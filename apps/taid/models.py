@@ -8,7 +8,7 @@ class _Person(models.Model):
     last_name = models.CharField(max_length=50)
     email = models.EmailField()
 
-    def __str__(self):
+    def __unicode__(self):
         return "{0} {1}".format(self.first_name, self.last_name)
 
 
@@ -40,7 +40,7 @@ class Course(models.Model):
     tuts = models.ManyToManyField("Tutorial", blank=True)
     pracs = models.ManyToManyField("Practical", blank=True)
 
-    def __str__(self):
+    def __unicode__(self):
         return self.code
 
 
@@ -48,7 +48,7 @@ class Tutorial(models.Model):
     code = models.CharField(max_length=20)
     ta = models.ForeignKey(Instructor)
 
-    def __str__(self):
+    def __unicode__(self):
         return self.code
 
 
@@ -56,5 +56,5 @@ class Practical(models.Model):
     code = models.CharField(max_length=20)
     ta = models.ForeignKey(Instructor)
 
-    def __str__(self):
+    def __unicode__(self):
         return self.code
