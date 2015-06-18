@@ -48,6 +48,7 @@ DEFAULT_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apps.taid',
+    'rest_framework',
 ]
 
 # Middlewares
@@ -131,7 +132,6 @@ USE_L10N = True
 
 # enable timezone awareness by default
 USE_TZ = True
-
 
 # Finally grab the SECRET KEY
 try:
