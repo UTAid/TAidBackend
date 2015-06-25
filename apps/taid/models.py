@@ -74,11 +74,25 @@ class Mark(models.Model):
     student = models.ForeignKey("Student")
     grade = models.ForeignKey("Grade")
 
+    def __unicode__(self):
+        return "{0} ({1}): {2}/{3}".format(
+                self.grade.assignment,
+                self.student,
+                self.value,
+                self.grade.assignment.total,
+                )
+
     # validate that value <= grade.assignment.total
+    def clean(self):
+        if self.value > self.grade.assignment.total:
+            raise ValidationError("Mark can't be higher than total")
 
 
 class Grade(models.Model):
     assignment = models.ForeignKey("Assignment")
+
+    def __unicode__(self):
+        return "Grades for {0}".format(self.assignment)
 
 
 class GradeFile(models.Model):
