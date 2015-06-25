@@ -58,3 +58,36 @@ class Practical(models.Model):
 
     def __unicode__(self):
         return self.code
+
+
+class Assignment(models.Model):
+    name = models.CharField(max_length=254)
+    total = models.DecimalField(max_digits=6, decimal_places=3)
+    parent = models.ForeignKey("self", null=True, blank=True, related_name="subparts")
+
+    def __unicode__(self):
+        return self.name
+
+
+class Mark(models.Model):
+    value = models.DecimalField(max_digits=6, decimal_places=3)
+    student = models.ForeignKey("Student")
+    grade = models.ForeignKey("Grade")
+
+    # validate that value <= grade.assignment.total
+
+
+class Grade(models.Model):
+    assignment = models.ForeignKey("Assignment")
+
+
+class GradeFile(models.Model):
+    name = models.CharField(max_length=254)
+    definitions = models.ManyToManyField("GradeDefinition", blank=True)
+
+
+class GradeDefinition(models.Model):
+    name = models.CharField(max_length=50)
+    value = models.DecimalField(max_digits=6, decimal_places=3)
+    assignment = models.ForeignKey("Assignment")
+    parent = models.ForeignKey("self", null=True, blank=True, related_name="subdefinitions")
