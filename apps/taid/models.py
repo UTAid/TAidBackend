@@ -66,6 +66,7 @@ class Assignment(models.Model):
     name = models.CharField(max_length=254)
     total = models.DecimalField(max_digits=6, decimal_places=3)
     parent = models.ForeignKey("self", null=True, blank=True, related_name="subparts")
+    marks = models.ManyToManyField("Mark", blank=True, related_name="student_marks")
 
     def __unicode__(self):
         return self.name
@@ -74,32 +75,24 @@ class Assignment(models.Model):
 class Mark(models.Model):
     value = models.DecimalField(max_digits=6, decimal_places=3)
     student = models.ForeignKey("Student")
-    gradefile = models.ForeignKey("Grade")
+    assignment = models.ForeignKey("Assignment")
 
     def __unicode__(self):
         return "{0} ({1}): {2}/{3}".format(
-                self.gradefile.assignment.name,
+                self.assignment.name,
                 self.student,
                 self.value,
-                self.gradefile.assignment.total,
+                self.assignment.total,
                 )
 
     def clean(self):
-        if self.value > self.gradefile.assignment.total:
+        if self.value > self.assignment.total:
             raise ValidationError("{0} is more than {1}".format(
                 self.value,
-                self.gradefile.assignment.total,
+                self.assignment.total,
                 ))
         elif self.value < 0.0:
             raise ValidationError("{0} is less than 0.0".format(self.value))
-
-
-class Grade(models.Model):
-    assignment = models.ForeignKey("Assignment")
-    marks = models.ManyToManyField("Mark", blank=True)
-
-    def __unicode__(self):
-        return "Grades for {0}".format(self.assignment)
 
 
 class GradeFile(models.Model):
