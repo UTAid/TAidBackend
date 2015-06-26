@@ -45,6 +45,9 @@ class MarkInline(admin.StackedInline):
 
 
 class GradeAdmin(admin.ModelAdmin):
+    exclude = (
+            "marks",
+            )
     inlines = (
             MarkInline,
             )

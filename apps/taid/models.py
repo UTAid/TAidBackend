@@ -1,4 +1,6 @@
 from django.db import models
+from django.core.exceptions import ValidationError
+
 import constants
 
 
@@ -72,24 +74,29 @@ class Assignment(models.Model):
 class Mark(models.Model):
     value = models.DecimalField(max_digits=6, decimal_places=3)
     student = models.ForeignKey("Student")
-    grade = models.ForeignKey("Grade")
+    gradefile = models.ForeignKey("Grade")
 
     def __unicode__(self):
         return "{0} ({1}): {2}/{3}".format(
-                self.grade.assignment,
+                self.gradefile.assignment.name,
                 self.student,
                 self.value,
-                self.grade.assignment.total,
+                self.gradefile.assignment.total,
                 )
 
-    # validate that value <= grade.assignment.total
     def clean(self):
-        if self.value > self.grade.assignment.total:
-            raise ValidationError("Mark can't be higher than total")
+        if self.value > self.gradefile.assignment.total:
+            raise ValidationError("{0} is more than {1}".format(
+                self.value,
+                self.gradefile.assignment.total,
+                ))
+        elif self.value < 0.0:
+            raise ValidationError("{0} is less than 0.0".format(self.value))
 
 
 class Grade(models.Model):
     assignment = models.ForeignKey("Assignment")
+    marks = models.ManyToManyField("Mark", blank=True)
 
     def __unicode__(self):
         return "Grades for {0}".format(self.assignment)
