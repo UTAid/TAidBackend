@@ -1,4 +1,6 @@
 from django.db import models
+from schedule.models.events import Event
+from schedule.models.calendars import Calendar
 import constants
 
 
@@ -39,6 +41,7 @@ class Course(models.Model):
     students = models.ManyToManyField("Student", blank=True)
     tuts = models.ManyToManyField("Tutorial", blank=True)
     pracs = models.ManyToManyField("Practical", blank=True)
+    calendar = models.ForeignKey(Calendar)
 
     def __unicode__(self):
         return self.code
@@ -47,6 +50,7 @@ class Course(models.Model):
 class Tutorial(models.Model):
     code = models.CharField(max_length=20)
     ta = models.ForeignKey(Instructor)
+    event = models.ForeignKey(Event)
 
     def __unicode__(self):
         return self.code
@@ -55,6 +59,7 @@ class Tutorial(models.Model):
 class Practical(models.Model):
     code = models.CharField(max_length=20)
     ta = models.ForeignKey(Instructor)
+    event = models.ForeignKey(Event)
 
     def __unicode__(self):
         return self.code
