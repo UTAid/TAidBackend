@@ -35,31 +35,27 @@ class Identification(models.Model):
 class Course(models.Model):
     code = models.CharField(max_length=20)
     title = models.CharField(max_length=254)
+    calendar = models.ForeignKey(Calendar)
     section = models.CharField(max_length=1, choices=constants._SECTION_CODES)
     session = models.CharField(max_length=2, choices=constants._SESSION_CODES)
     instructors = models.ManyToManyField("Instructor", blank=True)
     students = models.ManyToManyField("Student", blank=True)
     tuts = models.ManyToManyField("Tutorial", blank=True)
     pracs = models.ManyToManyField("Practical", blank=True)
-    calendar = models.ForeignKey(Calendar)
 
     def __unicode__(self):
         return self.code
 
 
-class Tutorial(models.Model):
-    code = models.CharField(max_length=20)
+class Tutorial(Event):
     ta = models.ForeignKey(Instructor)
-    event = models.ForeignKey(Event)
 
     def __unicode__(self):
-        return self.code
+        return self.title
 
 
-class Practical(models.Model):
-    code = models.CharField(max_length=20)
+class Practical(Event):
     ta = models.ForeignKey(Instructor)
-    event = models.ForeignKey(Event)
 
     def __unicode__(self):
-        return self.code
+        return self.title
