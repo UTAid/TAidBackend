@@ -20,6 +20,14 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='Assignment',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=254)),
+                ('total', models.DecimalField(max_digits=6, decimal_places=3)),
+            ],
+        ),
+        migrations.CreateModel(
             name='Course',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
@@ -27,6 +35,24 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(max_length=254)),
                 ('section', models.CharField(max_length=1, choices=[(b'F', b'Fall (First)'), (b'W', b'Winter (Second)'), (b'Y', b'Year (Both)')])),
                 ('session', models.CharField(max_length=2, choices=[(b'FW', b'Fall and Winter'), (b'S', b'Summer')])),
+            ],
+        ),
+        migrations.CreateModel(
+            name='GradeDefinition',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=50)),
+                ('value', models.DecimalField(max_digits=6, decimal_places=3)),
+                ('assignment', models.ForeignKey(to='taid.Assignment')),
+                ('parent', models.ForeignKey(related_name='subdefinitions', blank=True, to='taid.GradeDefinition', null=True)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='GradeFile',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=254)),
+                ('definitions', models.ManyToManyField(to='taid.GradeDefinition', blank=True)),
             ],
         ),
         migrations.CreateModel(
@@ -38,11 +64,18 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='Mark',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('value', models.DecimalField(max_digits=6, decimal_places=3)),
+                ('assignment', models.ForeignKey(to='taid.Assignment')),
+            ],
+        ),
+        migrations.CreateModel(
             name='Practical',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('code', models.CharField(max_length=20)),
-                ('course', models.ForeignKey(to='taid.Course')),
             ],
         ),
         migrations.CreateModel(
@@ -50,85 +83,81 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('code', models.CharField(max_length=20)),
-                ('course', models.ForeignKey(to='taid.Course')),
             ],
-        ),
-        migrations.CreateModel(
-            name='Instructor',
-            fields=[
-                ('_person_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='taid._Person')),
-            ],
-            bases=('taid._person',),
         ),
         migrations.CreateModel(
             name='Student',
             fields=[
                 ('_person_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='taid._Person')),
                 ('number', models.PositiveIntegerField()),
+                ('ids', models.ManyToManyField(to='taid.Identification', blank=True)),
+            ],
+            bases=('taid._person',),
+        ),
+        migrations.CreateModel(
+            name='Teacher',
+            fields=[
+                ('_person_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='taid._Person')),
             ],
             bases=('taid._person',),
         ),
         migrations.AddField(
-            model_name='identification',
-            name='person',
-            field=models.ForeignKey(to='taid._Person'),
-        ),
-        migrations.AddField(
             model_name='course',
             name='pracs',
-            field=models.ManyToManyField(related_name='course_pracs', to='taid.Practical'),
+            field=models.ManyToManyField(to='taid.Practical', blank=True),
         ),
         migrations.AddField(
             model_name='course',
             name='tuts',
-            field=models.ManyToManyField(related_name='course_tuts', to='taid.Tutorial'),
+            field=models.ManyToManyField(to='taid.Tutorial', blank=True),
         ),
         migrations.AddField(
-            model_name='_person',
-            name='ids',
-            field=models.ManyToManyField(to='taid.Identification'),
+            model_name='assignment',
+            name='marks',
+            field=models.ManyToManyField(related_name='student_marks', to='taid.Mark', blank=True),
+        ),
+        migrations.AddField(
+            model_name='assignment',
+            name='parent',
+            field=models.ForeignKey(related_name='subparts', blank=True, to='taid.Assignment', null=True),
+        ),
+        migrations.CreateModel(
+            name='Instructor',
+            fields=[
+                ('teacher_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='taid.Teacher')),
+            ],
+            bases=('taid.teacher',),
         ),
         migrations.CreateModel(
             name='TeachingAssistant',
             fields=[
-                ('instructor_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='taid.Instructor')),
-                ('practicals', models.ManyToManyField(to='taid.Practical')),
+                ('teacher_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='taid.Teacher')),
             ],
-            bases=('taid.instructor',),
-        ),
-        migrations.AddField(
-            model_name='student',
-            name='courses',
-            field=models.ManyToManyField(to='taid.Course'),
-        ),
-        migrations.AddField(
-            model_name='instructor',
-            name='courses',
-            field=models.ManyToManyField(to='taid.Course'),
-        ),
-        migrations.AddField(
-            model_name='course',
-            name='instructors',
-            field=models.ManyToManyField(to='taid.Instructor'),
-        ),
-        migrations.AddField(
-            model_name='course',
-            name='students',
-            field=models.ManyToManyField(to='taid.Student'),
+            bases=('taid.teacher',),
         ),
         migrations.AddField(
             model_name='tutorial',
             name='ta',
-            field=models.ForeignKey(to='taid.TeachingAssistant'),
+            field=models.ForeignKey(to='taid.Teacher'),
         ),
         migrations.AddField(
-            model_name='teachingassistant',
-            name='tutorials',
-            field=models.ManyToManyField(to='taid.Tutorial'),
+            model_name='mark',
+            name='student',
+            field=models.ForeignKey(to='taid.Student'),
+        ),
+        migrations.AddField(
+            model_name='course',
+            name='students',
+            field=models.ManyToManyField(to='taid.Student', blank=True),
         ),
         migrations.AddField(
             model_name='practical',
             name='ta',
-            field=models.ForeignKey(to='taid.TeachingAssistant'),
+            field=models.ForeignKey(to='taid.Instructor'),
+        ),
+        migrations.AddField(
+            model_name='course',
+            name='instructors',
+            field=models.ManyToManyField(to='taid.Instructor', blank=True),
         ),
     ]

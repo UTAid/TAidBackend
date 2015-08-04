@@ -14,11 +14,15 @@ class _Person(models.Model):
         return "{0} {1}".format(self.first_name, self.last_name)
 
 
-class Instructor(_Person):
+class Teacher(_Person):
     pass
 
 
-class TeachingAssistant(Instructor):
+class Instructor(Teacher):
+    pass
+
+
+class TeachingAssistant(Teacher):
     pass
 
 
@@ -48,7 +52,7 @@ class Course(models.Model):
 
 class Tutorial(models.Model):
     code = models.CharField(max_length=20)
-    ta = models.ForeignKey(Instructor)
+    ta = models.ForeignKey(Teacher)
 
     def __unicode__(self):
         return self.code
