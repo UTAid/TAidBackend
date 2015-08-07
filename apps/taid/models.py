@@ -5,7 +5,7 @@ import constants
 
 
 class _Person(models.Model):
-    utorid = models.CharField(max_length=50, primary_key=True)
+    university_id = models.CharField(max_length=50, primary_key=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField()
@@ -39,12 +39,12 @@ class Identification(models.Model):
 class Course(models.Model):
     code = models.CharField(max_length=20)
     title = models.CharField(max_length=254)
-    section = models.CharField(max_length=1, choices=constants._SECTION_CODES)
-    session = models.CharField(max_length=2, choices=constants._SESSION_CODES)
+    section_code = models.CharField(max_length=1, choices=constants._SECTION_CODES)
+    lecture_session = models.CharField(max_length=2, choices=constants._SESSION_CODES)
     instructors = models.ManyToManyField("Instructor", blank=True)
     students = models.ManyToManyField("Student", blank=True)
-    tuts = models.ManyToManyField("Tutorial", blank=True)
-    pracs = models.ManyToManyField("Practical", blank=True)
+    tuts = models.ManyToManyField("Tutorial", blank=True, related_name="tuts")
+    pracs = models.ManyToManyField("Practical", blank=True, related_name="pracs")
 
     def __unicode__(self):
         return self.code
@@ -52,7 +52,8 @@ class Course(models.Model):
 
 class Tutorial(models.Model):
     code = models.CharField(max_length=20)
-    ta = models.ForeignKey(Teacher)
+    course = models.ForeignKey(Course)
+    ta = models.ManyToManyField("TeachingAssistant")
 
     def __unicode__(self):
         return self.code
@@ -60,7 +61,8 @@ class Tutorial(models.Model):
 
 class Practical(models.Model):
     code = models.CharField(max_length=20)
-    ta = models.ForeignKey(Instructor)
+    course = models.ForeignKey(Course)
+    ta = models.ManyToManyField("TeachingAssistant")
 
     def __unicode__(self):
         return self.code

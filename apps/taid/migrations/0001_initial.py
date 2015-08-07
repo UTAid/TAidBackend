@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='_Person',
             fields=[
-                ('utorid', models.CharField(max_length=50, serialize=False, primary_key=True)),
+                ('university_id', models.CharField(max_length=50, serialize=False, primary_key=True)),
                 ('first_name', models.CharField(max_length=50)),
                 ('last_name', models.CharField(max_length=50)),
                 ('email', models.EmailField(max_length=254)),
@@ -33,8 +33,8 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('code', models.CharField(max_length=20)),
                 ('title', models.CharField(max_length=254)),
-                ('section', models.CharField(max_length=1, choices=[(b'F', b'Fall (First)'), (b'W', b'Winter (Second)'), (b'Y', b'Year (Both)')])),
-                ('session', models.CharField(max_length=2, choices=[(b'FW', b'Fall and Winter'), (b'S', b'Summer')])),
+                ('section_code', models.CharField(max_length=1, choices=[(b'F', b'Fall (First)'), (b'W', b'Winter (Second)'), (b'Y', b'Year (Both)')])),
+                ('lecture_session', models.CharField(max_length=2, choices=[(b'FW', b'Fall and Winter'), (b'S', b'Summer')])),
             ],
         ),
         migrations.CreateModel(
@@ -76,6 +76,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('code', models.CharField(max_length=20)),
+                ('course', models.ForeignKey(to='taid.Course')),
             ],
         ),
         migrations.CreateModel(
@@ -83,6 +84,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('code', models.CharField(max_length=20)),
+                ('course', models.ForeignKey(to='taid.Course')),
             ],
         ),
         migrations.CreateModel(
@@ -104,12 +106,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='course',
             name='pracs',
-            field=models.ManyToManyField(to='taid.Practical', blank=True),
+            field=models.ManyToManyField(related_name='pracs', to='taid.Practical', blank=True),
         ),
         migrations.AddField(
             model_name='course',
             name='tuts',
-            field=models.ManyToManyField(to='taid.Tutorial', blank=True),
+            field=models.ManyToManyField(related_name='tuts', to='taid.Tutorial', blank=True),
         ),
         migrations.AddField(
             model_name='assignment',
@@ -136,11 +138,6 @@ class Migration(migrations.Migration):
             bases=('taid.teacher',),
         ),
         migrations.AddField(
-            model_name='tutorial',
-            name='ta',
-            field=models.ForeignKey(to='taid.Teacher'),
-        ),
-        migrations.AddField(
             model_name='mark',
             name='student',
             field=models.ForeignKey(to='taid.Student'),
@@ -151,9 +148,14 @@ class Migration(migrations.Migration):
             field=models.ManyToManyField(to='taid.Student', blank=True),
         ),
         migrations.AddField(
+            model_name='tutorial',
+            name='ta',
+            field=models.ManyToManyField(to='taid.TeachingAssistant'),
+        ),
+        migrations.AddField(
             model_name='practical',
             name='ta',
-            field=models.ForeignKey(to='taid.Instructor'),
+            field=models.ManyToManyField(to='taid.TeachingAssistant'),
         ),
         migrations.AddField(
             model_name='course',
