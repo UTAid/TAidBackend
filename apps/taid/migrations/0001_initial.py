@@ -34,8 +34,8 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('code', models.CharField(max_length=20)),
                 ('title', models.CharField(max_length=254)),
-                ('section', models.CharField(max_length=1, choices=[(b'F', b'Fall (First)'), (b'W', b'Winter (Second)'), (b'Y', b'Year (Both)')])),
-                ('session', models.CharField(max_length=2, choices=[(b'FW', b'Fall and Winter'), (b'S', b'Summer')])),
+                ('section', models.CharField(max_length=1, verbose_name=b'Section Code', choices=[(b'F', b'Fall (First)'), (b'W', b'Winter (Second)'), (b'Y', b'Year (Both)')])),
+                ('lecture_sections', models.CommaSeparatedIntegerField(max_length=50, verbose_name=b'Lecture Section (Comman Seperated)', blank=True)),
                 ('calendar', models.ForeignKey(to='schedule.Calendar')),
             ],
         ),
@@ -142,7 +142,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='tutorial',
             name='ta',
-            field=models.ForeignKey(to='taid.Teacher'),
+            field=models.ForeignKey(blank=True, to='taid.Teacher', null=True),
         ),
         migrations.AddField(
             model_name='mark',
@@ -157,7 +157,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='practical',
             name='ta',
-            field=models.ForeignKey(to='taid.Instructor'),
+            field=models.ForeignKey(blank=True, to='taid.Instructor', null=True),
         ),
         migrations.AddField(
             model_name='course',

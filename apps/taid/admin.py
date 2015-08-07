@@ -17,17 +17,26 @@ class StudentAdmin(admin.ModelAdmin):
 class IdentificationAdmin(admin.ModelAdmin):
     pass
 
-
 class CourseAdmin(admin.ModelAdmin):
-    pass
+    exclude = (
+            'students',
+            )
 
 
 class TutorialAdmin(admin.ModelAdmin):
-    pass
+    exclude = (
+            'creator', 
+            'title',
+            'description'
+            )
 
 
 class PracticalAdmin(admin.ModelAdmin):
-    pass
+    exclude = (
+            'creator', 
+            'title',
+            'description'
+            )
 
 
 class AssignmentInline(admin.StackedInline):

@@ -2,6 +2,7 @@ from django.db import models
 from schedule.models.events import Event
 from schedule.models.calendars import Calendar
 from django.core.exceptions import ValidationError
+from django.db import connection
 import constants
 
 
@@ -36,13 +37,12 @@ class Identification(models.Model):
     description = models.CharField(max_length=500)
     value = models.CharField(max_length=100)
 
-
 class Course(models.Model):
     code = models.CharField(max_length=20)
     title = models.CharField(max_length=254)
     calendar = models.ForeignKey(Calendar)
-    section = models.CharField(max_length=1, choices=constants._SECTION_CODES)
-    session = models.CharField(max_length=2, choices=constants._SESSION_CODES)
+    section = models.CharField(max_length=1, verbose_name="Section Code", choices=constants._SECTION_CODES)
+    lecture_sections = models.CommaSeparatedIntegerField(max_length=50, blank=True, verbose_name="Lecture Section (Comman Seperated)")
     instructors = models.ManyToManyField("Instructor", blank=True)
     students = models.ManyToManyField("Student", blank=True)
     tuts = models.ManyToManyField("Tutorial", blank=True)
@@ -53,18 +53,61 @@ class Course(models.Model):
 
 class Tutorial(Event):
     code = models.CharField(max_length=20)
-    ta = models.ForeignKey(Teacher)
+    ta = models.ForeignKey(Teacher, null=True, blank=True)
+
+    def _getCourseName(self):
+        string = "";
+        cursor = connection.cursor()
+        sql = 'SELECT code from taid_course_tuts tact INNER JOIN taid_course tac ON tact.tutorial_id=' + str(self.id)
+        cursor.execute(sql)
+
+        for row in cursor.fetchall():
+            print row
+            string += row[0] + ","
+
+        return string[:-1]
 
     def __unicode__(self):
-        return self.title
+        print self.id
+
+        if (self.id == None):
+            return self.code
+        else:
+            return self._getCourseName() + " " + self.code
+
+    def __getattribute__(self, name):
+        if (name == "title"):
+            return self.__unicode__()
+
+        return super(Tutorial, self).__getattribute__(name)
 
 
 class Practical(Event):
     code = models.CharField(max_length=20)
-    ta = models.ForeignKey(Instructor)
+    ta = models.ForeignKey(Instructor, null=True, blank=True)
+
+    def _getCourseName(self):
+        string = "";
+        cursor = connection.cursor()
+        sql = 'SELECT code from taid_course_pracs tacp INNER JOIN taid_course tac ON tacp.practical_id=' + str(self.id)
+        cursor.execute(sql)
+
+        for row in cursor.fetchall():
+            string += row[0] + ","
+
+        return string[:-1]
 
     def __unicode__(self):
-        return self.code
+        if (self.id == None):
+            return self.code
+        else:
+            return self._getCourseName() + " " + self.code
+
+    def __getattribute__(self, name):
+        if (name == "title"):
+            return self.__unicode__()
+
+        return super(Practical, self).__getattribute__(name)
 
 
 class Assignment(models.Model):
