@@ -30,6 +30,28 @@ class PracticalAdmin(admin.ModelAdmin):
     pass
 
 
+class AssignmentInline(admin.StackedInline):
+    model = models.Assignment
+
+    exclude = (
+            "marks",
+            )
+
+
+class MarkInline(admin.StackedInline):
+    model = models.Mark
+
+
+class AssignmentAdmin(admin.ModelAdmin):
+    exclude = (
+            "marks",
+            )
+    inlines = (
+            AssignmentInline,
+            MarkInline,
+            )
+
+
 admin.site.register(models.Instructor, InstructorAdmin)
 admin.site.register(models.TeachingAssistant, TeachingAssistantAdmin)
 admin.site.register(models.Student, StudentAdmin)
@@ -37,3 +59,4 @@ admin.site.register(models.Identification, IdentificationAdmin)
 admin.site.register(models.Course, CourseAdmin)
 admin.site.register(models.Tutorial, TutorialAdmin)
 admin.site.register(models.Practical, PracticalAdmin)
+admin.site.register(models.Assignment, AssignmentAdmin)

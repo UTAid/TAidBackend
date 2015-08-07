@@ -1,6 +1,7 @@
 from django.db import models
 from schedule.models.events import Event
 from schedule.models.calendars import Calendar
+from django.core.exceptions import ValidationError
 import constants
 
 
@@ -14,11 +15,15 @@ class _Person(models.Model):
         return "{0} {1}".format(self.first_name, self.last_name)
 
 
-class Instructor(_Person):
+class Teacher(_Person):
     pass
 
 
-class TeachingAssistant(Instructor):
+class Instructor(Teacher):
+    pass
+
+
+class TeachingAssistant(Teacher):
     pass
 
 
@@ -46,16 +51,62 @@ class Course(models.Model):
     def __unicode__(self):
         return self.code
 
-
 class Tutorial(Event):
-    ta = models.ForeignKey(Instructor)
+    code = models.CharField(max_length=20)
+    ta = models.ForeignKey(Teacher)
 
     def __unicode__(self):
         return self.title
 
 
 class Practical(Event):
+    code = models.CharField(max_length=20)
     ta = models.ForeignKey(Instructor)
 
     def __unicode__(self):
-        return self.title
+        return self.code
+
+
+class Assignment(models.Model):
+    name = models.CharField(max_length=254)
+    total = models.DecimalField(max_digits=6, decimal_places=3)
+    parent = models.ForeignKey("self", null=True, blank=True, related_name="subparts")
+    marks = models.ManyToManyField("Mark", blank=True, related_name="student_marks")
+
+    def __unicode__(self):
+        return self.name
+
+
+class Mark(models.Model):
+    value = models.DecimalField(max_digits=6, decimal_places=3)
+    student = models.ForeignKey("Student")
+    assignment = models.ForeignKey("Assignment")
+
+    def __unicode__(self):
+        return "{0} ({1}): {2}/{3}".format(
+                self.assignment.name,
+                self.student,
+                self.value,
+                self.assignment.total,
+                )
+
+    def clean(self):
+        if self.value > self.assignment.total:
+            raise ValidationError("{0} is more than {1}".format(
+                self.value,
+                self.assignment.total,
+                ))
+        elif self.value < 0.0:
+            raise ValidationError("{0} is less than 0.0".format(self.value))
+
+
+class GradeFile(models.Model):
+    name = models.CharField(max_length=254)
+    definitions = models.ManyToManyField("GradeDefinition", blank=True)
+
+
+class GradeDefinition(models.Model):
+    name = models.CharField(max_length=50)
+    value = models.DecimalField(max_digits=6, decimal_places=3)
+    assignment = models.ForeignKey("Assignment")
+    parent = models.ForeignKey("self", null=True, blank=True, related_name="subdefinitions")
