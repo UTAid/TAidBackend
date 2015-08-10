@@ -20,8 +20,17 @@ class IdentificationAdmin(admin.ModelAdmin):
 class CourseAdmin(admin.ModelAdmin):
     exclude = (
             'students',
+            'instructors',
+            'tuts',
+            'pracs'
             )
 
+class LectureAdmin(admin.ModelAdmin):
+    exclude = (
+            'creator', 
+            'title',
+            'description'
+            )
 
 class TutorialAdmin(admin.ModelAdmin):
     exclude = (
@@ -69,3 +78,4 @@ admin.site.register(models.Course, CourseAdmin)
 admin.site.register(models.Tutorial, TutorialAdmin)
 admin.site.register(models.Practical, PracticalAdmin)
 admin.site.register(models.Assignment, AssignmentAdmin)
+admin.site.register(models.Lecture, LectureAdmin)

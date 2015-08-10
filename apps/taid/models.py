@@ -2,12 +2,11 @@ from django.db import models
 from schedule.models.events import Event
 from schedule.models.calendars import Calendar
 from django.core.exceptions import ValidationError
-from django.db import connection
 import constants
 
 
 class _Person(models.Model):
-    utorid = models.CharField(max_length=50, primary_key=True)
+    university_id = models.CharField(max_length=50, primary_key=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField()
@@ -41,39 +40,47 @@ class Course(models.Model):
     code = models.CharField(max_length=20)
     title = models.CharField(max_length=254)
     calendar = models.ForeignKey(Calendar)
-    section = models.CharField(max_length=1, verbose_name="Section Code", choices=constants._SECTION_CODES)
-    lecture_sections = models.CommaSeparatedIntegerField(max_length=50, blank=True, verbose_name="Lecture Section (Comman Seperated)")
-    instructors = models.ManyToManyField("Instructor", blank=True)
-    students = models.ManyToManyField("Student", blank=True)
-    tuts = models.ManyToManyField("Tutorial", blank=True)
-    pracs = models.ManyToManyField("Practical", blank=True)
+    section_code = models.CharField(max_length=1, choices=constants._SECTION_CODES)
+    lecture_session = models.CharField(max_length=2, choices=constants._SESSION_CODES)
+    instructors = models.ManyToManyField("Instructor", blank=True, verbose_name="Instructor(s)")
+    students = models.ManyToManyField("Student", blank=True, verbose_name="Student(s)")
+    tuts = models.ManyToManyField("Tutorial", blank=True, related_name="tuts", verbose_name="Tutorial(s)")
+    pracs = models.ManyToManyField("Practical", blank=True, related_name="pracs", verbose_name="Practical(s)")
 
     def __unicode__(self):
         return self.code
 
-class Tutorial(Event):
-    code = models.CharField(max_length=20)
-    ta = models.ForeignKey(Teacher, null=True, blank=True)
-
-    def _getCourseName(self):
-        string = "";
-        cursor = connection.cursor()
-        sql = 'SELECT code from taid_course_tuts tact INNER JOIN taid_course tac ON tact.tutorial_id=' + str(self.id)
-        cursor.execute(sql)
-
-        for row in cursor.fetchall():
-            print row
-            string += row[0] + ","
-
-        return string[:-1]
+class Lecture(Event):
+    code = models.ForeignKey(Course)
+    instructors = models.ForeignKey(Instructor)
+    section = models.CharField(max_length=10)
 
     def __unicode__(self):
-        print self.id
+        return self.code.code + " Section " + self.section
 
+    def __str__(self):
+        return self.__unicode__()
+
+    def __getattribute__(self, name):
+        if (name == "title"):
+            return self.__unicode__()
+
+        return super(Lecture, self).__getattribute__(name)
+
+
+class Tutorial(Event):
+    code = models.CharField(max_length=20)
+    course = models.ForeignKey(Course)
+    ta = models.ManyToManyField("TeachingAssistant")
+
+    def __unicode__(self):
         if (self.id == None):
             return self.code
         else:
-            return self._getCourseName() + " " + self.code
+            return self.course.code + " " + self.code
+
+    def __str__(self):
+        return self.__unicode__()
 
     def __getattribute__(self, name):
         if (name == "title"):
@@ -81,27 +88,19 @@ class Tutorial(Event):
 
         return super(Tutorial, self).__getattribute__(name)
 
-
 class Practical(Event):
     code = models.CharField(max_length=20)
-    ta = models.ForeignKey(Instructor, null=True, blank=True)
-
-    def _getCourseName(self):
-        string = "";
-        cursor = connection.cursor()
-        sql = 'SELECT code from taid_course_pracs tacp INNER JOIN taid_course tac ON tacp.practical_id=' + str(self.id)
-        cursor.execute(sql)
-
-        for row in cursor.fetchall():
-            string += row[0] + ","
-
-        return string[:-1]
+    course = models.ForeignKey(Course)
+    ta = models.ManyToManyField("TeachingAssistant")
 
     def __unicode__(self):
         if (self.id == None):
             return self.code
         else:
-            return self._getCourseName() + " " + self.code
+            return self.course.code + " " + self.code
+
+    def __str__(self):
+        return self.__unicode__()
 
     def __getattribute__(self, name):
         if (name == "title"):
