@@ -25,14 +25,13 @@ class StudentSerializer(serializers.HyperlinkedModelSerializer):
                 'first_name',
                 'last_name',
                 'email',
-                'ids',
                 )
 
 
 class IdentificationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Identification
-        fields = ('url', 'id', 'description', 'value')
+        fields = ('url', 'id', 'student', 'description', 'value')
 
 
 class CourseSerializer(serializers.HyperlinkedModelSerializer):

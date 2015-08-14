@@ -28,12 +28,12 @@ class TeachingAssistant(Teacher):
 
 class Student(_UniversityMember):
     student_number = models.CharField(max_length=10, blank=True)
-    ids = models.ManyToManyField("Identification", blank=True)
 
 
 class Identification(models.Model):
-    description = models.CharField(max_length=500)
     value = models.CharField(max_length=100)
+    student = models.ForeignKey(Student)
+    description = models.CharField(max_length=500, blank=True)
 
 
 class Course(models.Model):
@@ -88,24 +88,3 @@ class Mark(models.Model):
                 self.value,
                 self.assignment.total,
                 )
-
-    def clean(self):
-        if self.value > self.assignment.total:
-            raise ValidationError("{0} is more than {1}".format(
-                self.value,
-                self.assignment.total,
-                ))
-        elif self.value < 0.0:
-            raise ValidationError("{0} is less than 0.0".format(self.value))
-
-
-class GradeFile(models.Model):
-    name = models.CharField(max_length=254)
-    definitions = models.ManyToManyField("GradeDefinition", blank=True)
-
-
-class GradeDefinition(models.Model):
-    name = models.CharField(max_length=50)
-    value = models.DecimalField(max_digits=6, decimal_places=3)
-    assignment = models.ForeignKey("Assignment")
-    parent = models.ForeignKey("self", null=True, blank=True, related_name="subdefinitions")

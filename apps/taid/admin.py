@@ -10,8 +10,14 @@ class TeachingAssistantAdmin(admin.ModelAdmin):
     pass
 
 
+class IdentificationInline(admin.StackedInline):
+    model = models.Identification
+
+
 class StudentAdmin(admin.ModelAdmin):
-    pass
+    inlines = (
+            IdentificationInline,
+            )
 
 
 class IdentificationAdmin(admin.ModelAdmin):
