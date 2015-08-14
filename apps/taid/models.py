@@ -1,6 +1,8 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 
+from apps.taid import parsers
+
 import constants
 
 
@@ -88,3 +90,13 @@ class Mark(models.Model):
                 self.value,
                 self.assignment.total,
                 )
+
+
+class StudentUpload(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    datafile = models.FileField()
+
+    def save(self, *args, **kwargs):
+        if self.id is None:
+            parsers.student_parser(self.datafile)
+        super(StudentUpload, self).save(*args, **kwargs)

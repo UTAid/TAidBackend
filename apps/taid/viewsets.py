@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from apps.taid import models, serializers
 
-from rest_framework import viewsets, routers
+from rest_framework import viewsets, routers, parsers
 
 
 class InstructorViewSet(viewsets.ModelViewSet):
@@ -17,6 +17,15 @@ class TeachingAssistantViewSet(viewsets.ModelViewSet):
 class StudentViewSet(viewsets.ModelViewSet):
     queryset = models.Student.objects.all().order_by('university_id')
     serializer_class = serializers.StudentSerializer
+
+
+class StudentUploadViewSet(viewsets.ModelViewSet):
+    queryset = models.StudentUpload.objects.all()
+    serializer_class = serializers.StudentUploadSerializer
+    parser_classes = (parsers.MultiPartParser, parsers.FormParser,)
+
+    def perform_create(self, serializer):
+        serializer.save(datafile=self.request.data.get('datafile'))
 
 
 class IdentificationViewSet(viewsets.ModelViewSet):
@@ -42,6 +51,7 @@ class PracticalViewSet(viewsets.ModelViewSet):
 router = routers.DefaultRouter()
 router.register(r'instructors', InstructorViewSet)
 router.register(r'teaching_assistants', TeachingAssistantViewSet)
+router.register(r'students/upload', StudentUploadViewSet)
 router.register(r'students', StudentViewSet)
 router.register(r'identifications', IdentificationViewSet)
 router.register(r'courses', CourseViewSet)

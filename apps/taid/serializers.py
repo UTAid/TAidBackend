@@ -68,3 +68,9 @@ class PracticalSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Practical
         fields = ('url', 'id', 'code', 'course', 'ta')
+
+
+class StudentUploadSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.StudentUpload
+        fields = ('url', 'id', 'created', 'datafile')
