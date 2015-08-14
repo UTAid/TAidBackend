@@ -19,6 +19,11 @@ class StudentViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.StudentSerializer
 
 
+class IdentificationViewSet(viewsets.ModelViewSet):
+    queryset = models.Identification.objects.all()
+    serializer_class = serializers.IdentificationSerializer
+
+
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = models.Course.objects.all().order_by('code')
     serializer_class = serializers.CourseSerializer
