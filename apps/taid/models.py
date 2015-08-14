@@ -22,10 +22,11 @@ class Teacher(_Person):
 class Instructor(Teacher):
     pass
 
-
 class TeachingAssistant(Teacher):
     pass
 
+class TAAidEvent(Event):
+    pass
 
 class Student(_Person):
     number = models.PositiveIntegerField()
@@ -42,21 +43,18 @@ class Course(models.Model):
     calendar = models.ForeignKey(Calendar)
     section_code = models.CharField(max_length=1, choices=constants._SECTION_CODES)
     lecture_session = models.CharField(max_length=2, choices=constants._SESSION_CODES)
-    instructors = models.ManyToManyField("Instructor", blank=True, verbose_name="Instructor(s)")
     students = models.ManyToManyField("Student", blank=True, verbose_name="Student(s)")
-    tuts = models.ManyToManyField("Tutorial", blank=True, related_name="tuts", verbose_name="Tutorial(s)")
-    pracs = models.ManyToManyField("Practical", blank=True, related_name="pracs", verbose_name="Practical(s)")
 
     def __unicode__(self):
         return self.code
 
-class Lecture(Event):
+class Lecture(models.Model):
     code = models.ForeignKey(Course)
-    instructors = models.ForeignKey(Instructor)
-    section = models.CharField(max_length=10)
+    instructors = models.ManyToManyField("Instructor", blank=True, verbose_name="Instructor(s)")
+    event = models.ForeignKey(TAAidEvent)
 
     def __unicode__(self):
-        return self.code.code + " Section " + self.section
+        return self.code.code + " Section " + self.event.title
 
     def __str__(self):
         return self.__unicode__()
@@ -68,16 +66,13 @@ class Lecture(Event):
         return super(Lecture, self).__getattribute__(name)
 
 
-class Tutorial(Event):
-    code = models.CharField(max_length=20)
-    course = models.ForeignKey(Course)
-    ta = models.ManyToManyField("TeachingAssistant")
+class Tutorial(models.Model):
+    code = models.ForeignKey(Course)
+    ta = models.ManyToManyField("TeachingAssistant", blank=True, verbose_name="Teaching Assistant(s)")
+    event = models.ForeignKey(TAAidEvent)
 
     def __unicode__(self):
-        if (self.id == None):
-            return self.code
-        else:
-            return self.course.code + " " + self.code
+        return self.code.code + " Tutorial " + self.event.title
 
     def __str__(self):
         return self.__unicode__()
@@ -88,16 +83,13 @@ class Tutorial(Event):
 
         return super(Tutorial, self).__getattribute__(name)
 
-class Practical(Event):
-    code = models.CharField(max_length=20)
-    course = models.ForeignKey(Course)
-    ta = models.ManyToManyField("TeachingAssistant")
+class Practical(models.Model):
+    code = models.ForeignKey(Course)
+    ta = models.ManyToManyField("TeachingAssistant", blank=True, verbose_name="Teaching Assistant(s)")
+    event = models.ForeignKey(TAAidEvent)
 
     def __unicode__(self):
-        if (self.id == None):
-            return self.code
-        else:
-            return self.course.code + " " + self.code
+        return self.code.code + " Tutorial " + self.event.title
 
     def __str__(self):
         return self.__unicode__()

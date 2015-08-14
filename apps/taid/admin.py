@@ -17,36 +17,25 @@ class StudentAdmin(admin.ModelAdmin):
 class IdentificationAdmin(admin.ModelAdmin):
     pass
 
+class TAAidEventAdmin(admin.ModelAdmin):
+    exclude = (
+        'creator', 
+        'description'
+        )
+
 class CourseAdmin(admin.ModelAdmin):
     exclude = (
             'students',
-            'instructors',
-            'tuts',
-            'pracs'
             )
 
 class LectureAdmin(admin.ModelAdmin):
-    exclude = (
-            'creator', 
-            'title',
-            'description'
-            )
+    pass
 
 class TutorialAdmin(admin.ModelAdmin):
-    exclude = (
-            'creator', 
-            'title',
-            'description'
-            )
-
+    pass
 
 class PracticalAdmin(admin.ModelAdmin):
-    exclude = (
-            'creator', 
-            'title',
-            'description'
-            )
-
+    pass
 
 class AssignmentInline(admin.StackedInline):
     model = models.Assignment
@@ -69,7 +58,7 @@ class AssignmentAdmin(admin.ModelAdmin):
             MarkInline,
             )
 
-
+admin.site.register(models.TAAidEvent, TAAidEventAdmin)
 admin.site.register(models.Instructor, InstructorAdmin)
 admin.site.register(models.TeachingAssistant, TeachingAssistantAdmin)
 admin.site.register(models.Student, StudentAdmin)
