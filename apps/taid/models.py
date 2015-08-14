@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 import constants
 
 
-class _Person(models.Model):
+class _UniversityMember(models.Model):
     university_id = models.CharField(max_length=50, primary_key=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
@@ -14,7 +14,7 @@ class _Person(models.Model):
         return "{0} {1}".format(self.first_name, self.last_name)
 
 
-class Teacher(_Person):
+class Teacher(_UniversityMember):
     pass
 
 
@@ -26,8 +26,8 @@ class TeachingAssistant(Teacher):
     pass
 
 
-class Student(_Person):
-    number = models.PositiveIntegerField()
+class Student(_UniversityMember):
+    student_number = models.CharField(max_length=10, blank=True)
     ids = models.ManyToManyField("Identification", blank=True)
 
 
@@ -43,8 +43,6 @@ class Course(models.Model):
     lecture_session = models.CharField(max_length=2, choices=constants._SESSION_CODES)
     instructors = models.ManyToManyField("Instructor", blank=True)
     students = models.ManyToManyField("Student", blank=True)
-    tuts = models.ManyToManyField("Tutorial", blank=True, related_name="tuts")
-    pracs = models.ManyToManyField("Practical", blank=True, related_name="pracs")
 
     def __unicode__(self):
         return self.code

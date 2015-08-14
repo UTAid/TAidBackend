@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='_Person',
+            name='_UniversityMember',
             fields=[
                 ('university_id', models.CharField(max_length=50, serialize=False, primary_key=True)),
                 ('first_name', models.CharField(max_length=50)),
@@ -90,28 +90,18 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Student',
             fields=[
-                ('_person_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='taid._Person')),
-                ('number', models.PositiveIntegerField()),
+                ('_universitymember_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='taid._UniversityMember')),
+                ('student_number', models.CharField(max_length=10, blank=True)),
                 ('ids', models.ManyToManyField(to='taid.Identification', blank=True)),
             ],
-            bases=('taid._person',),
+            bases=('taid._universitymember',),
         ),
         migrations.CreateModel(
             name='Teacher',
             fields=[
-                ('_person_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='taid._Person')),
+                ('_universitymember_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='taid._UniversityMember')),
             ],
-            bases=('taid._person',),
-        ),
-        migrations.AddField(
-            model_name='course',
-            name='pracs',
-            field=models.ManyToManyField(related_name='pracs', to='taid.Practical', blank=True),
-        ),
-        migrations.AddField(
-            model_name='course',
-            name='tuts',
-            field=models.ManyToManyField(related_name='tuts', to='taid.Tutorial', blank=True),
+            bases=('taid._universitymember',),
         ),
         migrations.AddField(
             model_name='assignment',

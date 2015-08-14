@@ -18,8 +18,19 @@ class IdentificationAdmin(admin.ModelAdmin):
     pass
 
 
+class TutorialInline(admin.StackedInline):
+    model = models.Tutorial
+
+
+class PracticalInline(admin.StackedInline):
+    model = models.Practical
+
+
 class CourseAdmin(admin.ModelAdmin):
-    pass
+    inlines = (
+            TutorialInline,
+            PracticalInline,
+            )
 
 
 class TutorialAdmin(admin.ModelAdmin):
