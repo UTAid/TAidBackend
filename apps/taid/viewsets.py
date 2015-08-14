@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from apps.taid import models, serializers
 
-from rest_framework import viewsets
+from rest_framework import viewsets, routers
 
 
 class InstructorViewSet(viewsets.ModelViewSet):
@@ -37,3 +37,13 @@ class TutorialViewSet(viewsets.ModelViewSet):
 class PracticalViewSet(viewsets.ModelViewSet):
     queryset = models.Practical.objects.all().order_by('code')
     serializer_class = serializers.PracticalSerializer
+
+
+router = routers.DefaultRouter()
+router.register(r'instructors', InstructorViewSet)
+router.register(r'teaching_assistants', TeachingAssistantViewSet)
+router.register(r'students', StudentViewSet)
+router.register(r'identifications', IdentificationViewSet)
+router.register(r'courses', CourseViewSet)
+router.register(r'tutorials', TutorialViewSet)
+router.register(r'practicals', PracticalViewSet)
