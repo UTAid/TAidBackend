@@ -1,0 +1,94 @@
+Code Review - Jan. 23 2015
+
+Calendar component
+Branch - django-schedular      <--- Note branch name has a typo
+Author: Edouard
+Reviewer: Paco
+
+Location: apps/taid
+
+General:
+  
+  None of the scripts has a high-level description at the top indicating what it does,
+and where it fits within the calendar application and TAid. Please add these.
+
+  Please add as well author name and contact.
+
+  Also, since the scripts in this section are completely devoted to defining classes
+used by the TAid scheduling component, it is required to indicate where these classes
+are used and which other TAid components interact with this code. This will allow 
+me to review the code in the context of where and how it is used.
+
+  It would be nice to have a small README that indicates where in the UI this
+gets called from.
+
+// constants.py
+
+Nothing much here, a brief header would be nice.
+
+// tests.py
+
+Empty :) Anya will want some unit tests!
+
+// views.py
+
+Nothing much here either... header.
+
+// models.py
+
+This definitely needs a header. 
+
+* Name: Note that in models.py we import 'models' from django.db as well as several
+        components from scheduler.models - if this is how django likes it, let it be,
+        otherwise consider using TAid_models.py or something like that.
+
+* Class definitions
+
+    * Person class - is the parent of Teacher, Studenr, Instructor, and TeachingAssistant,
+		     however at the present time only student has any additional attributes
+		     or responsibilities. Teacher is just a person, and in fact it is
+		     parent to Instructor and TeachingAssistant which have no attributes
+		     or methods of their own. 
+		     Consider whether these are needed and why (if needed, then something 
+		     must go into each of them to justify their existence). 
+
+		     I suspect both Teacher and their descendants are missing important
+		     attributes (e.g. employee number? position? title? office location?)
+
+		     field lengths (currently 50). You never know when we are going
+		     to get some weird name like 
+
+		     Hubert Blaine Wolfeschlegelsteinhausenbergerdorff  (real dude!)
+
+		     That's around 30. If he had two last-names stuck together like
+		     we latin americans, we may be in trouble.
+    
+    * TAAidEvent   - Please re-order the classes. TAAidEvent is located right between
+		     TeachingAssistand and Student, both of which are part of the Person
+		     hierarchy.
+  
+		     Name: should be TAidEvent (currently has an extra A)
+		     
+		     Do we need it? it's just an Event, with no additional attributes or
+		     methods.
+
+    * Course       - Course has a calendar, but no links to Lecture, Practical, or Tutorial.
+		     Should it have those?
+
+    * Lecture/Practical/Tutorial - Consistency, Lecture has instructors (plural), 
+				   Practical and Tutorial should have tas (currently ta)
+
+    * Assignment   - I see a field for 'parent'. Had we agreed to remove hierarchical
+		     assignments and just have everything at top level? (i.e. there would
+		     be no parents or children of assignments?) Let's make sure we have
+		     the right answer to this.
+
+    * Grade components - Same as with Assignment, let's make sure we have the latest structure
+			 right. I'm not sure anymore what's the latest.
+
+// admin.py
+
+  Header please. You definitely need to explain what this thing is doing. I'm assuming it 
+  determines what is and what is not displayed on different components of the UI when
+  the user starts specific actions. 
+
