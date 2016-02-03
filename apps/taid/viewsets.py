@@ -19,9 +19,9 @@ class StudentViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.StudentSerializer
 
 
-class StudentUploadViewSet(viewsets.ModelViewSet):
-    queryset = models.StudentUpload.objects.all()
-    serializer_class = serializers.StudentUploadSerializer
+class StudentListFileViewSet(viewsets.ModelViewSet):
+    queryset = models.StudentListFile.objects.all()
+    serializer_class = serializers.StudentListFileSerializer
     parser_classes = (parsers.MultiPartParser, parsers.FormParser,)
 
     def perform_create(self, serializer):
@@ -31,11 +31,6 @@ class StudentUploadViewSet(viewsets.ModelViewSet):
 class IdentificationViewSet(viewsets.ModelViewSet):
     queryset = models.Identification.objects.all()
     serializer_class = serializers.IdentificationSerializer
-
-
-class CourseViewSet(viewsets.ModelViewSet):
-    queryset = models.Course.objects.all().order_by('code')
-    serializer_class = serializers.CourseSerializer
 
 
 class TutorialViewSet(viewsets.ModelViewSet):
@@ -51,9 +46,8 @@ class PracticalViewSet(viewsets.ModelViewSet):
 router = routers.DefaultRouter()
 router.register(r'instructors', InstructorViewSet)
 router.register(r'teaching_assistants', TeachingAssistantViewSet)
-router.register(r'students/upload', StudentUploadViewSet)
+router.register(r'students/upload', StudentListFileViewSet)
 router.register(r'students', StudentViewSet)
 router.register(r'identifications', IdentificationViewSet)
-router.register(r'courses', CourseViewSet)
 router.register(r'tutorials', TutorialViewSet)
 router.register(r'practicals', PracticalViewSet)

@@ -16,8 +16,8 @@ class IdentificationInline(admin.StackedInline):
 
 class StudentAdmin(admin.ModelAdmin):
     inlines = (
-            IdentificationInline,
-            )
+        IdentificationInline,
+    )
 
 
 class IdentificationAdmin(admin.ModelAdmin):
@@ -32,11 +32,8 @@ class PracticalInline(admin.StackedInline):
     model = models.Practical
 
 
-class CourseAdmin(admin.ModelAdmin):
-    inlines = (
-            TutorialInline,
-            PracticalInline,
-            )
+class LectureAdmin(admin.ModelAdmin):
+    pass
 
 
 class TutorialAdmin(admin.ModelAdmin):
@@ -47,33 +44,48 @@ class PracticalAdmin(admin.ModelAdmin):
     pass
 
 
-class AssignmentInline(admin.StackedInline):
-    model = models.Assignment
-
-    exclude = (
-            "marks",
-            )
-
-
 class MarkInline(admin.StackedInline):
     model = models.Mark
 
 
+class RubricInline(admin.StackedInline):
+    model = models.Rubric
+
+
 class AssignmentAdmin(admin.ModelAdmin):
-    exclude = (
-            "marks",
-            )
     inlines = (
-            AssignmentInline,
+            RubricInline,
+            )
+
+
+class RubricAdmin(admin.ModelAdmin):
+    model = models.Rubric
+    inlines = (
             MarkInline,
             )
+
+
+class StudentListFileAdmin(admin.ModelAdmin):
+    pass
+
+
+class EnrollmentListFileAdmin(admin.ModelAdmin):
+    pass
+
+
+class MarkFileAdmin(admin.ModelAdmin):
+    pass
 
 
 admin.site.register(models.Instructor, InstructorAdmin)
 admin.site.register(models.TeachingAssistant, TeachingAssistantAdmin)
 admin.site.register(models.Student, StudentAdmin)
 admin.site.register(models.Identification, IdentificationAdmin)
-admin.site.register(models.Course, CourseAdmin)
+admin.site.register(models.Lecture, LectureAdmin)
 admin.site.register(models.Tutorial, TutorialAdmin)
 admin.site.register(models.Practical, PracticalAdmin)
 admin.site.register(models.Assignment, AssignmentAdmin)
+admin.site.register(models.Rubric, RubricAdmin)
+admin.site.register(models.StudentListFile, StudentListFileAdmin)
+admin.site.register(models.EnrollmentListFile, StudentListFileAdmin)
+admin.site.register(models.MarkFile, StudentListFileAdmin)

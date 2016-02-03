@@ -34,43 +34,38 @@ class IdentificationSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('url', 'id', 'student', 'description', 'value')
 
 
-class CourseSerializer(serializers.HyperlinkedModelSerializer):
+class LectureSerializer(serializers.HyperlinkedModelSerializer):
     instructors = InstructorSerializer
     students = StudentSerializer
 
     class Meta:
-        model = models.Course
+        model = models.Lecture
         fields = (
                 'url',
                 'id',
                 'code',
-                'title',
-                'section_code',
-                'lecture_session',
                 'instructors',
                 'students',
                 )
 
 
 class TutorialSerializer(serializers.HyperlinkedModelSerializer):
-    course = CourseSerializer
     ta = TeachingAssistantSerializer
 
     class Meta:
         model = models.Tutorial
-        fields = ('url', 'id', 'code', 'course', 'ta')
+        fields = ('url', 'id', 'code', 'ta', 'students')
 
 
 class PracticalSerializer(serializers.HyperlinkedModelSerializer):
-    course = CourseSerializer
     ta = TeachingAssistantSerializer
 
     class Meta:
         model = models.Practical
-        fields = ('url', 'id', 'code', 'course', 'ta')
+        fields = ('url', 'id', 'code', 'ta', 'students')
 
 
-class StudentUploadSerializer(serializers.HyperlinkedModelSerializer):
+class StudentListFileSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = models.StudentUpload
+        model = models.StudentListFile
         fields = ('url', 'id', 'created', 'datafile')
