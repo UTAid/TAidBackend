@@ -43,6 +43,9 @@ class TutorialAdmin(admin.ModelAdmin):
 class PracticalAdmin(admin.ModelAdmin):
     pass
 
+class MarkAdmin(admin.ModelAdmin):
+    pass
+
 
 class MarkInline(admin.StackedInline):
     model = models.Mark
@@ -84,6 +87,7 @@ admin.site.register(models.Identification, IdentificationAdmin)
 admin.site.register(models.Lecture, LectureAdmin)
 admin.site.register(models.Tutorial, TutorialAdmin)
 admin.site.register(models.Practical, PracticalAdmin)
+admin.site.register(models.Mark, MarkAdmin)
 admin.site.register(models.Assignment, AssignmentAdmin)
 admin.site.register(models.Rubric, RubricAdmin)
 admin.site.register(models.StudentListFile, StudentListFileAdmin)

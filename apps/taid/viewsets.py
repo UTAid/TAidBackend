@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from apps.taid import models, serializers
 
 from rest_framework import viewsets, routers, parsers

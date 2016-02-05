@@ -89,10 +89,10 @@ class Mark(models.Model):
 
     def __unicode__(self):
         return "{0} ({1}): {2}/{3}".format(
-            self.assignment.name,
+            self.rubric.name,
             self.student,
             self.value,
-            self.assignment.total,
+            self.rubric.total,
         )
 
 
@@ -124,12 +124,13 @@ class EnrollmentListFile(models.Model):
 
 class MarkFile(models.Model):
     created = models.DateTimeField(auto_now_add=True)
+    assignment = models.ForeignKey("Assignment")
     datafile = models.FileField()
 
     def __unicode__(self):
-        return str(self.datafile)
+        return "Marks for {0}".format(self.assignment)
 
     def save(self, *args, **kwargs):
         if self.id is None:
-            parsers.mark_parser(self.datafile)
+            parsers.mark_parser(self.assignment, self.datafile)
         super(MarkFile, self).save(*args, **kwargs)

@@ -55,11 +55,34 @@ def _setup_enrollment(row):
         practical.students.add(student)
 
 
-def mark_parser(f):
+def mark_parser(assignment, f):
     reader = csv.reader(f)
+    names = reader.next()
+    totals = reader.next()
+    rubrics = _setup_rubric(assignment, names, totals)
     for row in reader:
-        mark = _setup_mark(row)
+        _setup_mark(rubrics, row)
 
 
-def _setup_mark(row):
-    print(row)
+def _setup_rubric(assignment, names, totals):
+    names = names[1:]
+    totals = totals[1:]
+    rubrics = []
+    for name, total in zip(names, totals):
+        rubric = assignment.rubric_entries.filter(name=name)
+        if not rubric:
+            rubric = assignment.rubric_entries.create(name=name, total=total, assignment=assignment)
+        rubrics.append(rubric)
+    return rubrics
+
+
+def _setup_mark(rubrics, row):
+    _student_model = models.get_model("taid", "Student")
+    student = _student_model.objects.get(university_id=row[0])
+    for rubric, mark in zip(rubrics, row[1:]):
+        _mark_model = models.get_model("taid", "Mark")
+        if mark == "":
+            mark = 0.0
+        else:
+            mark = float(mark)
+        _mark_model.objects.create(value=mark, student=student, rubric=rubric)
