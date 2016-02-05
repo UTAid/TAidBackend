@@ -49,9 +49,9 @@ DEFAULT_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.humanize',
+    'schedule',
     'apps.taid',
     'rest_framework',
-    'schedule',
 ]
 
 # Middlewares
@@ -92,6 +92,11 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
+    'PAGE_SIZE': 10,
+}
 
 # ##### SECURITY CONFIGURATION ############################
 

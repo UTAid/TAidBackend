@@ -1,11 +1,9 @@
 from django.db import models
 from schedule.models.events import Event
-from schedule.models.calendars import Calendar
-from django.core.exceptions import ValidationError
-import constants
+from apps.taid import parsers
 
 
-class _Person(models.Model):
+class _UniversityMember(models.Model):
     university_id = models.CharField(max_length=50, primary_key=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
@@ -15,132 +13,127 @@ class _Person(models.Model):
         return "{0} {1}".format(self.first_name, self.last_name)
 
 
-class Teacher(_Person):
+class Teacher(_UniversityMember):
     pass
 
 
 class Instructor(Teacher):
     pass
 
+
 class TeachingAssistant(Teacher):
     pass
 
-class TAAidEvent(Event):
+
+class TAidEvent(Event):
     pass
 
-class Student(_Person):
-    number = models.PositiveIntegerField()
-    ids = models.ManyToManyField("Identification", blank=True)
+
+class Student(_UniversityMember):
+    student_number = models.CharField(max_length=10, blank=True)
 
 
 class Identification(models.Model):
-    description = models.CharField(max_length=500)
     value = models.CharField(max_length=100)
+    student = models.ForeignKey(Student)
+    description = models.CharField(max_length=500, blank=True)
 
-class Course(models.Model):
+
+class Lecture(models.Model):
     code = models.CharField(max_length=20)
-    title = models.CharField(max_length=254)
-    calendar = models.ForeignKey(Calendar)
-    section_code = models.CharField(max_length=1, choices=constants._SECTION_CODES)
-    lecture_session = models.CharField(max_length=2, choices=constants._SESSION_CODES)
-    students = models.ManyToManyField("Student", blank=True, verbose_name="Student(s)")
+    instructors = models.ManyToManyField("Instructor", blank=True)
+    students = models.ManyToManyField("Student", blank=True)
 
     def __unicode__(self):
         return self.code
 
-class Lecture(models.Model):
-    code = models.ForeignKey(Course)
-    instructors = models.ManyToManyField("Instructor", blank=True, verbose_name="Instructor(s)")
-    event = models.ForeignKey(TAAidEvent)
-
-    def __unicode__(self):
-        return self.code.code + " Section " + self.event.title
-
-    def __str__(self):
-        return self.__unicode__()
-
-    def __getattribute__(self, name):
-        if (name == "title"):
-            return self.__unicode__()
-
-        return super(Lecture, self).__getattribute__(name)
-
 
 class Tutorial(models.Model):
-    code = models.ForeignKey(Course)
+    code = models.CharField(max_length=20)
     ta = models.ManyToManyField("TeachingAssistant", blank=True, verbose_name="Teaching Assistant(s)")
-    event = models.ForeignKey(TAAidEvent)
+    event = models.ForeignKey("TAidEvent")
+    students = models.ManyToManyField("Student", blank=True)
 
     def __unicode__(self):
-        return self.code.code + " Tutorial " + self.event.title
+        return self.code
 
-    def __str__(self):
-        return self.__unicode__()
-
-    def __getattribute__(self, name):
-        if (name == "title"):
-            return self.__unicode__()
-
-        return super(Tutorial, self).__getattribute__(name)
 
 class Practical(models.Model):
-    code = models.ForeignKey(Course)
+    code = models.CharField(max_length=20)
     ta = models.ManyToManyField("TeachingAssistant", blank=True, verbose_name="Teaching Assistant(s)")
-    event = models.ForeignKey(TAAidEvent)
+    event = models.ForeignKey("TAidEvent")
+    students = models.ManyToManyField("Student", blank=True)
 
     def __unicode__(self):
-        return self.code.code + " Tutorial " + self.event.title
-
-    def __str__(self):
-        return self.__unicode__()
-
-    def __getattribute__(self, name):
-        if (name == "title"):
-            return self.__unicode__()
-
-        return super(Practical, self).__getattribute__(name)
+        return self.code
 
 
 class Assignment(models.Model):
     name = models.CharField(max_length=254)
-    total = models.DecimalField(max_digits=6, decimal_places=3)
-    parent = models.ForeignKey("self", null=True, blank=True, related_name="subparts")
-    marks = models.ManyToManyField("Mark", blank=True, related_name="student_marks")
+    rubric_entries = models.ManyToManyField("Rubric", blank=True, related_name="rubric_entries")
 
     def __unicode__(self):
         return self.name
 
 
-class Mark(models.Model):
-    value = models.DecimalField(max_digits=6, decimal_places=3)
-    student = models.ForeignKey("Student")
+class Rubric(models.Model):
+    name = models.CharField(max_length=254)
+    total = models.DecimalField(max_digits=6, decimal_places=2)
     assignment = models.ForeignKey("Assignment")
 
     def __unicode__(self):
+        return "{0} for {1}".format(self.name, self.assignment)
+
+
+class Mark(models.Model):
+    value = models.DecimalField(max_digits=6, decimal_places=2)
+    student = models.ForeignKey("Student")
+    rubric = models.ForeignKey("Rubric")
+
+    def __unicode__(self):
         return "{0} ({1}): {2}/{3}".format(
-                self.assignment.name,
-                self.student,
-                self.value,
-                self.assignment.total,
-                )
-
-    def clean(self):
-        if self.value > self.assignment.total:
-            raise ValidationError("{0} is more than {1}".format(
-                self.value,
-                self.assignment.total,
-                ))
-        elif self.value < 0.0:
-            raise ValidationError("{0} is less than 0.0".format(self.value))
+            self.rubric.name,
+            self.student,
+            self.value,
+            self.rubric.total,
+        )
 
 
-class GradeFile(models.Model):
-    name = models.CharField(max_length=254)
-    definitions = models.ManyToManyField("GradeDefinition", blank=True)
+class StudentListFile(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    datafile = models.FileField()
+
+    def __unicode__(self):
+        return str(self.datafile)
+
+    def save(self, *args, **kwargs):
+        if self.id is None:
+            parsers.student_parser(self.datafile)
+        super(StudentListFile, self).save(*args, **kwargs)
 
 
-class GradeDefinition(models.Model):
-    name = models.CharField(max_length=50)
-    value = models.DecimalField(max_digits=6, decimal_places=3)
+class EnrollmentListFile(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    datafile = models.FileField()
+
+    def __unicode__(self):
+        return str(self.datafile)
+
+    def save(self, *args, **kwargs):
+        if self.id is None:
+            parsers.enrollment_parser(self.datafile)
+        super(EnrollmentListFile, self).save(*args, **kwargs)
+
+
+class MarkFile(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
     assignment = models.ForeignKey("Assignment")
-    parent = models.ForeignKey("self", null=True, blank=True, related_name="subdefinitions")
+    datafile = models.FileField()
+
+    def __unicode__(self):
+        return "Marks for {0}".format(self.assignment)
+
+    def save(self, *args, **kwargs):
+        if self.id is None:
+            parsers.mark_parser(self.assignment, self.datafile)
+        super(MarkFile, self).save(*args, **kwargs)
