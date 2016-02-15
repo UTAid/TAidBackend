@@ -9,6 +9,7 @@ def student_parser(f):
     for row in reader:
         student = _setup_student(row)
 
+
 def _setup_student(row):
     info, ids = row[:5], row[5:]
     uni_id, last_name, first_name, number, email = info
@@ -16,12 +17,12 @@ def _setup_student(row):
     # Create the student
     _student_model = models.get_model("taid", "Student")
     student = _student_model.objects.create(
-            university_id=uni_id,
-            first_name=first_name,
-            last_name=last_name,
-            student_number=number,
-            email=email,
-            )
+        university_id=uni_id,
+        first_name=first_name,
+        last_name=last_name,
+        student_number=number,
+        email=email,
+    )
 
     for val in ids:
         student.identification_set.create(value=val)

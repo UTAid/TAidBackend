@@ -1,0 +1,73 @@
+Format of .csv files for TAid
+
+*****
+Enrolment lists - Indicate what lecture, tutorial, and (if applicable) 
+what practical section each student is enrolled in.
+
+Format:
+
+utorID,lecture_section,tutorial_section,practical_section
+
+Example:
+
+canvi241,L0003,T0002,
+racrob58,L0003,T0004,
+couade63,L0003,T0001,
+staild32,L0003,T0003,
+bisbea71,L0003,T0002,
+petbil69,L0003,T0002,
+.
+.
+.
+
+
+*****
+Student lists - Standard list of students for a class. The format allows
+for utorID, student number, and 3 additional ids (id1-id3) for each
+student. 
+
+Format:
+
+utorID,last_name,first_name,student_number,email,id1,id2,id3
+
+Example:
+
+canvi241,Cano,Vi,209415323,Vi.Cano@nowhere.com,ci1nva24,vi2c1na4,24vic1an
+racrob58,Racey,Robbin,206271143,Robbin.Racey@nowhere.com,8bor5rac,bcar58ro,rca5o8br
+couade63,Couchman,Adella,2081414346,Adella.Couchman@nowhere.com,ued3oca6,d63ecuao,3uac6doe
+staild32,Staplins,Ilda,2021649638,Ilda.Staplins@nowhere.com,a2tdlsi3,d2tsi3la,2iads3lt
+bisbea71,Bison,Beatris,203143295,Beatris.Bison@nowhere.com,7sabibe1,eibs17ab,ie1asbb7
+petbil69,Petaccio,Billy,2022239535,Billy.Petaccio@nowhere.com,e69tlbip,6bteli9p,tbeil69p
+.
+.
+.
+
+*****
+
+Marks files: Standard MarkUs format, First 2 lines are the header
+
+Header format:
+"", item1_name, item2_name, ... , itemN_name
+"", item1_value, item2_value, ... , itemN_value
+ 
+The format of each row for the rest of the file is:
+
+utorID, item1_mark, item2_mark, ... ,itemN_mark
+.
+.
+.
+ 
+Note: it is expected that any row may be missing one or more marks
+
+Example:
+
+"",Assignment_001,Assignment_002,Assignment_003,Assignment_004,Assignment_005
+"",65,94,95,37,108
+canvi241,54,58,,18,51
+racrob58,56,61,95,18,72
+couade63,55,59,75,19,67
+staild32,55,59,31,20,44
+bisbea71,55,58,85,18,64
+.
+.
+.
