@@ -1,0 +1,59 @@
+Code Review - Feb 17, 2016
+
+Component: TAid/apps/taid/tests/test_parsers.py
+Author: Leo 
+Reviewer: Paco
+
+Style:
+
+	As ever, documentation and comments missing :)
+
+Tests:
+
+	The test code refers relies on the parser in /TAid/apps/taid/parsers.py
+
+	In particular, the current tests which apply to student lists rely on
+this chunk of code from parsers.py
+__
+
+def _setup_student(row):
+    info, ids = row[:5], row[5:]
+    uni_id, last_name, first_name, number, email = info
+
+    # Create the student
+    _student_model = models.get_model("taid", "Student")
+    student = _student_model.objects.create(
+        university_id=uni_id,
+        first_name=first_name,
+        last_name=last_name,
+        student_number=number,
+        email=email,
+    )
+
+    for val in ids:
+        student.identification_set.create(value=val)
+
+    return student
+__
+
+	* Note on the above: identification_set is *not* described in
+	  models.py - why is that?
+
+	Currently the tests included are:
+
+	Empty list (check no items returned)
+	One students (verify content of student object)
+	More than one student (check content of each student)
+
+	These are reasonable, but I would like to see the following:
+
+	* Tests above, but carried out on actual CSV files (not hard-
+	  coded strings)	
+	* I see stubs for tests with invalid format rows or parser issues,
+	  would be nice to see those completed!
+	
+	Question - Who checks data consistency? should it be the parser?
+	 	   I forget if we agreed that we will assume .csv files
+	  	   are proper, seems dangerous!
+	
+   Tests for other parsers are still being developed.	
