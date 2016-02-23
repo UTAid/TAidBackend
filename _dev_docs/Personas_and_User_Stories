@@ -1,0 +1,43 @@
+TAid Personas and User Stories
+
+  Personas
+
+    1 - Paquinho, a 35 year-old computer science TA. He has been at this for a few years and as a result he
+  thinks he has a good process for everything. He won't willingly give up his way of doing things, so
+  any software intended to help with usual TA tasks would have to be easy to use and clearly save time,
+  otherwise he won't use it.
+  He is comfortable with technology but dislikes spending time fiddling with his phone.
+  He finds dealing with marking cumbersome, especially when team marks have to be recorded, so he would
+  welcome an application that makes this process easy.
+
+    2 - Marina, a 22 year-old computer science undergraduate TA. Marina is a first-time TA who is enthusiastic
+  and eager to learn and do a good job, but also worried that maintaining a grip on the administrative
+  parts of her work may prove difficult. She would like an application that makes it easy for her to 
+  keep track of her weekly duties, maintain her marks, make short notes and reminders of what she needs
+  to do for the week, and send her marks to the course instructor.
+  She is quite comfortable and in fact prefers working on her smartphone. 
+
+    3 - Mina, a 40 year-old computer science professor. Mina is a teaching stream faculty member who has plenty
+  of experience teaching large classes. Her courses often contain team-oriented projects, so she has to
+	organize, manage, and keep track of large numbers of student teams. At the same time she has to deal with
+	large numbers of TAs, provide them with schedules and timely reminders of what they are teaching
+	each week, keep track of marks, make sure no inconsistencies arise during the term due to mistakes in
+	capturing group-work marking results, and ensure everything runs smoothly. Her courses often require
+	students to work during supervised lab sessions, and part of the marking happens there, so she needs an
+	application that will allow her TAs to quickly and easily record marks during the lab with a minimum of
+	effort.
+	Mina is very comfortable with technology and always willing to try new tools that may help her teaching,
+	may save her time, or may provide her students with a better learning experience.
+	
+    4 - Gopher, a 45 year-old computer science professor. Gopher is a research stream faculty member with plenty
+  of teaching experience. While his teaching load is often lighter than teaching stream faculty, this term
+	he has been put in charge of coordinating a large, second-year computer science class across the three
+	campuses of UofT. He will have to make sure instructors across the three campuses are in sync, he will
+	prepare the outline for the course, coordinate the creation of content including lectures, assignments,
+	exercises, and labs between the instructors, and make sure everyone is aware of what is going on with
+	the course at all times. In addition, he is responsible for organizing a large team of TAs for his own
+	section of the course, and making sure all of that runs smoothly.
+	With research to be done, graduate students to supervise, and grants to write. Gopher needs help making
+	all of the above easy.
+	He is not fond of smartphones, which he considers gizmos, and would rather do everything from them
+	comfort of his trusty Linux box. 
