@@ -47,15 +47,172 @@ class StudentListParserTests(TestCase):
             self.assertTrue(ids.get(value=stuStr[6]))
             self.assertTrue(ids.get(value=stuStr[7]))
 
-    def test_student_parser_multi_id(self):
-        pass
-
     def test_student_parser_conflict(self):
-        pass
+        f1 = ContentFile("canvi241,Cano,Vi,209415323,Vi.Cano@nowhere.com,ci1nva24,vi2c1na4,24vic1an")
+        parsers.student_parser(f1)
+        parsers.student_parser(f1)
+
+        self.assertEqual(stuModel.objects.count(), 1)
 
     def test_student_parser_bad_format(self):
-        pass
+        f1 = ContentFile("canvi241")
+        parsers.student_parser(f1)
+
+        self.assertEqual(stuModel.objects.count(), 0)
 
 
 class EnrollmentListParserTest(TestCase):
-    pass
+    
+    def test_enrollment_parser_empty(self):
+        f1 = ContentFile("")
+        parsers.enrollment_parser(f1)
+
+        _student_model = apps.get_model("taid", "Student")
+        _lecture_model = apps.get_model("taid", "Lecture")
+        _tutorial_model = apps.get_model("taid", "Tutorial")
+        _practical_model = apps.get_model("taid", "Practical")
+
+        self.assertEqual(_student_model.objects.count(), 0)
+        self.assertEqual(_lecture_model.objects.count(), 0)
+        self.assertEqual(_tutorial_model.objects.count(), 0)
+        self.assertEqual(_practical_model.objects.count(), 0)
+
+
+    def test_enrollment_parser_no_practical(self):
+        f1 = ContentFile("canvi241,L0003,T0002,")
+        parsers.enrollment_parser(f1)
+
+        _student_model = apps.get_model("taid", "Student")
+        _lecture_model = apps.get_model("taid", "Lecture")
+        _tutorial_model = apps.get_model("taid", "Tutorial")
+        _practical_model = apps.get_model("taid", "Practical")
+
+        self.assertEqual(_student_model.university_id, "canvi241")
+        self.assertEqual(_lecture_model.code, "L0003")
+        self.assertEqual(_tutorial_model.code, "T0002")
+        self.assertEqual(_practical_model.objects.count(), 0)
+
+
+    def test_enrollment_parser_with_practical(self):
+        f1 = ContentFile("canvi241,L0003,T0002,PRA0001")
+        parsers.enrollment_parser(f1)
+
+        _student_model = apps.get_model("taid", "Student")
+        _lecture_model = apps.get_model("taid", "Lecture")
+        _tutorial_model = apps.get_model("taid", "Tutorial")
+        _practical_model = apps.get_model("taid", "Practical")
+
+        self.assertEqual(_student_model.university_id, "canvi241")
+        self.assertEqual(_lecture_model.code, "L0003")
+        self.assertEqual(_tutorial_model.code, "T0002")
+        self.assertEqual(_practical_model.code, "PRA0001")
+
+
+    def test_enrollment_parser_multi_no_practical(self):
+        f1Content = ContentFile("canvi241,L0001,T0001,\r\n" +\
+                                "racrob58,L0002,T0002,\r\n" +\
+                                "couade63,L0003,T0003,\r\n" +\
+                                "staild32,L0004,T0004,\r\n" +\
+                                "bisbea71,L0005,T0005,\r\n" +\
+                                "petbil69,L0006,T0006,")
+
+        parsers.enrollment_parser(f1)
+        _student_model = apps.get_model("taid", "Student")
+        _lecture_model = apps.get_model("taid", "Lecture")
+        _tutorial_model = apps.get_model("taid", "Tutorial")
+        _practical_model = apps.get_model("taid", "Practical")
+
+        for row in f1Content.split('\r\n'):
+            enrollment_string = row.split(",")
+            stu_entry =  _student_model.objects.get(enrollment_string[0])
+            lec_entry =  _lecture_model.objects.get(enrollment_string[1])
+            tut_entry =  _tutorial_model.objects.get(enrollment_string[2])
+
+            self.assertTrue(stu_entry.objects.count() != 0)
+            self.assertTrue(lec_entry.objects.count() != 0)
+            self.assertTrue(tut_entry.objects.count() != 0)
+
+            self.assertEqual(stu_entry.university_id, enrollment_string[0])
+            self.assertEqual(lec_entry.code, enrollment_string[1])
+            self.assertEqual(tut_entry.code, enrollment_string[2])
+            self.assertEqual(_practical_model.objects.count(), 0)
+
+
+    def test_enrollment_parser_multi_with_practical(self):
+        f1Content = ContentFile("canvi241,L0001,T0001,PRA0001\r\n" +\
+                                "racrob58,L0002,T0002,PRA0002\r\n" +\
+                                "couade63,L0003,T0003,PRA0003\r\n" +\
+                                "staild32,L0004,T0004,PRA0004\r\n" +\
+                                "bisbea71,L0005,T0005,PRA0005\r\n" +\
+                                "petbil69,L0006,T0006,PRA0006")
+
+        parsers.enrollment_parser(f1)
+        _student_model = apps.get_model("taid", "Student")
+        _lecture_model = apps.get_model("taid", "Lecture")
+        _tutorial_model = apps.get_model("taid", "Tutorial")
+        _practical_model = apps.get_model("taid", "Practical")
+
+        for row in f1Content.split('\r\n'):
+            enrollment_string = row.split(",")
+            stu_entry =  _student_model.objects.get(enrollment_string[0])
+            lec_entry =  _lecture_model.objects.get(enrollment_string[1])
+            tut_entry =  _tutorial_model.objects.get(enrollment_string[2])
+            pra_entry =  _practical_model.objects.get(enrollment_string[3])
+
+            self.assertTrue(stu_entry.objects.count() != 0)
+            self.assertTrue(lec_entry.objects.count() != 0)
+            self.assertTrue(tut_entry.objects.count() != 0)
+            self.assertTrue(pra_entry.objects.count() != 0)
+
+            self.assertEqual(stu_entry.university_id, enrollment_string[0])
+            self.assertEqual(lec_entry.code, enrollment_string[1])
+            self.assertEqual(tut_entry.code, enrollment_string[2])
+            self.assertEqual(pra_entry.code, enrollment_string[3])
+
+    def test_enrollment_parser_multi_no_practical_and_with_practical(self):
+        f1Content = ContentFile("canvi241,L0001,T0001,\r\n" +\
+                                "racrob58,L0002,T0002,PRA0002\r\n" +\
+                                "couade63,L0003,T0003,\r\n" +\
+                                "staild32,L0004,T0004,PRA0004\r\n" +\
+                                "bisbea71,L0005,T0005,\r\n" +\
+                                "petbil69,L0006,T0006,PRA0006")
+
+        parsers.enrollment_parser(f1)
+        _student_model = apps.get_model("taid", "Student")
+        _lecture_model = apps.get_model("taid", "Lecture")
+        _tutorial_model = apps.get_model("taid", "Tutorial")
+        _practical_model = apps.get_model("taid", "Practical")
+
+        for row in f1Content.split('\r\n'):
+            enrollment_string = row.split(",")
+            stu_entry =  _student_model.objects.get(enrollment_string[0])
+            lec_entry =  _lecture_model.objects.get(enrollment_string[1])
+            tut_entry =  _tutorial_model.objects.get(enrollment_string[2])
+
+            if (enrollment_string[3] != ""):
+                pra_entry =  _practical_model.objects.get(enrollment_string[3])
+                self.assertEqual(pra_entry.code, enrollment_string[3])
+
+            self.assertEqual(stu_entry.university_id, enrollment_string[0])
+            self.assertEqual(lec_entry.code, enrollment_string[1])
+            self.assertEqual(tut_entry.code, enrollment_string[2])
+
+
+class MarkParserTest(TestCase):
+
+    def test_mark_parser_empty(self):
+        f1 = ContentFile("")
+        assignment_model = apps.get_model("taid", "Assignment")
+        student_model = apps.get_model("taid", "Student")
+        mark_model = apps.get_model("taid", "Mark")
+        rubric_model = apps.get_model("taid", "Rubric")
+
+        self.assertEqual(assignment_model.objects.count(), 0)
+        self.assertEqual(student_model.objects.count(), 0)
+        self.assertEqual(mark_model.objects.count(), 0)
+        self.assertEqual(rubric_model.objects.count(), 0)
+            
+
+
+
+
