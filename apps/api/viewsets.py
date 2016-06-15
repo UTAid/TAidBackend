@@ -32,6 +32,11 @@ class IdentificationViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.IdentificationSerializer
 
 
+class LectureViewSet(viewsets.ModelViewSet):
+    queryset = models.Lecture.objects.all().order_by('code')
+    serializer_class = serializers.LectureSerializer
+
+
 class TutorialViewSet(viewsets.ModelViewSet):
     queryset = models.Tutorial.objects.all().order_by('code')
     serializer_class = serializers.TutorialSerializer
@@ -48,5 +53,6 @@ router.register(r'teaching_assistants', TeachingAssistantViewSet)
 router.register(r'students/upload', StudentListFileViewSet)
 router.register(r'students', StudentViewSet)
 router.register(r'identifications', IdentificationViewSet)
+router.register(r'lectures', LectureViewSet)
 router.register(r'tutorials', TutorialViewSet)
 router.register(r'practicals', PracticalViewSet)

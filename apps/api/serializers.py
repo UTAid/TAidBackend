@@ -1,20 +1,26 @@
 from apps.api import models
 from rest_framework import serializers
 
-class InstructorSerializer(serializers.HyperlinkedModelSerializer):
+class InstructorSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Instructor
         fields = ('url', 'university_id', 'first_name', 'last_name', 'email')
 
 
-class TeachingAssistantSerializer(serializers.HyperlinkedModelSerializer):
+class TeachingAssistantSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.TeachingAssistant
         fields = ('url', 'university_id', 'first_name', 'last_name', 'email')
 
 
-class StudentSerializer(serializers.HyperlinkedModelSerializer):
-    ids = 'IdentificationSerializer'
+class IdentificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Identification
+        fields = ('url', 'id', 'student', 'description', 'value')
+
+
+class StudentSerializer(serializers.ModelSerializer):
+    ids = IdentificationSerializer(source="identification_set", many=True, required=False)
 
     class Meta:
         model = models.Student
@@ -25,16 +31,11 @@ class StudentSerializer(serializers.HyperlinkedModelSerializer):
                 'first_name',
                 'last_name',
                 'email',
+                'ids',
                 )
 
 
-class IdentificationSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = models.Identification
-        fields = ('url', 'id', 'student', 'description', 'value')
-
-
-class LectureSerializer(serializers.HyperlinkedModelSerializer):
+class LectureSerializer(serializers.ModelSerializer):
     instructors = InstructorSerializer
     students = StudentSerializer
 
@@ -49,23 +50,25 @@ class LectureSerializer(serializers.HyperlinkedModelSerializer):
                 )
 
 
-class TutorialSerializer(serializers.HyperlinkedModelSerializer):
+class TutorialSerializer(serializers.ModelSerializer):
     ta = TeachingAssistantSerializer
+    students = StudentSerializer
 
     class Meta:
         model = models.Tutorial
         fields = ('url', 'id', 'code', 'ta', 'students')
 
 
-class PracticalSerializer(serializers.HyperlinkedModelSerializer):
+class PracticalSerializer(serializers.ModelSerializer):
     ta = TeachingAssistantSerializer
+    students = StudentSerializer
 
     class Meta:
         model = models.Practical
         fields = ('url', 'id', 'code', 'ta', 'students')
 
 
-class StudentListFileSerializer(serializers.HyperlinkedModelSerializer):
+class StudentListFileSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.StudentListFile
         fields = ('url', 'id', 'created', 'datafile')
