@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 
-from apps.taid import parsers
+from apps.api import parsers
 
 import constants
 

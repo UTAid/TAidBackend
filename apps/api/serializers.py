@@ -1,4 +1,4 @@
-from apps.taid import models
+from apps.api import models
 from rest_framework import serializers
 
 class InstructorSerializer(serializers.HyperlinkedModelSerializer):

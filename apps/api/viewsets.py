@@ -1,4 +1,4 @@
-from apps.taid import models, serializers
+from apps.api import models, serializers
 
 from rest_framework import viewsets, routers, parsers
 

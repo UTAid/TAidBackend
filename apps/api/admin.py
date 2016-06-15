@@ -1,5 +1,5 @@
 from django.contrib import admin
-from apps.taid import models
+from apps.api import models
 
 
 class InstructorAdmin(admin.ModelAdmin):

@@ -2,7 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from TAid.settings import common
 
-from apps.taid import viewsets
+from apps.api import viewsets
 
 urlpatterns = patterns('',
         # Examples:
