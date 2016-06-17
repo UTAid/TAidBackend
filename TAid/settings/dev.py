@@ -22,3 +22,11 @@ DATABASES = {
 INSTALLED_APPS = DEFAULT_APPS + [
         "django_extensions",
         ]
+
+
+# CORS configuration
+# The following probably shouldn't be hardcoded.
+# See below for docs:
+# https://github.com/ottoyiu/django-cors-headers/blob/master/README.md
+CORS_ORIGIN_REGEX_WHITELIST = ('^https?://localhost:.*')
+CORS_URLS_REGEX = r'^/(api/|api-auth/).*'
