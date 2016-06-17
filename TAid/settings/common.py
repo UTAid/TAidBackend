@@ -49,11 +49,13 @@ DEFAULT_APPS = [
     'django.contrib.staticfiles',
     'apps.api',
     'rest_framework',
+    'corsheaders',
 ]
 
 # Middlewares
 MIDDLEWARE_CLASSES = [
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -93,6 +95,11 @@ REST_FRAMEWORK = {
         'rest_framework_csv.renderers.CSVRenderer',
     ),
 }
+
+# CORS middleware CONFIGURATION
+# Allowed origins and URL's are in dev settings.
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = False
 
 
 # ##### SECURITY CONFIGURATION ############################

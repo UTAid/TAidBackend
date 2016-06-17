@@ -5,6 +5,7 @@ django-filter==0.10.0
 django-scheduler==0.7.5
 djangorestframework==3.3.3
 djangorestframework-csv==1.4.1
+django-cors-headers==1.1.0
 future==0.14.3
 graphviz==0.4.5
 icalendar==3.9.0
