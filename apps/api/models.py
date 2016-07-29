@@ -38,6 +38,7 @@ class Identification(models.Model):
     value = models.CharField(max_length=100)
     student = models.ForeignKey(Student)
     description = models.CharField(max_length=500, blank=True)
+    number = models.PositiveIntegerField()
 
 
 class Lecture(models.Model):

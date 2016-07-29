@@ -1,22 +1,24 @@
-from apps.api import models
+from apps.api import models, parsers
+from apps.api.validators import validate_csv
 from rest_framework import serializers
+
 
 class InstructorSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Instructor
-        fields = ('url', 'university_id', 'first_name', 'last_name', 'email')
+        fields = ("url", "university_id", "first_name", "last_name", "email")
 
 
 class TeachingAssistantSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.TeachingAssistant
-        fields = ('url', 'university_id', 'first_name', 'last_name', 'email')
+        fields = ("url", "university_id", "first_name", "last_name", "email")
 
 
 class IdentificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Identification
-        fields = ('url', 'id', 'student', 'description', 'value')
+        fields = ("url", "id", "student", "description", "value")
 
 
 class StudentSerializer(serializers.ModelSerializer):
@@ -25,13 +27,13 @@ class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Student
         fields = (
-                'url',
-                'university_id',
-                'student_number',
-                'first_name',
-                'last_name',
-                'email',
-                'ids',
+                "url",
+                "university_id",
+                "student_number",
+                "first_name",
+                "last_name",
+                "email",
+                "ids",
                 )
 
 
@@ -42,11 +44,11 @@ class LectureSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Lecture
         fields = (
-                'url',
-                'id',
-                'code',
-                'instructors',
-                'students',
+                "url",
+                "id",
+                "code",
+                "instructors",
+                "students",
                 )
 
 
@@ -56,7 +58,7 @@ class TutorialSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Tutorial
-        fields = ('url', 'id', 'code', 'ta', 'students')
+        fields = ("url", "id", "code", "ta", "students")
 
 
 class PracticalSerializer(serializers.ModelSerializer):
@@ -65,10 +67,46 @@ class PracticalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Practical
-        fields = ('url', 'id', 'code', 'ta', 'students')
+        fields = ("url", "id", "code", "ta", "students")
 
 
-class StudentListFileSerializer(serializers.ModelSerializer):
+class StudentListSerializer(serializers.Serializer):
+    file = serializers.FileField(validators=(validate_csv,))
+
+    def update(self, instance, validated_data):
+        instance.file = validated_data.get("file", instance.file)
+        return instance
+
+    def create(self, validated_data):
+        return parsers.StudentList(**validated_data)
+
+
+class EnrollmentListSerializer(serializers.Serializer):
+    file = serializers.FileField(validators=(validate_csv,))
+
+    def update(self, instance, validated_data):
+        instance.file = validated_data.get("file", instance.file)
+        return instance
+
+    def create(self, validated_data):
+        return parsers.EnrollmentList(**validated_data)
+
+
+class MarkSerializer(serializers.ModelSerializer):
+    value = serializers.DecimalField
+    student = StudentSerializer
+
     class Meta:
-        model = models.StudentListFile
-        fields = ('url', 'id', 'created', 'datafile')
+        model = models.Mark
+        fields = ("url", "id", "value", "student")
+
+
+class MarkFileSerializer(serializers.Serializer):
+    file = serializers.FileField(validators=(validate_csv,))
+
+    def update(self, instance, validated_data):
+        instance.file = validated_data.get("file", instance.file)
+        return instance
+
+    def create(self, validated_data):
+        return parsers.MarkFile(**validated_data)

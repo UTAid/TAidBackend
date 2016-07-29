@@ -1,6 +1,9 @@
 from apps.api import models, serializers
 
 from rest_framework import viewsets, routers, parsers
+from rest_framework.decorators import detail_route, list_route
+from rest_framework.response import Response
+from rest_framework_csv.renderers import CSVRenderer
 
 
 class InstructorViewSet(viewsets.ModelViewSet):
@@ -13,18 +16,41 @@ class TeachingAssistantViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.TeachingAssistantSerializer
 
 
+class StudentListCSVRenderer(CSVRenderer):
+    header = None
+
+
 class StudentViewSet(viewsets.ModelViewSet):
     queryset = models.Student.objects.all().order_by('university_id')
     serializer_class = serializers.StudentSerializer
 
+    @list_route(methods=["post"])
+    def upload(self, request):
+        s = serializers.StudentListSerializer(data=request.data)
+        if not s.is_valid():
+            return Response(s.errors)
+        student_list = s.save()
+        return Response(student_list.parse())
 
-class StudentListFileViewSet(viewsets.ModelViewSet):
-    queryset = models.StudentListFile.objects.all()
-    serializer_class = serializers.StudentListFileSerializer
-    parser_classes = (parsers.MultiPartParser, parsers.FormParser,)
+    @list_route(methods=["get"], renderer_classes=(StudentListCSVRenderer,))
+    def export(self, request):
+        student = models.Student.objects.get(university_id="kuadav")
+        content = [
+                [student.university_id,
+                student.first_name,
+                student.last_name,
+                student.email,
+                student.student_number]
+        ]
+        return Response(content)
 
-    def perform_create(self, serializer):
-        serializer.save(datafile=self.request.data.get('datafile'))
+    @list_route(methods=["post"])
+    def enroll(self, request):
+        s = serializers.EnrollmentListSerializer(data=request.data)
+        if not s.is_valid():
+            return Response(s.errors)
+        enrollment_list = s.save()
+        return Response(enrollment_list.parse())
 
 
 class IdentificationViewSet(viewsets.ModelViewSet):
@@ -47,12 +73,25 @@ class PracticalViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.PracticalSerializer
 
 
+class MarkFileViewSet(viewsets.ModelViewSet):
+    queryset = models.Mark.objects.all().order_by('student')
+    serializer_class = serializers.MarkSerializer
+
+    @list_route(methods=["post"])
+    def upload(self, request):
+        s = serializers.MarkFileSerializer(data=request.data)
+        if not s.is_valid():
+            return Response(s.errors)
+        mark_file = s.save()
+        return Response(mark_file.parse())
+
+
 router = routers.DefaultRouter()
 router.register(r'instructors', InstructorViewSet)
 router.register(r'teaching_assistants', TeachingAssistantViewSet)
-router.register(r'students/upload', StudentListFileViewSet)
 router.register(r'students', StudentViewSet)
 router.register(r'identifications', IdentificationViewSet)
 router.register(r'lectures', LectureViewSet)
 router.register(r'tutorials', TutorialViewSet)
 router.register(r'practicals', PracticalViewSet)
+router.register(r'marks', MarkFileViewSet)
