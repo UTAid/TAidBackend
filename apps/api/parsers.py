@@ -147,7 +147,7 @@ class MarkFile(object):
         result = { "message": student.pk, "marks": {} }
         for rubric, value in zip(self.rubrics, row[1:]):
             if value == "":
-                value = 0.0
+                continue
             else:
                 value = float(value)
             mark, created = _mark_model.objects.update_or_create(

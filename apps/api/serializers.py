@@ -70,6 +70,31 @@ class PracticalSerializer(serializers.ModelSerializer):
         fields = ("url", "id", "code", "ta", "students")
 
 
+class MarkSerializer(serializers.ModelSerializer):
+    value = serializers.DecimalField
+    student = StudentSerializer
+
+    class Meta:
+        model = models.Mark
+        fields = ("url", "id", "value", "student")
+
+
+class RubricSerializer(serializers.ModelSerializer):
+    marks = MarkSerializer(source="mark_set", many=True, required=False)
+
+    class Meta:
+        model = models.Rubric
+        fields = ("url", "name", "total", "marks")
+
+
+class AssignmentSerializer(serializers.ModelSerializer):
+    rubric_entries = RubricSerializer(many=True, required=False)
+
+    class Meta:
+        model = models.Assignment
+        fields = ("url", "name", "rubric_entries")
+
+
 class StudentListSerializer(serializers.Serializer):
     file = serializers.FileField(validators=(validate_csv,))
 
@@ -90,15 +115,6 @@ class EnrollmentListSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         return parsers.EnrollmentList(**validated_data)
-
-
-class MarkSerializer(serializers.ModelSerializer):
-    value = serializers.DecimalField
-    student = StudentSerializer
-
-    class Meta:
-        model = models.Mark
-        fields = ("url", "id", "value", "student")
 
 
 class MarkFileSerializer(serializers.Serializer):
