@@ -25,6 +25,28 @@ class InstructorViewSet(viewsets.ModelViewSet):
 class TeachingAssistantViewSet(viewsets.ModelViewSet):
     queryset = models.TeachingAssistant.objects.all().order_by('university_id')
     serializer_class = serializers.TeachingAssistantSerializer
+
+    @list_route(methods=["post"])
+    def upload(self, request):
+        s = serializers.TAListSerializer(data=request.data)
+        if not s.is_valid():
+            return Response(s.errors)
+        ta_list = s.save()
+        return Response(ta_list.parse())
+
+    @list_route(methods=["get"], renderer_classes=(NoHeaderCSVRenderer,))
+    def export(self, request):
+        content = []
+        for university_id in request.GET.getlist("id"):
+            ta = models.TeachingAssistant.objects.get(university_id=university_id)
+            row = [
+                    ta.university_id,
+                    ta.first_name,
+                    ta.last_name,
+                    ta.email,
+                    ]
+            content.append(row)
+        return Response(content)
         
 
 class StudentViewSet(viewsets.ModelViewSet):

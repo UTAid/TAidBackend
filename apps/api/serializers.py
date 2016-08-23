@@ -126,3 +126,14 @@ class MarkFileSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         return parsers.MarkFile(**validated_data)
+
+
+class TAListSerializer(serializers.Serializer):
+    file = serializers.FileField(validators=(validate_csv,))
+
+    def update(self, instance, validated_data):
+        instance.file = validated_data.get("file", instance.file)
+        return instance
+
+    def create(self, validated_data):
+        return parsers.TAList(**validated_data)

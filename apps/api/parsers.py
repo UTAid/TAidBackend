@@ -160,3 +160,36 @@ class MarkFile(object):
             else:
                 result["marks"][rubric.name] = { "result": "changed", "value": mark.value }
         return result
+
+
+class TAList(object):
+    def __init__(self, file):
+        self.file = file
+        self.reader = csv.reader(self.file)
+        self.results = {}
+
+    def parse(self):
+        for i, row in enumerate(self.reader):
+            self.results[i] = { "result": None, "message": None }
+            try:
+                self.results[i] = self._setup_ta(row)
+            except Exception as e:
+                self.results[i]["result"] = "error"
+                self.results[i]["message"] = str(e)
+        return self.results
+
+    def _setup_ta(self, row):
+        uni_id, last_name, first_name, email = row[:4]
+
+        _ta_model = apps.get_model("api", "TeachingAssistant")
+        ta, created = _ta_model.objects.update_or_create(
+                university_id=uni_id,
+                first_name=first_name,
+                last_name=last_name,
+                email=email,
+                )
+        if created:
+            result = { "result": "created", "message": ta.pk }
+        else:
+            result = { "result": "changed", "message": ta.pk }
+        return result
