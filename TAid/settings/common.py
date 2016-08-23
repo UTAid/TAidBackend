@@ -2,6 +2,7 @@
 import sys
 # Import some utility functions
 from os.path import abspath, basename, dirname, join, normpath
+import datetime
 
 # #########################################################
 
@@ -49,11 +50,13 @@ DEFAULT_APPS = [
     'django.contrib.staticfiles',
     'apps.api',
     'rest_framework',
+    'corsheaders',
 ]
 
 # Middlewares
 MIDDLEWARE_CLASSES = [
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -85,6 +88,11 @@ TEMPLATES = [
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
     'PAGE_SIZE': 10,
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
     'DEFAULT_RENDERER_CLASSES': (
@@ -94,12 +102,19 @@ REST_FRAMEWORK = {
     ),
 }
 
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=0.25),
+    'JWT_ALLOW_REFRESH': True,
+}
+
 
 # ##### SECURITY CONFIGURATION ############################
 
 # We store the secret key here
 # The required SECRET_KEY is fetched at the end of this file
 SECRET_FILE = normpath(join(PROJECT_ROOT, 'run', 'SECRET.key'))
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 # These persons receive error notification
 ADMINS = (
