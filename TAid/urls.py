@@ -7,20 +7,25 @@ from apps.api import viewsets
 from apps.api.views import schema_view
 
 
-urlpatterns = patterns('',
-        # Examples:
-        # url(r'^$', 'TAid.views.home', name='home'),
-        # url(r'^blog/', include('blog.urls')),
+v0_patterns = [
+    url(r'^', include(viewsets.router.urls)),
+    url(r'^docs/', schema_view),
+]
 
-        url(r'^api/v0/', include(viewsets.router.urls)),
-        url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-        url(r'^api-token-auth/', jwt.obtain_jwt_token),
-        url(r'^api-token-refresh/', jwt.refresh_jwt_token),
-        url(r'^api-token-verify/', jwt.verify_jwt_token),
-        url(r'^docs/', schema_view),
-        url(r'^admin/', include(admin.site.urls)),
-        # static files (images, css, javascript, etc.)
-        (r'^media/(?P<path>.*)$', 'django.views.static.serve',
-            {'document_root': common.MEDIA_ROOT},
-            ),
-        )
+api_patterns = [
+    url(r'^v0/', include(v0_patterns)),
+    url(r'^auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^token-auth/', jwt.obtain_jwt_token),
+    url(r'^token-refresh/', jwt.refresh_jwt_token),
+    url(r'^token-verify/', jwt.verify_jwt_token),
+]
+
+urlpatterns = patterns('',
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^api/', include(api_patterns)),
+
+    # Static files (images, css, javascript, etc.)
+    (r'^media/(?P<path>.*)$', 'django.views.static.serve',
+        {'document_root': common.MEDIA_ROOT},
+    ),
+)
