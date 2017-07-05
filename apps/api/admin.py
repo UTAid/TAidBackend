@@ -3,11 +3,15 @@ from apps.api import models
 
 
 class InstructorAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['last_name','first_name', 'university_id', 'email']
+    search_fields = ['last_name','first_name', 'university_id', 'email']
+    ordering = ['last_name']
 
 
 class TeachingAssistantAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['last_name','first_name', 'university_id', 'email']
+    search_fields = ['last_name','first_name', 'university_id', 'email']
+    ordering = ['last_name']
 
 
 class IdentificationInline(admin.StackedInline):
@@ -15,6 +19,9 @@ class IdentificationInline(admin.StackedInline):
 
 
 class StudentAdmin(admin.ModelAdmin):
+    list_display = ['last_name','first_name', 'university_id', 'student_number', 'email']
+    search_fields = ['last_name','first_name', 'university_id', 'student_number', 'email']
+    ordering = ['last_name']
     inlines = (
         IdentificationInline,
     )
