@@ -1,8 +1,5 @@
 from django.db import models
-from django.core.exceptions import ValidationError
-
 from apps.api import parsers
-import constants
 
 
 class _UniversityMember(models.Model):
@@ -70,7 +67,8 @@ class Practical(models.Model):
 
 class Assignment(models.Model):
     name = models.CharField(max_length=254)
-    rubric_entries = models.ManyToManyField("Rubric", blank=True, related_name="rubric_entries")
+    rubric_entries = models.ManyToManyField(
+        "Rubric", blank=True, related_name="rubric_entries")
 
     def __unicode__(self):
         return self.name
@@ -107,9 +105,8 @@ class StudentListFile(models.Model):
         return str(self.datafile)
 
     def save(self, *args, **kwargs):
-        if self.id is None:
-            student_list = parsers.StudentList(self.datafile)
-            student_list.parse()
+        student_list = parsers.StudentList(self.datafile)
+        student_list.parse()
         super(StudentListFile, self).save(*args, **kwargs)
 
 
@@ -121,9 +118,8 @@ class EnrollmentListFile(models.Model):
         return str(self.datafile)
 
     def save(self, *args, **kwargs):
-        if self.id is None:
-            enrollment_list = parsers.EnrollmentList(self.datafile)
-            enrollment_list.parse()
+        enrollment_list = parsers.EnrollmentList(self.datafile)
+        enrollment_list.parse()
         super(EnrollmentListFile, self).save(*args, **kwargs)
 
 
@@ -136,7 +132,6 @@ class MarkFile(models.Model):
         return "Marks for {0}".format(self.assignment)
 
     def save(self, *args, **kwargs):
-        if self.id is None:
-            mark_file = parsers.MarkFile(self.datafile)
-            mark_file.parse()
+        mark_file = parsers.MarkFile(self.datafile)
+        mark_file.parse()
         super(MarkFile, self).save(*args, **kwargs)

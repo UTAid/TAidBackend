@@ -3,14 +3,14 @@ from apps.api import models
 
 
 class InstructorAdmin(admin.ModelAdmin):
-    list_display = ['last_name','first_name', 'university_id', 'email']
-    search_fields = ['last_name','first_name', 'university_id', 'email']
+    list_display = ['last_name', 'first_name', 'university_id', 'email']
+    search_fields = ['last_name', 'first_name', 'university_id', 'email']
     ordering = ['last_name']
 
 
 class TeachingAssistantAdmin(admin.ModelAdmin):
-    list_display = ['last_name','first_name', 'university_id', 'email']
-    search_fields = ['last_name','first_name', 'university_id', 'email']
+    list_display = ['last_name', 'first_name', 'university_id', 'email']
+    search_fields = ['last_name', 'first_name', 'university_id', 'email']
     ordering = ['last_name']
 
 
@@ -19,8 +19,10 @@ class IdentificationInline(admin.StackedInline):
 
 
 class StudentAdmin(admin.ModelAdmin):
-    list_display = ['last_name','first_name', 'university_id', 'student_number', 'email']
-    search_fields = ['last_name','first_name', 'university_id', 'student_number', 'email']
+    list_display = ['last_name', 'first_name',
+                    'university_id', 'student_number', 'email']
+    search_fields = ['last_name', 'first_name',
+                     'university_id', 'student_number', 'email']
     ordering = ['last_name']
     inlines = (
         IdentificationInline,
@@ -50,6 +52,7 @@ class TutorialAdmin(admin.ModelAdmin):
 class PracticalAdmin(admin.ModelAdmin):
     pass
 
+
 class MarkAdmin(admin.ModelAdmin):
     pass
 
@@ -64,15 +67,15 @@ class RubricInline(admin.StackedInline):
 
 class AssignmentAdmin(admin.ModelAdmin):
     inlines = (
-            RubricInline,
-            )
+        RubricInline,
+    )
 
 
 class RubricAdmin(admin.ModelAdmin):
     model = models.Rubric
     inlines = (
-            MarkInline,
-            )
+        MarkInline,
+    )
 
 
 class StudentListFileAdmin(admin.ModelAdmin):
