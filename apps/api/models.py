@@ -108,7 +108,8 @@ class StudentListFile(models.Model):
 
     def save(self, *args, **kwargs):
         if self.id is None:
-            parsers.student_parser(self.datafile)
+            student_list = parsers.StudentList(self.datafile)
+            student_list.parse()
         super(StudentListFile, self).save(*args, **kwargs)
 
 
@@ -121,7 +122,8 @@ class EnrollmentListFile(models.Model):
 
     def save(self, *args, **kwargs):
         if self.id is None:
-            parsers.enrollment_parser(self.datafile)
+            enrollment_list = parsers.EnrollmentList(self.datafile)
+            enrollment_list.parse()
         super(EnrollmentListFile, self).save(*args, **kwargs)
 
 
@@ -135,5 +137,6 @@ class MarkFile(models.Model):
 
     def save(self, *args, **kwargs):
         if self.id is None:
-            parsers.mark_parser(self.assignment, self.datafile)
+            mark_file = parsers.MarkFile(self.datafile)
+            mark_file.parse()
         super(MarkFile, self).save(*args, **kwargs)
