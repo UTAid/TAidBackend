@@ -6,7 +6,7 @@ Developed for Anya Tafliovich at UTSC.
 
 ## Requirements
 
-Please see `requirements.txt` for updated requirements.
+Please see [requirements.txt](requirements.txt) for updated requirements.
 At the minimum this project will need Django 1.8.
 
 
@@ -32,6 +32,8 @@ The development server will most likely will be set as `http://127.0.0.1:8000/` 
 
 
 ## Documentation
+Documentation of the overall project can be found at:
+sphinx/_build/html/index.html
 
 The documentation from the Django 1.8 will be most useful.
 Some good links include:
