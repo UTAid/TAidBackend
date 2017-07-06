@@ -1,0 +1,238 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Parsers Documentation &#8212; TAidBackend 1.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Create Models UML" href="graph.html" />
+    <link rel="prev" title="Set up Documentation" href="set_up.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-parsers">
+<span id="parsers-documentation"></span><h1>Parsers Documentation<a class="headerlink" href="#module-parsers" title="Permalink to this headline">¶</a></h1>
+<p>Populates the database based on the csv files provided</p>
+<dl class="class">
+<dt id="parsers.EnrollmentList">
+<em class="property">class </em><code class="descclassname">parsers.</code><code class="descname">EnrollmentList</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#parsers.EnrollmentList" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Populates database with students and the lecture, tutorials and</dt>
+<dd>practicals they are enrolled in</dd>
+<dt>Attributes:</dt>
+<dd><dl class="first docutils">
+<dt>file: Open csv file object. Contents of file. Has to be of format:</dt>
+<dd>uni_id, lec_id, tut_id, prac_id</dd>
+</dl>
+<p class="last">reader: Reader oject which can iterate over lines in given csvfile
+results: A dictionary of the format {int: {‘result’:’‘, ‘message’:’‘}}</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="parsers.EnrollmentList.parse">
+<code class="descname">parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#parsers.EnrollmentList.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the models and returns a dict of dict</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd><p class="first">A dict of dict. Maps the i-th row to its corresponding data. Ex-
+{int: {‘result’: ‘’, ‘message’: “”}}
+Result can be 3 cases -</p>
+<blockquote class="last">
+<div><dl class="docutils">
+<dt>error: if models could not be updated. Message describes</dt>
+<dd>the error</dd>
+<dt>changed: changes the lecture, tutorial or practical associated</dt>
+<dd>with the student. Message is the uni_id, lec_id, tut_id
+or prac_id</dd>
+</dl>
+</div></blockquote>
+</dd>
+<dt>Excepts:</dt>
+<dd>Excepts all errors but most likely it is for
+django.core.exceptions.AppRegistryNotReady</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="parsers.StudentList">
+<em class="property">class </em><code class="descclassname">parsers.</code><code class="descname">StudentList</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#parsers.StudentList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Populates database with students and their information</p>
+<dl class="docutils">
+<dt>Attributes:</dt>
+<dd><dl class="first docutils">
+<dt>file: Open csv file object. Contents of file. Has to be of format:</dt>
+<dd>uni_id, last_name, first_name, number, email, id, id, id</dd>
+</dl>
+<p class="last">reader: Reader oject which can iterate over lines in given csv file
+results: A dictionary of the format {int: {‘result’:’‘, ‘message’:’‘}}</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="parsers.StudentList.parse">
+<code class="descname">parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#parsers.StudentList.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the models and returns a dict of dict</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd><p class="first">A dict of dict. Maps the i-th row to its corresponding data. Ex-
+{int: {‘result’: ‘’, ‘message’: “”}}
+Result can be 3 cases -</p>
+<blockquote class="last">
+<div><dl class="docutils">
+<dt>error: if models could not be updated. Message describes the</dt>
+<dd>error</dd>
+<dt>created: create a new student on the database with provided</dt>
+<dd>info. Message is the uni_id which is the primary_key</dd>
+<dt>changed: a student with that info already exists in database</dt>
+<dd>therefore updates info with the one found in csv file.
+Message is the uni_id which is the primary_key</dd>
+</dl>
+</div></blockquote>
+</dd>
+<dt>Excepts:</dt>
+<dd>Excepts all errors but most likely it is for
+django.core.exceptions.AppRegistryNotReady</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="parsers.TAList">
+<em class="property">class </em><code class="descclassname">parsers.</code><code class="descname">TAList</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#parsers.TAList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Populates database with TA information</p>
+<dl class="docutils">
+<dt>Attributes:</dt>
+<dd><dl class="first docutils">
+<dt>file: Open csv file object. Contents of file. Has to be of format:</dt>
+<dd>uni_id, last_name, first_name, email</dd>
+</dl>
+<p class="last">reader: Reader oject which can iterate over lines in given csv file
+results: A dictionary of the format {int: {‘result’:’‘, ‘message’:’‘}}</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="parsers.TAList.parse">
+<code class="descname">parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#parsers.TAList.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the models and returns a dict of dict</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd><p class="first">A dict of dict. Maps the i-th row to its corresponding data. Ex-
+{int: {‘result’: ‘’, ‘message’: “”}}
+Result can be 3 cases -</p>
+<blockquote class="last">
+<div><dl class="docutils">
+<dt>error: if models could not be updated. Message describes</dt>
+<dd>the error</dd>
+<dt>created: if TA is not present in database creates it. Message</dt>
+<dd>is uni_id</dd>
+<dt>changed: if TA is present then changes the info. Message is</dt>
+<dd>uni_id</dd>
+</dl>
+</div></blockquote>
+</dd>
+<dt>Excepts:</dt>
+<dd>Excepts all errors but most likely it is for
+django.core.exceptions.AppRegistryNotReady</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">TAidBackend</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="set_up.html">Set up Documentation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Parsers Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="graph.html">Create Models UML</a></li>
+<li class="toctree-l1"><a class="reference internal" href="update_sphinx.html">Update Shpinx</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="set_up.html" title="previous chapter">Set up Documentation</a></li>
+      <li>Next: <a href="graph.html" title="next chapter">Create Models UML</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Prantar Bhowmik.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/parsers.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

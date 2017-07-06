@@ -27,7 +27,7 @@ The code uses python2. Follow the instructions to setup a local server in your m
 ### Exploring the development server
 The development server will most likely will be set as `http://127.0.0.1:8000/` but if otherwise it will say so on the screen when `python2 manage.py runserver` is run
 * `http://127.0.0.1:8000/admin/` will take to the admin page. Put in the credentials that were made during the set-up process
-* `hhttp://127.0.0.1:8000/api/v0/` will take to the api page. If not logged in, click on login button top right corner of screen and provide admin credentials.
+* `http://127.0.0.1:8000/api/v0/` will take to the api page. If not logged in, click on login button top right corner of screen and provide admin credentials.
   * Now going to `http://127.0.0.1:8000/api/v0/` will show more information on the screen of the links where different API requests can be made
 
 
