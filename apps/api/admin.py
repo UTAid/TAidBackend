@@ -1,3 +1,5 @@
+'''Representation of the model in the admin interface'''
+
 from django.contrib import admin
 from apps.api import models
 

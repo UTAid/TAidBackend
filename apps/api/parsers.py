@@ -22,7 +22,7 @@ class StudentList(object):
         self.results = {}
 
     def parse(self):
-        ''' Updates the models and returns a dict of dict
+        '''Updates the models and returns a dict of dict
 
         Returns:
             A dict of dict. Maps the i-th row to its corresponding data. Ex-
@@ -50,7 +50,7 @@ class StudentList(object):
         return self.results
 
     def _setup_student(self, row):
-        ''' Updates the database
+        '''Updates the database
 
         Args:
             row: list of string. Contains 7 elements of the format
@@ -110,14 +110,14 @@ class EnrollmentList(object):
     '''
 
     def __init__(self, file):
-        ''' Inits EnrollmentList given an open file object
+        '''Inits EnrollmentList given an open file object
         '''
         self.file = file
         self.reader = reader(self.file)
         self.results = {}
 
     def parse(self):
-        ''' Updates the models and returns a dict of dict
+        '''Updates the models and returns a dict of dict
 
         Returns:
             A dict of dict. Maps the i-th row to its corresponding data. Ex-
@@ -143,7 +143,7 @@ class EnrollmentList(object):
         return self.results
 
     def _setup_enrollment(self, row):
-        ''' Updates the database
+        '''Updates the database
 
         Args:
             row: list of string. Contains 4 elements of the format
@@ -260,14 +260,14 @@ class TAList(object):
     '''
 
     def __init__(self, file):
-        ''' Inits TAList given an open file object
+        '''Inits TAList given an open file object
         '''
         self.file = file
         self.reader = reader(self.file)
         self.results = {}
 
     def parse(self):
-        ''' Updates the models and returns a dict of dict
+        '''Updates the models and returns a dict of dict
 
         Returns:
             A dict of dict. Maps the i-th row to its corresponding data. Ex-
@@ -294,7 +294,7 @@ class TAList(object):
         return self.results
 
     def _setup_ta(self, row):
-        ''' Updates the database
+        '''Updates the database
 
         Args:
             row: list of string. Contains 4 elements of the format

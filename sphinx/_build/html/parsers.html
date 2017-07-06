@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Parsers Documentation &#8212; TAidBackend 1.0.0 documentation</title>
+    <title>Parsers Auto-Documentation &#8212; TAidBackend 1.0.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -23,8 +23,8 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Create Models UML" href="graph.html" />
-    <link rel="prev" title="Set up Documentation" href="set_up.html" />
+    <link rel="next" title="Serializers Auto-Documentation" href="serializers.html" />
+    <link rel="prev" title="Constants Auto-Documentation" href="constants.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -40,12 +40,12 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-parsers">
-<span id="parsers-documentation"></span><h1>Parsers Documentation<a class="headerlink" href="#module-parsers" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-apps.api.parsers">
+<span id="parsers-auto-documentation"></span><h1>Parsers Auto-Documentation<a class="headerlink" href="#module-apps.api.parsers" title="Permalink to this headline">¶</a></h1>
 <p>Populates the database based on the csv files provided</p>
 <dl class="class">
-<dt id="parsers.EnrollmentList">
-<em class="property">class </em><code class="descclassname">parsers.</code><code class="descname">EnrollmentList</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#parsers.EnrollmentList" title="Permalink to this definition">¶</a></dt>
+<dt id="apps.api.parsers.EnrollmentList">
+<em class="property">class </em><code class="descclassname">apps.api.parsers.</code><code class="descname">EnrollmentList</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#apps.api.parsers.EnrollmentList" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
 <dt>Populates database with students and the lecture, tutorials and</dt>
 <dd>practicals they are enrolled in</dd>
@@ -59,8 +59,8 @@ results: A dictionary of the format {int: {‘result’:’‘, ‘message’:�
 </dd>
 </dl>
 <dl class="method">
-<dt id="parsers.EnrollmentList.parse">
-<code class="descname">parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#parsers.EnrollmentList.parse" title="Permalink to this definition">¶</a></dt>
+<dt id="apps.api.parsers.EnrollmentList.parse">
+<code class="descname">parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#apps.api.parsers.EnrollmentList.parse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Updates the models and returns a dict of dict</p>
 <dl class="docutils">
 <dt>Returns:</dt>
@@ -86,8 +86,8 @@ django.core.exceptions.AppRegistryNotReady</dd>
 </dd></dl>
 
 <dl class="class">
-<dt id="parsers.StudentList">
-<em class="property">class </em><code class="descclassname">parsers.</code><code class="descname">StudentList</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#parsers.StudentList" title="Permalink to this definition">¶</a></dt>
+<dt id="apps.api.parsers.StudentList">
+<em class="property">class </em><code class="descclassname">apps.api.parsers.</code><code class="descname">StudentList</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#apps.api.parsers.StudentList" title="Permalink to this definition">¶</a></dt>
 <dd><p>Populates database with students and their information</p>
 <dl class="docutils">
 <dt>Attributes:</dt>
@@ -100,8 +100,8 @@ results: A dictionary of the format {int: {‘result’:’‘, ‘message’:�
 </dd>
 </dl>
 <dl class="method">
-<dt id="parsers.StudentList.parse">
-<code class="descname">parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#parsers.StudentList.parse" title="Permalink to this definition">¶</a></dt>
+<dt id="apps.api.parsers.StudentList.parse">
+<code class="descname">parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#apps.api.parsers.StudentList.parse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Updates the models and returns a dict of dict</p>
 <dl class="docutils">
 <dt>Returns:</dt>
@@ -129,8 +129,8 @@ django.core.exceptions.AppRegistryNotReady</dd>
 </dd></dl>
 
 <dl class="class">
-<dt id="parsers.TAList">
-<em class="property">class </em><code class="descclassname">parsers.</code><code class="descname">TAList</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#parsers.TAList" title="Permalink to this definition">¶</a></dt>
+<dt id="apps.api.parsers.TAList">
+<em class="property">class </em><code class="descclassname">apps.api.parsers.</code><code class="descname">TAList</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#apps.api.parsers.TAList" title="Permalink to this definition">¶</a></dt>
 <dd><p>Populates database with TA information</p>
 <dl class="docutils">
 <dt>Attributes:</dt>
@@ -143,8 +143,8 @@ results: A dictionary of the format {int: {‘result’:’‘, ‘message’:�
 </dd>
 </dl>
 <dl class="method">
-<dt id="parsers.TAList.parse">
-<code class="descname">parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#parsers.TAList.parse" title="Permalink to this definition">¶</a></dt>
+<dt id="apps.api.parsers.TAList.parse">
+<code class="descname">parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#apps.api.parsers.TAList.parse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Updates the models and returns a dict of dict</p>
 <dl class="docutils">
 <dt>Returns:</dt>
@@ -191,17 +191,23 @@ django.core.exceptions.AppRegistryNotReady</dd>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="set_up.html">Set up Documentation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Parsers Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="admin.html">Admin Auto-Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="constants.html">Constants Auto-Documentation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Parsers Auto-Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="serializers.html">Serializers Auto-Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="validators.html">Validators Auto-Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="views.html">Views Auto-Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="viewsets.html">Viewsets Auto-Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="graph.html">Create Models UML</a></li>
-<li class="toctree-l1"><a class="reference internal" href="update_sphinx.html">Update Shpinx</a></li>
+<li class="toctree-l1"><a class="reference internal" href="update_sphinx.html">Update Sphinx</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="set_up.html" title="previous chapter">Set up Documentation</a></li>
-      <li>Next: <a href="graph.html" title="next chapter">Create Models UML</a></li>
+      <li>Previous: <a href="constants.html" title="previous chapter">Constants Auto-Documentation</a></li>
+      <li>Next: <a href="serializers.html" title="next chapter">Serializers Auto-Documentation</a></li>
   </ul></li>
 </ul>
 </div>

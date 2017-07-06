@@ -1,5 +1,5 @@
-Parsers Documentation
+Parsers Auto-Documentation
 ============================
 
-.. automodule:: parsers
+.. automodule:: apps.api.parsers
     :members:

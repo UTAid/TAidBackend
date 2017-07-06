@@ -1,3 +1,5 @@
+'''Converts models to JSON'''
+
 from apps.api import models, parsers
 from apps.api.validators import validate_csv
 from rest_framework import serializers
@@ -22,19 +24,20 @@ class IdentificationSerializer(serializers.ModelSerializer):
 
 
 class StudentSerializer(serializers.ModelSerializer):
-    ids = IdentificationSerializer(source="identification_set", many=True, required=False)
+    ids = IdentificationSerializer(
+        source="identification_set", many=True, required=False)
 
     class Meta:
         model = models.Student
         fields = (
-                "url",
-                "university_id",
-                "student_number",
-                "first_name",
-                "last_name",
-                "email",
-                "ids",
-                )
+            "url",
+            "university_id",
+            "student_number",
+            "first_name",
+            "last_name",
+            "email",
+            "ids",
+        )
 
 
 class LectureSerializer(serializers.ModelSerializer):
@@ -44,12 +47,12 @@ class LectureSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Lecture
         fields = (
-                "url",
-                "id",
-                "code",
-                "instructors",
-                "students",
-                )
+            "url",
+            "id",
+            "code",
+            "instructors",
+            "students",
+        )
 
 
 class TutorialSerializer(serializers.ModelSerializer):

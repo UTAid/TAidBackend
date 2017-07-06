@@ -1,3 +1,5 @@
+'''Creates the database'''
+
 from django.db import models
 from apps.api import parsers
 

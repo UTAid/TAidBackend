@@ -1,4 +1,4 @@
-Update Shpinx
+Update Sphinx
 ============================
 
 - Modify rst file

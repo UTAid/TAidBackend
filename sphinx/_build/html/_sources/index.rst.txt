@@ -12,7 +12,13 @@ Application for managing courses and grades.
    :caption: Contents:
 
    set_up
+   admin
+   constants
    parsers
+   serializers
+   validators
+   views
+   viewsets
    graph
    update_sphinx
 
