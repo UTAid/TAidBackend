@@ -91,6 +91,9 @@ class EnrollmentListFileAdmin(admin.ModelAdmin):
 class MarkFileAdmin(admin.ModelAdmin):
     pass
 
+class TAListAdmin(admin.ModelAdmin):
+    pass
+
 
 admin.site.register(models.Instructor, InstructorAdmin)
 admin.site.register(models.TeachingAssistant, TeachingAssistantAdmin)
@@ -105,3 +108,4 @@ admin.site.register(models.Rubric, RubricAdmin)
 admin.site.register(models.StudentListFile, StudentListFileAdmin)
 admin.site.register(models.EnrollmentListFile, StudentListFileAdmin)
 admin.site.register(models.MarkFile, StudentListFileAdmin)
+admin.site.register(models.TAListFile, TAListAdmin)

@@ -137,3 +137,15 @@ class MarkFile(models.Model):
         mark_file = parsers.MarkFile(self.datafile)
         mark_file.parse()
         super(MarkFile, self).save(*args, **kwargs)
+
+class TAListFile(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    datafile = models.FileField()
+
+    def __unicode__(self):
+        return str(self.datafile)
+
+    def save(self, *args, **kwargs):
+        ta_list = parsers.TAList(self.datafile)
+        ta_list.parse()
+        super(TAListFile, self).save(*args, **kwargs)
