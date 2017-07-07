@@ -29,6 +29,8 @@ The development server will most likely will be set as `http://127.0.0.1:8000/` 
 * `http://127.0.0.1:8000/admin/` will take to the admin page. Put in the credentials that were made during the set-up process
 * `http://127.0.0.1:8000/api/v0/` will take to the api page. If not logged in, click on login button top right corner of screen and provide admin credentials.
   * Now going to `http://127.0.0.1:8000/api/v0/` will show more information on the screen of the links where different API requests can be made
+  * Now going to `http://127.0.0.1:8000/api/v0/docs/` will show the operations available to the rest api
+
 
 
 ## Documentation

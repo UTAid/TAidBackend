@@ -10,11 +10,11 @@ class _UniversityMember(models.Model):
     last_name = models.CharField(max_length=50)
     email = models.EmailField()
 
-    def __unicode__(self):
-        return "{0} {1}".format(self.first_name, self.last_name)
-
     class Meta:
         abstract = True
+
+    def __unicode__(self):
+        return "{0} {1}".format(self.first_name, self.last_name)
 
 
 class Teacher(_UniversityMember):
@@ -51,7 +51,7 @@ class Lecture(models.Model):
 
 class Tutorial(models.Model):
     code = models.CharField(max_length=20)
-    ta = models.ManyToManyField("TeachingAssistant", blank=True)
+    teaching_assistant = models.ManyToManyField("TeachingAssistant", blank=True)
     students = models.ManyToManyField("Student", blank=True)
 
     def __unicode__(self):
@@ -60,7 +60,7 @@ class Tutorial(models.Model):
 
 class Practical(models.Model):
     code = models.CharField(max_length=20)
-    ta = models.ManyToManyField("TeachingAssistant", blank=True)
+    teaching_assistant = models.ManyToManyField("TeachingAssistant", blank=True)
     students = models.ManyToManyField("Student", blank=True)
 
     def __unicode__(self):

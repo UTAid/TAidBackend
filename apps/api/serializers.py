@@ -56,21 +56,21 @@ class LectureSerializer(serializers.ModelSerializer):
 
 
 class TutorialSerializer(serializers.ModelSerializer):
-    ta = TeachingAssistantSerializer
+    teaching_assistant = TeachingAssistantSerializer
     students = StudentSerializer
 
     class Meta:
         model = models.Tutorial
-        fields = ("url", "id", "code", "ta", "students")
+        fields = ("url", "id", "code", "teaching_assistant", "students")
 
 
 class PracticalSerializer(serializers.ModelSerializer):
-    ta = TeachingAssistantSerializer
+    teaching_assistant = TeachingAssistantSerializer
     students = StudentSerializer
 
     class Meta:
         model = models.Practical
-        fields = ("url", "id", "code", "ta", "students")
+        fields = ("url", "id", "code", "teaching_assistant", "students")
 
 
 class MarkSerializer(serializers.ModelSerializer):

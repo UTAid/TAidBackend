@@ -231,9 +231,7 @@ class MarkFile(object):
         student = _student_model.objects.get(university_id=row[0])
         result = {"message": student.pk, "marks": {}}
         for rubric, value in zip(self.rubrics, row[1:]):
-            if value == "":
-                continue
-            else:
+            if value != "":
                 value = float(value)
             mark, created = _mark_model.objects.update_or_create(
                 value=value,
@@ -311,14 +309,14 @@ class TAList(object):
         uni_id, last_name, first_name, email = row[:4]
 
         _ta_model = apps.get_model("api", "TeachingAssistant")
-        ta, created = _ta_model.objects.update_or_create(
+        teaching_assistant, created = _ta_model.objects.update_or_create(
             university_id=uni_id,
             first_name=first_name,
             last_name=last_name,
             email=email,
         )
         if created:
-            result = {"result": "created", "message": ta.pk}
+            result = {"result": "created", "message": teaching_assistant.pk}
         else:
-            result = {"result": "changed", "message": ta.pk}
+            result = {"result": "changed", "message": teaching_assistant.pk}
         return result

@@ -48,6 +48,8 @@ when ``python2 manage.py runserver`` is run
 
 - Now going to ``http://127.0.0.1:8000/api/v0/`` will show more information on the screen of the links where different API requests can be made
 
+- Now going to ``http://127.0.0.1:8000/api/v0/docs/`` will show the operations available to the rest api
+
 Useful Links
 -------------
 
