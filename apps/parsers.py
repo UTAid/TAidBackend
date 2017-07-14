@@ -305,4 +305,3 @@ class TAList(object):
         else:
             result = {"result": "changed", "message": teaching_assistant.pk}
         return result
-

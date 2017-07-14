@@ -1,7 +1,7 @@
 '''Creates the database'''
 
 from django.db import models
-from apps import parsers
+from . import parsers
 
 
 class _UniversityMember(models.Model):
@@ -51,7 +51,8 @@ class Lecture(models.Model):
 
 class Tutorial(models.Model):
     code = models.CharField(max_length=20)
-    teaching_assistant = models.ManyToManyField("TeachingAssistant", blank=True)
+    teaching_assistant = models.ManyToManyField(
+        "TeachingAssistant", blank=True)
     students = models.ManyToManyField("Student", blank=True)
 
     def __unicode__(self):
@@ -60,7 +61,8 @@ class Tutorial(models.Model):
 
 class Practical(models.Model):
     code = models.CharField(max_length=20)
-    teaching_assistant = models.ManyToManyField("TeachingAssistant", blank=True)
+    teaching_assistant = models.ManyToManyField(
+        "TeachingAssistant", blank=True)
     students = models.ManyToManyField("Student", blank=True)
 
     def __unicode__(self):
@@ -137,6 +139,7 @@ class MarkFile(models.Model):
         mark_file = parsers.MarkFile(self.datafile)
         mark_file.parse()
         super(MarkFile, self).save(*args, **kwargs)
+
 
 class TAListFile(models.Model):
     created = models.DateTimeField(auto_now_add=True)

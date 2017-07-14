@@ -1,7 +1,7 @@
 '''Representation of the model in the admin interface'''
 
 from django.contrib import admin
-from apps import models
+from . import models
 
 
 class InstructorAdmin(admin.ModelAdmin):
@@ -90,6 +90,7 @@ class EnrollmentListFileAdmin(admin.ModelAdmin):
 
 class MarkFileAdmin(admin.ModelAdmin):
     pass
+
 
 class TAListAdmin(admin.ModelAdmin):
     pass

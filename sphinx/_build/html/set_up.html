@@ -1,0 +1,170 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Set up Documentation &#8212; TAidBackend 1.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Admin Auto-Documentation" href="admin.html" />
+    <link rel="prev" title="Welcome to TAidBackend’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="set-up-documentation">
+<h1>Set up Documentation<a class="headerlink" href="#set-up-documentation" title="Permalink to this headline">¶</a></h1>
+<p><strong>TAid</strong> is an application for managing grades and courses. Developed
+for Anya Tafliovich at UTSC.</p>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<p>Can be found at <code class="docutils literal"><span class="pre">requirements.txt</span></code></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Django</span><span class="o">==</span><span class="mf">1.11</span><span class="o">.</span><span class="mi">3</span>
+<span class="n">django</span><span class="o">-</span><span class="n">cors</span><span class="o">-</span><span class="n">headers</span><span class="o">==</span><span class="mf">2.1</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">django</span><span class="o">-</span><span class="n">extensions</span><span class="o">==</span><span class="mf">1.8</span><span class="o">.</span><span class="mi">1</span>
+<span class="n">djangorestframework</span><span class="o">==</span><span class="mf">3.6</span><span class="o">.</span><span class="mi">3</span>
+<span class="n">djangorestframework</span><span class="o">-</span><span class="n">csv</span><span class="o">==</span><span class="mf">2.0</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">djangorestframework</span><span class="o">-</span><span class="n">jwt</span><span class="o">==</span><span class="mf">1.11</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">django</span><span class="o">-</span><span class="n">rest</span><span class="o">-</span><span class="n">swagger</span><span class="o">==</span><span class="mf">2.1</span><span class="o">.</span><span class="mi">2</span>
+<span class="n">pydot</span><span class="o">==</span><span class="mf">1.2</span><span class="o">.</span><span class="mi">3</span>
+<span class="n">requests</span><span class="o">==</span><span class="mf">2.18</span><span class="o">.</span><span class="mi">1</span>
+<span class="n">simplejson</span><span class="o">==</span><span class="mf">3.11</span><span class="o">.</span><span class="mi">1</span>
+<span class="n">sphinx</span><span class="o">==</span><span class="mf">1.6</span><span class="o">.</span><span class="mi">3</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>It is recommended to have <code class="docutils literal"><span class="pre">pip</span></code> and <code class="docutils literal"><span class="pre">virtualenvwrapper</span></code> setup on
+your base machine for development. Clone this repo to your destination.
+Just run <code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirments.txt</span></code> inside of a virtualenv to
+download all your dependencies.</p>
+<div class="section" id="set-up">
+<h3>Set-up<a class="headerlink" href="#set-up" title="Permalink to this headline">¶</a></h3>
+<p>The code uses python3. Follow the instructions to setup a local server
+in your machine:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">sudo</span> <span class="pre">pip3</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements.txt</span></code> - This will install all the dependencies found in the requirements.txt file</li>
+<li><code class="docutils literal"><span class="pre">python3</span> <span class="pre">manage.py</span> <span class="pre">makemigrations</span></code> - Creates new migrations based on the changes you have made to your models (placed here just to be cautious)</li>
+<li><code class="docutils literal"><span class="pre">python3</span> <span class="pre">manage.py</span> <span class="pre">migrate</span></code> - Applies the migrations and sets up the database</li>
+<li><code class="docutils literal"><span class="pre">python3</span> <span class="pre">manage.py</span> <span class="pre">createsuperuser</span></code> - Sets up an admin user (follow instructions on screen)</li>
+<li><code class="docutils literal"><span class="pre">python3</span> <span class="pre">manage.py</span> <span class="pre">runserver</span></code> - This sets up a development server on the local pc</li>
+</ul>
+</div>
+<div class="section" id="exploring-the-development-server">
+<h3>Exploring the development server<a class="headerlink" href="#exploring-the-development-server" title="Permalink to this headline">¶</a></h3>
+<p>The development server will most likely will be set as
+<code class="docutils literal"><span class="pre">http://127.0.0.1:8000/</span></code> but if otherwise it will say so on the screen
+when <code class="docutils literal"><span class="pre">python2</span> <span class="pre">manage.py</span> <span class="pre">runserver</span></code> is run</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">http://127.0.0.1:8000/admin/</span></code> will take to the admin page. Put in the credentials that were made during the set-up process</li>
+<li><code class="docutils literal"><span class="pre">http://127.0.0.1:8000/api/v0/</span></code> will take to the api page. If not logged in, click on login button top right corner of screen and provide admin credentials.</li>
+<li>Now going to <code class="docutils literal"><span class="pre">http://127.0.0.1:8000/api/v0/</span></code> will show more information on the screen of the links where different API requests can be made</li>
+<li>Now going to <code class="docutils literal"><span class="pre">http://127.0.0.1:8000/api/v0/docs/</span></code> will show the operations available to the rest api</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">TAidBackend</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Set up Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="admin.html">Admin Auto-Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="constants.html">Constants Auto-Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parsers.html">Parsers Auto-Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="serializers.html">Serializers Auto-Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="validators.html">Validators Auto-Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="views.html">Views Auto-Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="viewsets.html">Viewsets Auto-Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="graph.html">Create Models UML</a></li>
+<li class="toctree-l1"><a class="reference internal" href="update_sphinx.html">Update Sphinx</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to TAidBackend’s documentation!</a></li>
+      <li>Next: <a href="admin.html" title="next chapter">Admin Auto-Documentation</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Prantar Bhowmik.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/set_up.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

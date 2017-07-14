@@ -15,10 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.views.static import serve
 import rest_framework_jwt.views as jwt
 
 from apps import viewsets
 from apps.views import schema_view
+from TAid import settings
 
 
 v0_patterns = [
@@ -37,4 +39,7 @@ api_patterns = [
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include(api_patterns)),
+    url(r'^media/(?P<path>.*)$', serve, {
+        'document_root': settings.MEDIA_ROOT,
+    }),
 ]
