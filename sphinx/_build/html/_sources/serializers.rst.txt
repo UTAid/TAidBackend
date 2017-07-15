@@ -1,5 +1,5 @@
 Serializers Auto-Documentation
 ==============================
 
-.. automodule:: apps.serializers
+.. automodule:: apps.api.serializers
     :members:

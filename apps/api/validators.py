@@ -6,8 +6,10 @@ from django.core.exceptions import ValidationError
 
 def validate_csv(value):
     '''Validates if a file is a csv file
+
     Attributes:
         value: is a string which is the name of the file
+
     Raises:
         ValidationError: if the file is not csv or falied to parse the file
     '''

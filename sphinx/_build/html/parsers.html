@@ -40,12 +40,12 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-apps.parsers">
-<span id="parsers-auto-documentation"></span><h1>Parsers Auto-Documentation<a class="headerlink" href="#module-apps.parsers" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-apps.api.parsers">
+<span id="parsers-auto-documentation"></span><h1>Parsers Auto-Documentation<a class="headerlink" href="#module-apps.api.parsers" title="Permalink to this headline">¶</a></h1>
 <p>Populates the database based on the csv files provided</p>
 <dl class="class">
-<dt id="apps.parsers.EnrollmentList">
-<em class="property">class </em><code class="descclassname">apps.parsers.</code><code class="descname">EnrollmentList</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#apps.parsers.EnrollmentList" title="Permalink to this definition">¶</a></dt>
+<dt id="apps.api.parsers.EnrollmentList">
+<em class="property">class </em><code class="descclassname">apps.api.parsers.</code><code class="descname">EnrollmentList</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#apps.api.parsers.EnrollmentList" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
 <dt>Populates database with students and the lecture, tutorials and</dt>
 <dd>practicals they are enrolled in</dd>
@@ -59,15 +59,15 @@ results: A dictionary of the format {int: {‘result’:’‘, ‘message’:�
 </dd>
 </dl>
 <dl class="method">
-<dt id="apps.parsers.EnrollmentList.parse">
-<code class="descname">parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#apps.parsers.EnrollmentList.parse" title="Permalink to this definition">¶</a></dt>
-<dd><p>Updates the models and returns a dict of dict
-Returns:</p>
-<blockquote>
-<div><p>A dict of dict. Maps the i-th row to its corresponding data. Ex-
+<dt id="apps.api.parsers.EnrollmentList.parse">
+<code class="descname">parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#apps.api.parsers.EnrollmentList.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the models and returns a dict of dict</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd><p class="first">A dict of dict. Maps the i-th row to its corresponding data. Ex-
 {int: {‘result’: ‘’, ‘message’: “”}}
 Result can be 3 cases -</p>
-<blockquote>
+<blockquote class="last">
 <div><dl class="docutils">
 <dt>error: if models could not be updated. Message describes</dt>
 <dd>the error</dd>
@@ -76,8 +76,7 @@ Result can be 3 cases -</p>
 or prac_id</dd>
 </dl>
 </div></blockquote>
-</div></blockquote>
-<dl class="docutils">
+</dd>
 <dt>Excepts:</dt>
 <dd>Excepts all errors but most likely it is for
 django.core.exceptions.AppRegistryNotReady</dd>
@@ -87,28 +86,29 @@ django.core.exceptions.AppRegistryNotReady</dd>
 </dd></dl>
 
 <dl class="class">
-<dt id="apps.parsers.StudentList">
-<em class="property">class </em><code class="descclassname">apps.parsers.</code><code class="descname">StudentList</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#apps.parsers.StudentList" title="Permalink to this definition">¶</a></dt>
-<dd><p>Populates database with students and their information
-Attributes:</p>
-<blockquote>
-<div><dl class="docutils">
+<dt id="apps.api.parsers.StudentList">
+<em class="property">class </em><code class="descclassname">apps.api.parsers.</code><code class="descname">StudentList</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#apps.api.parsers.StudentList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Populates database with students and their information</p>
+<dl class="docutils">
+<dt>Attributes:</dt>
+<dd><dl class="first docutils">
 <dt>file: Open csv file object. Contents of file. Has to be of format:</dt>
 <dd>uni_id, last_name, first_name, number, email, id, id, id</dd>
 </dl>
-<p>reader: Reader oject which can iterate over lines in given csv file
+<p class="last">reader: Reader oject which can iterate over lines in given csv file
 results: A dictionary of the format {int: {‘result’:’‘, ‘message’:’‘}}</p>
-</div></blockquote>
+</dd>
+</dl>
 <dl class="method">
-<dt id="apps.parsers.StudentList.parse">
-<code class="descname">parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#apps.parsers.StudentList.parse" title="Permalink to this definition">¶</a></dt>
-<dd><p>Updates the models and returns a dict of dict
-Returns:</p>
-<blockquote>
-<div><p>A dict of dict. Maps the i-th row to its corresponding data. Ex-
+<dt id="apps.api.parsers.StudentList.parse">
+<code class="descname">parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#apps.api.parsers.StudentList.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the models and returns a dict of dict</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd><p class="first">A dict of dict. Maps the i-th row to its corresponding data. Ex-
 {int: {‘result’: ‘’, ‘message’: “”}}
 Result can be 3 cases -</p>
-<blockquote>
+<blockquote class="last">
 <div><dl class="docutils">
 <dt>error: if models could not be updated. Message describes the</dt>
 <dd>error</dd>
@@ -119,8 +119,7 @@ Result can be 3 cases -</p>
 Message is the uni_id which is the primary_key</dd>
 </dl>
 </div></blockquote>
-</div></blockquote>
-<dl class="docutils">
+</dd>
 <dt>Excepts:</dt>
 <dd>Excepts all errors but most likely it is for
 django.core.exceptions.AppRegistryNotReady</dd>
@@ -130,28 +129,29 @@ django.core.exceptions.AppRegistryNotReady</dd>
 </dd></dl>
 
 <dl class="class">
-<dt id="apps.parsers.TAList">
-<em class="property">class </em><code class="descclassname">apps.parsers.</code><code class="descname">TAList</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#apps.parsers.TAList" title="Permalink to this definition">¶</a></dt>
-<dd><p>Populates database with TA information
-Attributes:</p>
-<blockquote>
-<div><dl class="docutils">
+<dt id="apps.api.parsers.TAList">
+<em class="property">class </em><code class="descclassname">apps.api.parsers.</code><code class="descname">TAList</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#apps.api.parsers.TAList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Populates database with TA information</p>
+<dl class="docutils">
+<dt>Attributes:</dt>
+<dd><dl class="first docutils">
 <dt>file: Open csv file object. Contents of file. Has to be of format:</dt>
 <dd>uni_id, last_name, first_name, email</dd>
 </dl>
-<p>reader: Reader oject which can iterate over lines in given csv file
+<p class="last">reader: Reader oject which can iterate over lines in given csv file
 results: A dictionary of the format {int: {‘result’:’‘, ‘message’:’‘}}</p>
-</div></blockquote>
+</dd>
+</dl>
 <dl class="method">
-<dt id="apps.parsers.TAList.parse">
-<code class="descname">parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#apps.parsers.TAList.parse" title="Permalink to this definition">¶</a></dt>
-<dd><p>Updates the models and returns a dict of dict
-Returns:</p>
-<blockquote>
-<div><p>A dict of dict. Maps the i-th row to its corresponding data. Ex-
+<dt id="apps.api.parsers.TAList.parse">
+<code class="descname">parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#apps.api.parsers.TAList.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the models and returns a dict of dict</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd><p class="first">A dict of dict. Maps the i-th row to its corresponding data. Ex-
 {int: {‘result’: ‘’, ‘message’: “”}}
 Result can be 3 cases -</p>
-<blockquote>
+<blockquote class="last">
 <div><dl class="docutils">
 <dt>error: if models could not be updated. Message describes</dt>
 <dd>the error</dd>
@@ -161,8 +161,7 @@ Result can be 3 cases -</p>
 <dd>uni_id</dd>
 </dl>
 </div></blockquote>
-</div></blockquote>
-<dl class="docutils">
+</dd>
 <dt>Excepts:</dt>
 <dd>Excepts all errors but most likely it is for
 django.core.exceptions.AppRegistryNotReady</dd>

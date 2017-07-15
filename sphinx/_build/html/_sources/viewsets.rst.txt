@@ -1,5 +1,5 @@
 Viewsets Auto-Documentation
 ============================
 
-.. automodule:: apps.viewsets
+.. automodule:: apps.api.viewsets
     :members:

@@ -1,5 +1,5 @@
 Constants Auto-Documentation
 ============================
 
-.. automodule:: apps.constants
+.. automodule:: apps.api.constants
     :members:

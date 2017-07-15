@@ -6,6 +6,7 @@ from django.apps import apps
 
 class StudentList(object):
     '''Populates database with students and their information
+
     Attributes:
         file: Open csv file object. Contents of file. Has to be of format:
             uni_id, last_name, first_name, number, email, id, id, id
@@ -22,6 +23,7 @@ class StudentList(object):
 
     def parse(self):
         '''Updates the models and returns a dict of dict
+
         Returns:
             A dict of dict. Maps the i-th row to its corresponding data. Ex-
             {int: {'result': '', 'message': ""}}
@@ -33,6 +35,7 @@ class StudentList(object):
                 changed: a student with that info already exists in database
                     therefore updates info with the one found in csv file.
                     Message is the uni_id which is the primary_key
+
         Excepts:
             Excepts all errors but most likely it is for
             django.core.exceptions.AppRegistryNotReady
@@ -48,9 +51,11 @@ class StudentList(object):
 
     def _setup_student(self, row):
         '''Updates the database
+
         Args:
             row: list of string. Contains 7 elements of the format
                 [uni_id, last_name, first_name, number, email, id, id, id]
+
         Returns:
             A dict of dict of the format {int: {'result': '', 'message': ""}}
             Result can be 2 cases -
@@ -96,6 +101,7 @@ class StudentList(object):
 class EnrollmentList(object):
     '''Populates database with students and the lecture, tutorials and
         practicals they are enrolled in
+
     Attributes:
         file: Open csv file object. Contents of file. Has to be of format:
             uni_id, lec_id, tut_id, prac_id
@@ -112,6 +118,7 @@ class EnrollmentList(object):
 
     def parse(self):
         '''Updates the models and returns a dict of dict
+
         Returns:
             A dict of dict. Maps the i-th row to its corresponding data. Ex-
             {int: {'result': '', 'message': ""}}
@@ -121,6 +128,7 @@ class EnrollmentList(object):
                 changed: changes the lecture, tutorial or practical associated
                     with the student. Message is the uni_id, lec_id, tut_id
                     or prac_id
+
         Excepts:
             Excepts all errors but most likely it is for
             django.core.exceptions.AppRegistryNotReady
@@ -136,10 +144,12 @@ class EnrollmentList(object):
 
     def _setup_enrollment(self, row):
         '''Updates the database
+
         Args:
             row: list of string. Contains 4 elements of the format
                 [uni_id, lec_id, tut_id, prac_id]
                 lec_id, tut_id and prac_id can be empty strings
+
         Returns:
             A dict of dict of the format {int: {'result': '', 'message': ""}}
             Result can be empty or -
@@ -239,6 +249,7 @@ class MarkFile(object):
 
 class TAList(object):
     '''Populates database with TA information
+
     Attributes:
         file: Open csv file object. Contents of file. Has to be of format:
             uni_id, last_name, first_name, email
@@ -255,6 +266,7 @@ class TAList(object):
 
     def parse(self):
         '''Updates the models and returns a dict of dict
+
         Returns:
             A dict of dict. Maps the i-th row to its corresponding data. Ex-
             {int: {'result': '', 'message': ""}}
@@ -265,6 +277,7 @@ class TAList(object):
                     is uni_id
                 changed: if TA is present then changes the info. Message is
                     uni_id
+
         Excepts:
             Excepts all errors but most likely it is for
             django.core.exceptions.AppRegistryNotReady
@@ -280,9 +293,11 @@ class TAList(object):
 
     def _setup_ta(self, row):
         '''Updates the database
+
         Args:
             row: list of string. Contains 4 elements of the format
                 [uni_id, last_name, first_name, email]
+
         Returns:
             A dict of dict of the format {int: {'result': '', 'message': ""}}
             Result can be 2 cases -

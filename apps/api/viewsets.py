@@ -1,6 +1,6 @@
 '''Performs get and post requests'''
 
-from . import models, serializers
+from apps.api import models, serializers
 
 from rest_framework import viewsets, routers, parsers
 from rest_framework.decorators import detail_route, list_route

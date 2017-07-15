@@ -1,5 +1,5 @@
 Admin Auto-Documentation
 ============================
 
-.. automodule:: apps.admin
+.. automodule:: apps.api.admin
     :members:

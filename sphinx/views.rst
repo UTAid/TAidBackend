@@ -1,5 +1,5 @@
 Views Auto-Documentation
 ============================
 
-.. automodule:: apps.views
+.. automodule:: apps.api.views
     :members:

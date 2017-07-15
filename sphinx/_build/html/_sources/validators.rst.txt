@@ -1,5 +1,5 @@
 Validators Auto-Documentation
 ============================
 
-.. automodule:: apps.validators
+.. automodule:: apps.api.validators
     :members:

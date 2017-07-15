@@ -1,7 +1,7 @@
 '''Converts models to JSON'''
 
-from . import models, parsers
-from apps.validators import validate_csv
+from apps.api import models, parsers
+from apps.api.validators import validate_csv
 from rest_framework import serializers
 
 
