@@ -88,6 +88,7 @@ download all your dependencies.</p>
 <p>The code uses python2. Follow the instructions to setup a local server
 in your machine:</p>
 <ul class="simple">
+<li><code class="docutils literal"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">python-pip</span></code> - This will install pip</li>
 <li><code class="docutils literal"><span class="pre">sudo</span> <span class="pre">pip2</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements.txt</span></code> - This will install all the dependencies found in the requirements.txt file</li>
 <li><code class="docutils literal"><span class="pre">python2</span> <span class="pre">manage.py</span> <span class="pre">makemigrations</span></code> - Creates new migrations based on the changes you have made to your models (placed here just to be cautious)</li>
 <li><code class="docutils literal"><span class="pre">python2</span> <span class="pre">manage.py</span> <span class="pre">migrate</span></code> - Applies the migrations and sets up the database</li>
@@ -102,21 +103,18 @@ in your machine:</p>
 when <code class="docutils literal"><span class="pre">python2</span> <span class="pre">manage.py</span> <span class="pre">runserver</span></code> is run</p>
 <ul class="simple">
 <li><code class="docutils literal"><span class="pre">http://127.0.0.1:8000/admin/</span></code> will take to the admin page. Put in the credentials that were made during the set-up process</li>
-<li><code class="docutils literal"><span class="pre">http://127.0.0.1:8000/api/v0/</span></code> will take to the api page. If not logged in, click on login button top right corner of screen and provide admin credentials.</li>
+<li><code class="docutils literal"><span class="pre">http://127.0.0.1:8000/api/v0/</span></code> will take to the api page. If not logged in, click on login button top right corner of screen and provide admin credentials.<ul>
 <li>Now going to <code class="docutils literal"><span class="pre">http://127.0.0.1:8000/api/v0/</span></code> will show more information on the screen of the links where different API requests can be made</li>
 <li>Now going to <code class="docutils literal"><span class="pre">http://127.0.0.1:8000/api/v0/docs/</span></code> will show the operations available to the rest api</li>
 </ul>
-</div>
-</div>
-<div class="section" id="useful-links">
-<h2>Useful Links<a class="headerlink" href="#useful-links" title="Permalink to this headline">¶</a></h2>
-<p>The documentation from the Django 1.8 will be most useful. Some good
-links include:</p>
-<ul class="simple">
-<li><a class="reference external" href="https://docs.djangoproject.com/en/1.8/ref/models/fields/">Model Fields</a></li>
-<li><a class="reference external" href="https://docs.djangoproject.com/en/1.8/ref/contrib/admin/">Admin</a></li>
-<li><a class="reference external" href="https://docs.djangoproject.com/en/1.8/topics/migrations/">Migrations</a></li>
+</li>
 </ul>
+</div>
+<div class="section" id="documentation">
+<h3>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h3>
+<p>Documentation of the overall project can be found at:</p>
+<p><code class="docutils literal"><span class="pre">sphinx/_build/html/index.html</span></code></p>
+</div>
 </div>
 </div>
 
@@ -141,7 +139,6 @@ links include:</p>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Set up Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#useful-links">Useful Links</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="admin.html">Admin Auto-Documentation</a></li>
@@ -152,7 +149,7 @@ links include:</p>
 <li class="toctree-l1"><a class="reference internal" href="views.html">Views Auto-Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="viewsets.html">Viewsets Auto-Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="graph.html">Create Models UML</a></li>
-<li class="toctree-l1"><a class="reference internal" href="update_sphinx.html">Update Sphinx</a></li>
+<li class="toctree-l1"><a class="reference internal" href="update_sphinx.html">Sphinx</a></li>
 </ul>
 
 <div class="relations">

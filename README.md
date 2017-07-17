@@ -18,6 +18,7 @@ Just run `pip install -r requirments.txt` inside of a virtualenv to download all
 
 ### Set-up
 The code uses python2. Follow the instructions to setup a local server in your machine:
+* `sudo apt-get install python-pip` - This will install pip
 * `sudo pip2 install -r requirements.txt` - This will install all the dependencies found in the requirements.txt file
 * `python2 manage.py makemigrations` - Creates new migrations based on the changes you have made to your models (placed here just to be cautious)
 * `python2 manage.py migrate` - Applies the migrations and sets up the database
@@ -35,11 +36,4 @@ The development server will most likely will be set as `http://127.0.0.1:8000/` 
 
 ## Documentation
 Documentation of the overall project can be found at:
-sphinx/_build/html/index.html
-
-The documentation from the Django 1.8 will be most useful.
-Some good links include:
-
-* [Model Fields](https://docs.djangoproject.com/en/1.8/ref/models/fields/)
-* [Admin](https://docs.djangoproject.com/en/1.8/ref/contrib/admin/)
-* [Migrations](https://docs.djangoproject.com/en/1.8/topics/migrations/)
+`sphinx/_build/html/index.html`
