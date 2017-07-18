@@ -18,7 +18,6 @@ class StudentList(object):
         ''' Inits StudentList given an open file object
         '''
         self.file = file
-        self.reader = reader(self.file)
         self.results = {}
 
     def parse(self):
@@ -40,13 +39,16 @@ class StudentList(object):
             Excepts all errors but most likely it is for
             django.core.exceptions.AppRegistryNotReady
         '''
-        for i, row in enumerate(self.reader):
+        for i, row in enumerate(self.file):
+            row = (row.decode('ascii')).strip().split(",")
+
             self.results[i] = {"result": None, "message": None}
             try:
                 self.results[i] = self._setup_student(row)
             except Exception as exception:
                 self.results[i]["result"] = "error"
                 self.results[i]["message"] = str(exception)
+        print(self.results)
         return self.results
 
     def _setup_student(self, row):
@@ -113,7 +115,6 @@ class EnrollmentList(object):
         '''Inits EnrollmentList given an open file object
         '''
         self.file = file
-        self.reader = reader(self.file)
         self.results = {}
 
     def parse(self):
@@ -133,13 +134,16 @@ class EnrollmentList(object):
             Excepts all errors but most likely it is for
             django.core.exceptions.AppRegistryNotReady
         '''
-        for i, row in enumerate(self.reader):
+        for i, row in enumerate(self.file):
+            row = (row.decode('ascii')).strip().split(",")
+
             self.results[i] = {"result": None, "message": None}
             try:
                 self.results[i] = self._setup_enrollment(row)
             except Exception as exception:
                 self.results[i]["result"] = "error"
                 self.results[i]["message"] = str(exception)
+        print(self.results)
         return self.results
 
     def _setup_enrollment(self, row):
@@ -188,12 +192,16 @@ class EnrollmentList(object):
 class MarkFile(object):
     def __init__(self, file):
         self.file = file
-        self.reader = reader(self.file)
         self.results = {}
 
     def parse(self):
-        names = self.reader.next()
-        totals = self.reader.next()
+        for i, row in enumerate(self.file):
+            if i == 0:
+                names = (row.decode('ascii')).strip().split(",")
+            elif i == 1:
+                totals = (row.decode('ascii')).strip().split(",")
+            else:
+                break
 
         _assignment_model = apps.get_model("api", "Assignment")
         self.assignment, created = _assignment_model.objects.get_or_create(
@@ -206,13 +214,17 @@ class MarkFile(object):
 
         self._setup_rubric(names, totals)
 
-        for i, row in enumerate(self.reader):
-            self.results[i] = {"result": None, "message": None}
-            try:
-                self.results[i] = self._setup_mark(row)
-            except Exception as exception:
-                self.results[i]["result"] = "error"
-                self.results[i]["message"] = str(exception)
+        for i, row in enumerate(self.file):
+            if i >= 2:
+                row = (row.decode('ascii')).strip().split(",")
+
+                self.results[i] = {"result": None, "message": None}
+                try:
+                    self.results[i] = self._setup_mark(row)
+                except Exception as exception:
+                    self.results[i]["result"] = "error"
+                    self.results[i]["message"] = str(exception)
+        print(self.results)
         return self.results
 
     def _setup_rubric(self, names, totals):
@@ -261,7 +273,6 @@ class TAList(object):
         '''Inits TAList given an open file object
         '''
         self.file = file
-        self.reader = reader(self.file)
         self.results = {}
 
     def parse(self):
@@ -282,13 +293,16 @@ class TAList(object):
             Excepts all errors but most likely it is for
             django.core.exceptions.AppRegistryNotReady
         '''
-        for i, row in enumerate(self.reader):
+        for i, row in enumerate(self.file):
+            row = (row.decode('ascii')).strip().split(",")
+
             self.results[i] = {"result": None, "message": None}
             try:
                 self.results[i] = self._setup_ta(row)
             except Exception as exception:
                 self.results[i]["result"] = "error"
                 self.results[i]["message"] = str(exception)
+        print(self.results)
         return self.results
 
     def _setup_ta(self, row):

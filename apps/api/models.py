@@ -13,6 +13,9 @@ class _UniversityMember(models.Model):
     class Meta:
         abstract = True
 
+    def __str__(self):
+        return "{0} {1}".format(self.first_name, self.last_name)
+
     def __unicode__(self):
         return "{0} {1}".format(self.first_name, self.last_name)
 
@@ -39,11 +42,20 @@ class Identification(models.Model):
     description = models.CharField(max_length=500, blank=True)
     number = models.PositiveIntegerField()
 
+    def __str__(self):
+        return str(self.student)
+
+    def __unicode__(self):
+        return str(self.student)
+
 
 class Lecture(models.Model):
     code = models.CharField(max_length=20)
     instructors = models.ManyToManyField("Instructor", blank=True)
     students = models.ManyToManyField("Student", blank=True)
+
+    def __str__(self):
+        return self.code
 
     def __unicode__(self):
         return self.code
@@ -51,8 +63,12 @@ class Lecture(models.Model):
 
 class Tutorial(models.Model):
     code = models.CharField(max_length=20)
-    teaching_assistant = models.ManyToManyField("TeachingAssistant", blank=True)
+    teaching_assistant = models.ManyToManyField(
+        "TeachingAssistant", blank=True)
     students = models.ManyToManyField("Student", blank=True)
+
+    def __str__(self):
+        return self.code
 
     def __unicode__(self):
         return self.code
@@ -60,8 +76,12 @@ class Tutorial(models.Model):
 
 class Practical(models.Model):
     code = models.CharField(max_length=20)
-    teaching_assistant = models.ManyToManyField("TeachingAssistant", blank=True)
+    teaching_assistant = models.ManyToManyField(
+        "TeachingAssistant", blank=True)
     students = models.ManyToManyField("Student", blank=True)
+
+    def __str__(self):
+        return self.code
 
     def __unicode__(self):
         return self.code
@@ -72,6 +92,9 @@ class Assignment(models.Model):
     rubric_entries = models.ManyToManyField(
         "Rubric", blank=True, related_name="rubric_entries")
 
+    def __str__(self):
+        return self.name
+
     def __unicode__(self):
         return self.name
 
@@ -81,6 +104,9 @@ class Rubric(models.Model):
     total = models.DecimalField(max_digits=6, decimal_places=2)
     assignment = models.ForeignKey("Assignment")
 
+    def __str__(self):
+        return "{0} for {1}".format(self.name, self.assignment)
+
     def __unicode__(self):
         return "{0} for {1}".format(self.name, self.assignment)
 
@@ -89,6 +115,14 @@ class Mark(models.Model):
     value = models.DecimalField(max_digits=6, decimal_places=2)
     student = models.ForeignKey("Student")
     rubric = models.ForeignKey("Rubric")
+
+    def __str__(self):
+        return "{0} ({1}): {2}/{3}".format(
+            self.rubric.name,
+            self.student,
+            self.value,
+            self.rubric.total,
+        )
 
     def __unicode__(self):
         return "{0} ({1}): {2}/{3}".format(
@@ -103,6 +137,9 @@ class StudentListFile(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     datafile = models.FileField()
 
+    def __str__(self):
+        return str(self.datafile)
+
     def __unicode__(self):
         return str(self.datafile)
 
@@ -115,6 +152,9 @@ class StudentListFile(models.Model):
 class EnrollmentListFile(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     datafile = models.FileField()
+
+    def __str__(self):
+        return str(self.datafile)
 
     def __unicode__(self):
         return str(self.datafile)
@@ -130,6 +170,9 @@ class MarkFile(models.Model):
     assignment = models.ForeignKey("Assignment")
     datafile = models.FileField()
 
+    def __str__(self):
+        return "Marks for {0}".format(self.assignment)
+
     def __unicode__(self):
         return "Marks for {0}".format(self.assignment)
 
@@ -138,9 +181,13 @@ class MarkFile(models.Model):
         mark_file.parse()
         super(MarkFile, self).save(*args, **kwargs)
 
+
 class TAListFile(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     datafile = models.FileField()
+
+    def __str__(self):
+        return str(self.datafile)
 
     def __unicode__(self):
         return str(self.datafile)
