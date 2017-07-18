@@ -1,6 +1,5 @@
 '''Populates the database based on the csv files provided'''
 
-from csv import reader
 from django.apps import apps
 
 
@@ -8,14 +7,13 @@ class StudentList(object):
     '''Populates database with students and their information
 
     Attributes:
-        file: Open csv file object. Contents of file. Has to be of format:
+        file: Open file object. Contents of file. Has to be of format:
             uni_id, last_name, first_name, number, email, id, id, id
-        reader: Reader oject which can iterate over lines in given csv file
         results: A dictionary of the format {int: {'result':'', 'message':''}}
     '''
 
     def __init__(self, file):
-        ''' Inits StudentList given an open file object
+        '''Inits StudentList given an open file object
         '''
         self.file = file
         self.results = {}
@@ -48,7 +46,6 @@ class StudentList(object):
             except Exception as exception:
                 self.results[i]["result"] = "error"
                 self.results[i]["message"] = str(exception)
-        print(self.results)
         return self.results
 
     def _setup_student(self, row):
@@ -101,13 +98,12 @@ class StudentList(object):
 
 
 class EnrollmentList(object):
-    '''Populates database with students and the lecture, tutorials and
-        practicals they are enrolled in
+    '''Populates database with students and associates them to the lecture,
+       tutorials and practicals they are enrolled in
 
     Attributes:
         file: Open csv file object. Contents of file. Has to be of format:
             uni_id, lec_id, tut_id, prac_id
-        reader: Reader oject which can iterate over lines in given csvfile
         results: A dictionary of the format {int: {'result':'', 'message':''}}
     '''
 
@@ -143,7 +139,6 @@ class EnrollmentList(object):
             except Exception as exception:
                 self.results[i]["result"] = "error"
                 self.results[i]["message"] = str(exception)
-        print(self.results)
         return self.results
 
     def _setup_enrollment(self, row):
@@ -200,7 +195,6 @@ class MarkFile(object):
                 names = (row.decode('ascii')).strip().split(",")
             elif i == 1:
                 totals = (row.decode('ascii')).strip().split(",")
-            else:
                 break
 
         _assignment_model = apps.get_model("api", "Assignment")
@@ -224,7 +218,6 @@ class MarkFile(object):
                 except Exception as exception:
                     self.results[i]["result"] = "error"
                     self.results[i]["message"] = str(exception)
-        print(self.results)
         return self.results
 
     def _setup_rubric(self, names, totals):
@@ -265,7 +258,6 @@ class TAList(object):
     Attributes:
         file: Open csv file object. Contents of file. Has to be of format:
             uni_id, last_name, first_name, email
-        reader: Reader oject which can iterate over lines in given csv file
         results: A dictionary of the format {int: {'result':'', 'message':''}}
     '''
 
@@ -302,7 +294,6 @@ class TAList(object):
             except Exception as exception:
                 self.results[i]["result"] = "error"
                 self.results[i]["message"] = str(exception)
-        print(self.results)
         return self.results
 
     def _setup_ta(self, row):

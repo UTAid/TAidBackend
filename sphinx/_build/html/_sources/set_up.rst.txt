@@ -16,7 +16,7 @@ Installation
 
 It is recommended to have ``pip`` and ``virtualenvwrapper`` setup on
 your base machine for development. Clone this repo to your destination.
-Just run ``pip install -r requirments.txt`` inside of a virtualenv to
+Just run ``pip3 install -r requirments.txt`` inside of a virtualenv to
 download all your dependencies.
 
 Set-up
@@ -24,6 +24,8 @@ Set-up
 
 The code uses python3. Follow the instructions to setup a local server
 in your machine:
+
+- ``sudo apt-get install python3-pip`` - This will install pip
 
 - ``sudo pip3 install -r requirements.txt`` - This will install all the dependencies found in the requirements.txt file
 
@@ -46,6 +48,12 @@ when ``python2 manage.py runserver`` is run
 
 - ``http://127.0.0.1:8000/api/v0/`` will take to the api page. If not logged in, click on login button top right corner of screen and provide admin credentials.
 
-- Now going to ``http://127.0.0.1:8000/api/v0/`` will show more information on the screen of the links where different API requests can be made
+  - Now going to ``http://127.0.0.1:8000/api/v0/`` will show more information on the screen of the links where different API requests can be made
 
-- Now going to ``http://127.0.0.1:8000/api/v0/docs/`` will show the operations available to the rest api
+  - Now going to ``http://127.0.0.1:8000/api/v0/docs/`` will show the operations available to the rest api
+
+Documentation
+~~~~~~~~~~~~~
+Documentation of the overall project can be found at:
+
+``sphinx/_build/html/index.html``

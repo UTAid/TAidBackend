@@ -47,15 +47,14 @@
 <dt id="apps.api.parsers.EnrollmentList">
 <em class="property">class </em><code class="descclassname">apps.api.parsers.</code><code class="descname">EnrollmentList</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#apps.api.parsers.EnrollmentList" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
-<dt>Populates database with students and the lecture, tutorials and</dt>
-<dd>practicals they are enrolled in</dd>
+<dt>Populates database with students and associates them to the lecture,</dt>
+<dd>tutorials and practicals they are enrolled in</dd>
 <dt>Attributes:</dt>
 <dd><dl class="first docutils">
 <dt>file: Open csv file object. Contents of file. Has to be of format:</dt>
 <dd>uni_id, lec_id, tut_id, prac_id</dd>
 </dl>
-<p class="last">reader: Reader oject which can iterate over lines in given csvfile
-results: A dictionary of the format {int: {‘result’:’‘, ‘message’:’‘}}</p>
+<p class="last">results: A dictionary of the format {int: {‘result’:’‘, ‘message’:’‘}}</p>
 </dd>
 </dl>
 <dl class="method">
@@ -92,11 +91,10 @@ django.core.exceptions.AppRegistryNotReady</dd>
 <dl class="docutils">
 <dt>Attributes:</dt>
 <dd><dl class="first docutils">
-<dt>file: Open csv file object. Contents of file. Has to be of format:</dt>
+<dt>file: Open file object. Contents of file. Has to be of format:</dt>
 <dd>uni_id, last_name, first_name, number, email, id, id, id</dd>
 </dl>
-<p class="last">reader: Reader oject which can iterate over lines in given csv file
-results: A dictionary of the format {int: {‘result’:’‘, ‘message’:’‘}}</p>
+<p class="last">results: A dictionary of the format {int: {‘result’:’‘, ‘message’:’‘}}</p>
 </dd>
 </dl>
 <dl class="method">
@@ -138,8 +136,7 @@ django.core.exceptions.AppRegistryNotReady</dd>
 <dt>file: Open csv file object. Contents of file. Has to be of format:</dt>
 <dd>uni_id, last_name, first_name, email</dd>
 </dl>
-<p class="last">reader: Reader oject which can iterate over lines in given csv file
-results: A dictionary of the format {int: {‘result’:’‘, ‘message’:’‘}}</p>
+<p class="last">results: A dictionary of the format {int: {‘result’:’‘, ‘message’:’‘}}</p>
 </dd>
 </dl>
 <dl class="method">
@@ -199,7 +196,7 @@ django.core.exceptions.AppRegistryNotReady</dd>
 <li class="toctree-l1"><a class="reference internal" href="views.html">Views Auto-Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="viewsets.html">Viewsets Auto-Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="graph.html">Create Models UML</a></li>
-<li class="toctree-l1"><a class="reference internal" href="update_sphinx.html">Update Sphinx</a></li>
+<li class="toctree-l1"><a class="reference internal" href="update_sphinx.html">Sphinx</a></li>
 </ul>
 
 <div class="relations">

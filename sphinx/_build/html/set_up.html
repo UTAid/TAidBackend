@@ -65,13 +65,14 @@ for Anya Tafliovich at UTSC.</p>
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
 <p>It is recommended to have <code class="docutils literal"><span class="pre">pip</span></code> and <code class="docutils literal"><span class="pre">virtualenvwrapper</span></code> setup on
 your base machine for development. Clone this repo to your destination.
-Just run <code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirments.txt</span></code> inside of a virtualenv to
+Just run <code class="docutils literal"><span class="pre">pip3</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirments.txt</span></code> inside of a virtualenv to
 download all your dependencies.</p>
 <div class="section" id="set-up">
 <h3>Set-up<a class="headerlink" href="#set-up" title="Permalink to this headline">¶</a></h3>
 <p>The code uses python3. Follow the instructions to setup a local server
 in your machine:</p>
 <ul class="simple">
+<li><code class="docutils literal"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">python3-pip</span></code> - This will install pip</li>
 <li><code class="docutils literal"><span class="pre">sudo</span> <span class="pre">pip3</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements.txt</span></code> - This will install all the dependencies found in the requirements.txt file</li>
 <li><code class="docutils literal"><span class="pre">python3</span> <span class="pre">manage.py</span> <span class="pre">makemigrations</span></code> - Creates new migrations based on the changes you have made to your models (placed here just to be cautious)</li>
 <li><code class="docutils literal"><span class="pre">python3</span> <span class="pre">manage.py</span> <span class="pre">migrate</span></code> - Applies the migrations and sets up the database</li>
@@ -86,10 +87,17 @@ in your machine:</p>
 when <code class="docutils literal"><span class="pre">python2</span> <span class="pre">manage.py</span> <span class="pre">runserver</span></code> is run</p>
 <ul class="simple">
 <li><code class="docutils literal"><span class="pre">http://127.0.0.1:8000/admin/</span></code> will take to the admin page. Put in the credentials that were made during the set-up process</li>
-<li><code class="docutils literal"><span class="pre">http://127.0.0.1:8000/api/v0/</span></code> will take to the api page. If not logged in, click on login button top right corner of screen and provide admin credentials.</li>
+<li><code class="docutils literal"><span class="pre">http://127.0.0.1:8000/api/v0/</span></code> will take to the api page. If not logged in, click on login button top right corner of screen and provide admin credentials.<ul>
 <li>Now going to <code class="docutils literal"><span class="pre">http://127.0.0.1:8000/api/v0/</span></code> will show more information on the screen of the links where different API requests can be made</li>
 <li>Now going to <code class="docutils literal"><span class="pre">http://127.0.0.1:8000/api/v0/docs/</span></code> will show the operations available to the rest api</li>
 </ul>
+</li>
+</ul>
+</div>
+<div class="section" id="documentation">
+<h3>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h3>
+<p>Documentation of the overall project can be found at:</p>
+<p><code class="docutils literal"><span class="pre">sphinx/_build/html/index.html</span></code></p>
 </div>
 </div>
 </div>
@@ -125,7 +133,7 @@ when <code class="docutils literal"><span class="pre">python2</span> <span class
 <li class="toctree-l1"><a class="reference internal" href="views.html">Views Auto-Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="viewsets.html">Viewsets Auto-Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="graph.html">Create Models UML</a></li>
-<li class="toctree-l1"><a class="reference internal" href="update_sphinx.html">Update Sphinx</a></li>
+<li class="toctree-l1"><a class="reference internal" href="update_sphinx.html">Sphinx</a></li>
 </ul>
 
 <div class="relations">
