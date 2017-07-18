@@ -1,0 +1,11 @@
+{% extends "schedule/base.html" %}
+{% load i18n %}
+{% block head_title %}{% trans "Course Calendars" %}{% endblock %}
+{% block body %}
+<h2>{% trans "Course Calendars" %}</h2>
+<ul>
+{% for cal in object_list %}
+	<li><a href="{% url "year_calendar" cal.slug %}">{{ cal }}</a>
+{% endfor %}
+</ul>
+{% endblock %}

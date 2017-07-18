@@ -25,6 +25,7 @@ api_patterns = [
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include(api_patterns)),
+    url(r'^calender-list/', include('schedule.urls')),
     url(r'^media/(?P<path>.*)$', serve, {
         'document_root': common.MEDIA_ROOT,
     }),

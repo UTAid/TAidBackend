@@ -5,6 +5,7 @@ djangorestframework==3.6.3
 djangorestframework-csv==2.0.0
 djangorestframework-jwt==1.11.0
 django-rest-swagger==2.1.2
+django-scheduler==0.8.5
 pydot==1.2.3
 requests==2.18.1
 simplejson==3.11.1
