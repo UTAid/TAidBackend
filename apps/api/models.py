@@ -1,6 +1,7 @@
 '''Creates the database'''
 
 from django.db import models
+from schedule.models.events import Event
 from apps.api import parsers
 
 
@@ -29,6 +30,9 @@ class Instructor(Teacher):
 
 
 class TeachingAssistant(Teacher):
+    pass
+
+class TaidEvent(Event):
     pass
 
 
@@ -64,7 +68,8 @@ class Lecture(models.Model):
 class Tutorial(models.Model):
     code = models.CharField(max_length=20)
     teaching_assistant = models.ManyToManyField(
-        "TeachingAssistant", blank=True)
+        "TeachingAssistant", blank=True, verbose_name='Teaching Assistant(s)')
+    event = models.ForeignKey("TAidEvent", null=True)
     students = models.ManyToManyField("Student", blank=True)
 
     def __str__(self):
@@ -77,7 +82,8 @@ class Tutorial(models.Model):
 class Practical(models.Model):
     code = models.CharField(max_length=20)
     teaching_assistant = models.ManyToManyField(
-        "TeachingAssistant", blank=True)
+        "TeachingAssistant", blank=True, verbose_name='Teaching Assistant(s)')
+    event = models.ForeignKey("TAidEvent", null=True)
     students = models.ManyToManyField("Student", blank=True)
 
     def __str__(self):

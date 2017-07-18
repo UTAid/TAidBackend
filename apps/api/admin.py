@@ -19,6 +19,9 @@ class TeachingAssistantAdmin(admin.ModelAdmin):
 class IdentificationInline(admin.StackedInline):
     model = models.Identification
 
+class TAidEventAdmin(admin.ModelAdmin):
+    exclude = ('creator', 'description')
+
 
 class StudentAdmin(admin.ModelAdmin):
     list_display = ['last_name', 'first_name',
@@ -105,6 +108,7 @@ admin.site.register(models.Tutorial, TutorialAdmin)
 admin.site.register(models.Practical, PracticalAdmin)
 admin.site.register(models.Mark, MarkAdmin)
 admin.site.register(models.Assignment, AssignmentAdmin)
+admin.site.register(models.TaidEvent, TAidEventAdmin)
 admin.site.register(models.Rubric, RubricAdmin)
 admin.site.register(models.StudentListFile, StudentListFileAdmin)
 admin.site.register(models.EnrollmentListFile, EnrollmentListFileAdmin)
