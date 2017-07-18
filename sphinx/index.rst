@@ -21,6 +21,7 @@ Application for managing courses and grades.
    viewsets
    graph
    update_sphinx
+   run_test
 
 
 
