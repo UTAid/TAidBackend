@@ -56,6 +56,7 @@ class Identification(models.Model):
 class Lecture(models.Model):
     code = models.CharField(max_length=20)
     instructors = models.ManyToManyField("Instructor", blank=True)
+    event = models.ForeignKey("TAidEvent", null=True, blank=True)
     students = models.ManyToManyField("Student", blank=True)
 
     def __str__(self):
@@ -69,7 +70,7 @@ class Tutorial(models.Model):
     code = models.CharField(max_length=20)
     teaching_assistant = models.ManyToManyField(
         "TeachingAssistant", blank=True, verbose_name='Teaching Assistant(s)')
-    event = models.ForeignKey("TAidEvent", null=True)
+    event = models.ForeignKey("TAidEvent", null=True, blank=True)
     students = models.ManyToManyField("Student", blank=True)
 
     def __str__(self):
@@ -83,7 +84,7 @@ class Practical(models.Model):
     code = models.CharField(max_length=20)
     teaching_assistant = models.ManyToManyField(
         "TeachingAssistant", blank=True, verbose_name='Teaching Assistant(s)')
-    event = models.ForeignKey("TAidEvent", null=True)
+    event = models.ForeignKey("TAidEvent", null=True, blank=True)
     students = models.ManyToManyField("Student", blank=True)
 
     def __str__(self):
