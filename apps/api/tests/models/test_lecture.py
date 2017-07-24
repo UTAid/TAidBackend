@@ -1,0 +1,1 @@
+'''Test Student from models'''
