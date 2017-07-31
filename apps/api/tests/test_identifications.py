@@ -49,7 +49,8 @@ class ReadIdentificationTests(APITestCase):
         self.test_identification = Identification.objects.create(
                 student=self.test_student,
                 value=999999999,
-                description="tcard"
+                description="tcard",
+                number=1,
                 )
 
     def tearDown(self):
@@ -83,7 +84,8 @@ class UpdateIdentificationTests(APITestCase):
         self.test_identification = Identification.objects.create(
                 student=self.test_student,
                 value=999999999,
-                description="tcard"
+                description="tcard",
+                number = 1,
                 )
 
     def tearDown(self):
@@ -97,6 +99,7 @@ class UpdateIdentificationTests(APITestCase):
                 "student": "pacotaco",
                 "value": "CHANGED",
                 "description": "tcard",
+                'number':1,
                }
         self.client.force_authenticate(user=self.auth_user)
         response = self.client.put(url, data, format="json")
@@ -116,7 +119,8 @@ class DeleteIdentificationTests(APITestCase):
         self.test_identification = Identification.objects.create(
                 student=self.test_student,
                 value=999999999,
-                description="tcard"
+                description="tcard",
+                number=1,
                 )
 
     def tearDown(self):
