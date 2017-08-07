@@ -2,17 +2,18 @@ from django.test import TestCase
 from django.apps import apps
 from django.core.files.base import ContentFile
 from apps.api import parsers
+from apps.api.models import Student, Lecture, Tutorial, Practical, TeachingAssistant
 
 
 class StudentListParserTests(TestCase):
 
     def test_student_parser_empty(self):
-        test_file = ContentFile("")
+        content = ""
+        test_file = ContentFile(content.encode())
         student_list_obj = parsers.StudentList(test_file)
         student_list_obj.parse()
 
-        _student_model = apps.get_model("api", "Student")
-        self.assertEqual(_student_model.objects.count(), 0)
+        self.assertEqual(Student.objects.count(), 0)
 
     def test_student_parser_one(self):
         content = "canvi241,Cano,Vi,209415323,Vi.Cano@nowhere.com,ci1nva24,vi2c1na4,24vic1an"
@@ -20,8 +21,7 @@ class StudentListParserTests(TestCase):
         student_list_obj = parsers.StudentList(test_file)
         student_list_obj.parse()
 
-        _student_model = apps.get_model("api", "Student")
-        entry = _student_model.objects.get(pk="canvi241")
+        entry = Student.objects.get(pk="canvi241")
         ids = entry.identification_set.all()
         self.assertEqual(entry.last_name, "Cano")
         self.assertEqual(entry.first_name, "Vi")
@@ -41,10 +41,9 @@ class StudentListParserTests(TestCase):
         student_list_obj = parsers.StudentList(test_file)
         student_list_obj.parse()
 
-        _student_model = apps.get_model("api", "Student")
         for row in content.split('\r\n'):
             student_data = row.split(',')
-            entry = _student_model.objects.get(pk=student_data[0])
+            entry = Student.objects.get(pk=student_data[0])
             ids = entry.identification_set.all()
             self.assertEqual(entry.last_name, student_data[1])
             self.assertEqual(entry.first_name, student_data[2])
@@ -53,6 +52,7 @@ class StudentListParserTests(TestCase):
             self.assertTrue(ids.get(value=student_data[5]))
             self.assertTrue(ids.get(value=student_data[6]))
             self.assertTrue(ids.get(value=student_data[7]))
+        self.assertEqual(Student.objects.count(), 3)
 
     def test_student_parser_conflict(self):
         content = "canvi241,Cano,Vi,209415323,Vi.Cano@nowhere.com,ci1nva24,vi2c1na4,24vic1an"
@@ -61,9 +61,7 @@ class StudentListParserTests(TestCase):
         student_list_obj.parse()
         student_list_obj.parse()
 
-        _student_model = apps.get_model("api", "Student")
-
-        self.assertEqual(_student_model.objects.count(), 1)
+        self.assertEqual(Student.objects.count(), 1)
 
     def test_student_parser_bad_format(self):
         content = "canvi241"
@@ -71,24 +69,462 @@ class StudentListParserTests(TestCase):
         student_list_obj = parsers.StudentList(test_file)
         student_list_obj.parse()
 
-        _student_model = apps.get_model("api", "Student")
-
-        self.assertEqual(_student_model.objects.count(), 0)
+        self.assertEqual(Student.objects.count(), 0)
 
 
-class EnrollmentListParserTest(TestCase):
+class EnrollmentListParserTests(TestCase):
+
+    def setUp(self):
+        self.student1 = Student.objects.create(
+            university_id = "canvi241",
+            first_name = "Cano",
+            last_name = "Vi",
+            email = "Vi.Cano@nowhere.com",
+            student_number = "209415323",
+        )
+        self.student2 = Student.objects.create(
+            university_id = "racrob58",
+            first_name = "Racey",
+            last_name = "Robbin",
+            email = "Robbin.Racey@nowhere.com",
+            student_number = "206271143",
+        )
+        self.tutorial1 = Tutorial.objects.create(
+            code = "T0001",
+        )
+        self.tutorial2 = Tutorial.objects.create(
+            code = "T0002",
+        )
+        self.lecture1 = Lecture.objects.create(
+            code = "L0001",
+        )
+        self.lecture2 = Lecture.objects.create(
+            code = "L0002",
+        )
+        self.practical1 = Practical.objects.create(
+            code = "PRA0001",
+        )
+        self.practical2 = Practical.objects.create(
+            code = "PRA0002",
+        )
+
+    def tearDown(self):
+        self.student1.delete()
+        self.tutorial1.delete()
+        self.tutorial2.delete()
+        self.lecture1.delete()
+        self.lecture2.delete()
+        self.practical1.delete()
+        self.practical2.delete()
 
     def test_enrollment_parser_empty(self):
-        test_file = ContentFile("")
-        enrollment_list_obj = parsers.StudentList(test_file)
+        content = "canvi241"
+        test_file = ContentFile(content.encode())
+        enrollment_list_obj = parsers.EnrollmentList(test_file)
         enrollment_list_obj.parse()
 
-        _student_model = apps.get_model("api", "Student")
-        _lecture_model = apps.get_model("api", "Lecture")
-        _tutorial_model = apps.get_model("api", "Tutorial")
-        _practical_model = apps.get_model("api", "Practical")
+        student = Student.objects.get(pk="canvi241")
 
-        self.assertEqual(_student_model.objects.count(), 0)
-        self.assertEqual(_lecture_model.objects.count(), 0)
-        self.assertEqual(_tutorial_model.objects.count(), 0)
-        self.assertEqual(_practical_model.objects.count(), 0)
+        self.assertEqual(student.tutorial_set.count(), 0)
+        self.assertEqual(student.lecture_set.count(), 0)
+        self.assertEqual(student.practical_set.count(), 0)
+
+    def test_enrollment_parser_no_practical(self):
+        content = "canvi241,L0001,T0002,"
+        test_file = ContentFile(content.encode())
+        enrollment_list_obj = parsers.EnrollmentList(test_file)
+        enrollment_list_obj.parse()
+
+        student = Student.objects.get(pk="canvi241")
+
+        self.assertEqual(student.tutorial_set.count(), 1)
+        self.assertEqual(student.lecture_set.count(), 1)
+        self.assertEqual(student.practical_set.count(), 0)
+
+    def test_enrollment_parser_with_practical(self):
+        content = "canvi241,L0001,T0002,PRA0001"
+        test_file = ContentFile(content.encode())
+        enrollment_list_obj = parsers.EnrollmentList(test_file)
+        enrollment_list_obj.parse()
+
+        student = Student.objects.get(pk="canvi241")
+
+        self.assertEqual(student.tutorial_set.count(), 1)
+        self.assertEqual(student.lecture_set.count(), 1)
+        self.assertEqual(student.practical_set.count(), 1)
+
+    def test_enrollment_parser_multi_no_practical(self):
+        content = "canvi241,L0001,T0001,\r\n" +\
+                    "racrob58,L0002,T0002,"
+        test_file = ContentFile(content.encode())
+        enrollment_list_obj = parsers.EnrollmentList(test_file)
+        enrollment_list_obj.parse()
+
+        for i, row in enumerate(content.split('\r\n')):
+            enrollment_string = row.split(',')
+
+            student = Student.objects.get(pk = enrollment_string[0])
+
+            lecture = "L000" + str(i+1)
+            tutorial = "T000" + str(i+1)
+
+            self.assertEqual(student.lecture_set.get().code, lecture)
+            self.assertEqual(student.tutorial_set.get().code, tutorial)
+            self.assertEqual(student.lecture_set.count(), 1)
+            self.assertEqual(student.tutorial_set.count(), 1)
+
+    def test_add_student_multiple_practical(self):
+        content = "canvi241,L0001,T0001,PRA0001\r\n" +\
+                    "canvi241,L0001,T0001,PRA0002"
+        test_file = ContentFile(content.encode())
+        enrollment_list_obj = parsers.EnrollmentList(test_file)
+        enrollment_list_obj.parse()
+
+        student = Student.objects.get(pk="canvi241")
+
+        for i, row in enumerate(content.split('\r\n')):
+            enrollment_string = row.split(',')
+            practical = "PRA000" + str(i+1)
+
+            self.assertEqual(student.practical_set.all()[i].code, practical)
+
+        self.assertEqual(student.lecture_set.get().code, "L0001")
+        self.assertEqual(student.tutorial_set.get().code, "T0001")
+        self.assertEqual(student.lecture_set.count(), 1)
+        self.assertEqual(student.tutorial_set.count(), 1)
+        self.assertEqual(student.practical_set.count(), 2)
+
+    def test_enrollment_parser_multi_with_practical(self):
+        content = "canvi241,L0001,T0001,PRA0001\r\n" +\
+                    "racrob58,L0002,T0002,PRA0002"
+        test_file = ContentFile(content.encode())
+        enrollment_list_obj = parsers.EnrollmentList(test_file)
+        enrollment_list_obj.parse()
+
+        for i, row in enumerate(content.split('\r\n')):
+            enrollment_string = row.split(',')
+
+            student = Student.objects.get(pk = enrollment_string[0])
+
+            lecture = "L000" + str(i+1)
+            tutorial = "T000" + str(i+1)
+            practical = "PRA000"+ str(i+1)
+
+            self.assertEqual(student.lecture_set.get().code, lecture)
+            self.assertEqual(student.tutorial_set.get().code, tutorial)
+            self.assertEqual(student.practical_set.get().code, practical)
+            self.assertEqual(student.lecture_set.count(), 1)
+            self.assertEqual(student.tutorial_set.count(), 1)
+            self.assertEqual(student.practical_set.count(), 1)
+
+    def test_enrollment_parser_multi_no_practical_and_with_practical(self):
+        content = "canvi241,L0001,T0001,\r\n" +\
+                    "racrob58,L0002,T0002,PRA0002"
+        test_file = ContentFile(content.encode())
+        enrollment_list_obj = parsers.EnrollmentList(test_file)
+        enrollment_list_obj.parse()
+
+        for i, row in enumerate(content.split('\r\n')):
+            enrollment_string = row.split(',')
+
+            student = Student.objects.get(pk = enrollment_string[0])
+
+            lecture = "L000" + str(i+1)
+            tutorial = "T000" + str(i+1)
+
+            if enrollment_string[3] != "":
+                practical = "PRA000"+ str(i+1)
+                self.assertEqual(student.practical_set.get().code, practical)
+                self.assertEqual(student.practical_set.count(), 1)
+            else:
+                self.assertEqual(student.practical_set.count(), 0)
+
+            self.assertEqual(student.lecture_set.get().code, lecture)
+            self.assertEqual(student.tutorial_set.get().code, tutorial)
+            self.assertEqual(student.lecture_set.count(), 1)
+            self.assertEqual(student.tutorial_set.count(), 1)
+
+    def test_enrollment_parser_no_lecture(self):
+        content = "canvi241,,T0002,PRA0001"
+        test_file = ContentFile(content.encode())
+        enrollment_list_obj = parsers.EnrollmentList(test_file)
+        enrollment_list_obj.parse()
+
+        student = Student.objects.get(pk="canvi241")
+
+        self.assertEqual(student.tutorial_set.count(), 1)
+        self.assertEqual(student.lecture_set.count(), 0)
+        self.assertEqual(student.practical_set.count(), 1)
+
+    def test_enrollment_parser_with_lecture(self):
+        content = "canvi241,L0001,T0002,PRA0001"
+        test_file = ContentFile(content.encode())
+        enrollment_list_obj = parsers.EnrollmentList(test_file)
+        enrollment_list_obj.parse()
+
+        student = Student.objects.get(pk="canvi241")
+
+        self.assertEqual(student.tutorial_set.count(), 1)
+        self.assertEqual(student.lecture_set.count(), 1)
+        self.assertEqual(student.practical_set.count(), 1)
+
+    def test_enrollment_parser_multi_no_lecture(self):
+        content = "canvi241,,T0001,PRA0001\r\n" +\
+                    "racrob58,,T0002,PRA0002"
+        test_file = ContentFile(content.encode())
+        enrollment_list_obj = parsers.EnrollmentList(test_file)
+        enrollment_list_obj.parse()
+
+        for i, row in enumerate(content.split('\r\n')):
+            enrollment_string = row.split(',')
+
+            student = Student.objects.get(pk = enrollment_string[0])
+
+            practical = "PRA000" + str(i+1)
+            tutorial = "T000" + str(i+1)
+
+            self.assertEqual(student.practical_set.get().code, practical)
+            self.assertEqual(student.tutorial_set.get().code, tutorial)
+            self.assertEqual(student.practical_set.count(), 1)
+            self.assertEqual(student.tutorial_set.count(), 1)
+
+    def test_add_student_multiple_lecture(self):
+        content = "canvi241,L0001,T0001,PRA0001\r\n" +\
+                    "canvi241,L0002,T0001,PRA0001"
+        test_file = ContentFile(content.encode())
+        enrollment_list_obj = parsers.EnrollmentList(test_file)
+        enrollment_list_obj.parse()
+
+        student = Student.objects.get(pk="canvi241")
+
+        for i, row in enumerate(content.split('\r\n')):
+            enrollment_string = row.split(',')
+            lecture = "L000" + str(i+1)
+
+            self.assertEqual(student.lecture_set.all()[i].code, lecture)
+
+        self.assertEqual(student.practical_set.get().code, "PRA0001")
+        self.assertEqual(student.tutorial_set.get().code, "T0001")
+        self.assertEqual(student.practical_set.count(), 1)
+        self.assertEqual(student.tutorial_set.count(), 1)
+        self.assertEqual(student.lecture_set.count(), 2)
+
+    def test_enrollment_parser_multi_with_lecture(self):
+        content = "canvi241,L0001,T0001,PRA0001\r\n" +\
+                    "racrob58,L0002,T0002,PRA0002"
+        test_file = ContentFile(content.encode())
+        enrollment_list_obj = parsers.EnrollmentList(test_file)
+        enrollment_list_obj.parse()
+
+        for i, row in enumerate(content.split('\r\n')):
+            enrollment_string = row.split(',')
+
+            student = Student.objects.get(pk = enrollment_string[0])
+
+            lecture = "L000" + str(i+1)
+            tutorial = "T000" + str(i+1)
+            practical = "PRA000"+ str(i+1)
+
+            self.assertEqual(student.lecture_set.get().code, lecture)
+            self.assertEqual(student.tutorial_set.get().code, tutorial)
+            self.assertEqual(student.practical_set.get().code, practical)
+            self.assertEqual(student.lecture_set.count(), 1)
+            self.assertEqual(student.tutorial_set.count(), 1)
+            self.assertEqual(student.practical_set.count(), 1)
+
+    def test_enrollment_parser_multi_no_lecture_and_with_lecture(self):
+        content = "canvi241,,T0001,PRA0001\r\n" +\
+                    "racrob58,L0002,T0002,PRA0002"
+        test_file = ContentFile(content.encode())
+        enrollment_list_obj = parsers.EnrollmentList(test_file)
+        enrollment_list_obj.parse()
+
+        for i, row in enumerate(content.split('\r\n')):
+            enrollment_string = row.split(',')
+
+            student = Student.objects.get(pk = enrollment_string[0])
+
+            practical = "PRA000" + str(i+1)
+            tutorial = "T000" + str(i+1)
+
+            if enrollment_string[1] != "":
+                lecture = "L000"+ str(i+1)
+                self.assertEqual(student.lecture_set.get().code, lecture)
+                self.assertEqual(student.lecture_set.count(), 1)
+            else:
+                self.assertEqual(student.lecture_set.count(), 0)
+
+            self.assertEqual(student.practical_set.get().code, practical)
+            self.assertEqual(student.tutorial_set.get().code, tutorial)
+            self.assertEqual(student.practical_set.count(), 1)
+            self.assertEqual(student.tutorial_set.count(), 1)
+
+    def test_enrollment_parser_no_tutorial(self):
+        content = "canvi241,L0001,,PRA0001"
+        test_file = ContentFile(content.encode())
+        enrollment_list_obj = parsers.EnrollmentList(test_file)
+        enrollment_list_obj.parse()
+
+        student = Student.objects.get(pk="canvi241")
+
+        self.assertEqual(student.tutorial_set.count(), 0)
+        self.assertEqual(student.lecture_set.count(), 1)
+        self.assertEqual(student.practical_set.count(), 1)
+
+    def test_enrollment_parser_with_tutorial(self):
+        content = "canvi241,L0001,T0002,PRA0001"
+        test_file = ContentFile(content.encode())
+        enrollment_list_obj = parsers.EnrollmentList(test_file)
+        enrollment_list_obj.parse()
+
+        student = Student.objects.get(pk="canvi241")
+
+        self.assertEqual(student.tutorial_set.count(), 1)
+        self.assertEqual(student.lecture_set.count(), 1)
+        self.assertEqual(student.practical_set.count(), 1)
+
+    def test_enrollment_parser_multi_no_tutorial(self):
+        content = "canvi241,L0001,,PRA0001\r\n" +\
+                    "racrob58,L0002,,PRA0002"
+        test_file = ContentFile(content.encode())
+        enrollment_list_obj = parsers.EnrollmentList(test_file)
+        enrollment_list_obj.parse()
+
+        for i, row in enumerate(content.split('\r\n')):
+            enrollment_string = row.split(',')
+
+            student = Student.objects.get(pk = enrollment_string[0])
+
+            lecture = "L000" + str(i+1)
+            practical = "PRA000" + str(i+1)
+
+            self.assertEqual(student.lecture_set.get().code, lecture)
+            self.assertEqual(student.practical_set.get().code, practical)
+            self.assertEqual(student.lecture_set.count(), 1)
+            self.assertEqual(student.practical_set.count(), 1)
+
+    def test_add_student_multiple_tutorial(self):
+        content = "canvi241,L0001,T0001,PRA0001\r\n" +\
+                    "canvi241,L0001,T0002,PRA0001"
+        test_file = ContentFile(content.encode())
+        enrollment_list_obj = parsers.EnrollmentList(test_file)
+        enrollment_list_obj.parse()
+
+        student = Student.objects.get(pk="canvi241")
+
+        for i, row in enumerate(content.split('\r\n')):
+            enrollment_string = row.split(',')
+            tutorial = "T000" + str(i+1)
+
+            self.assertEqual(student.tutorial_set.all()[i].code, tutorial)
+
+        self.assertEqual(student.lecture_set.get().code, "L0001")
+        self.assertEqual(student.practical_set.get().code, "PRA0001")
+        self.assertEqual(student.lecture_set.count(), 1)
+        self.assertEqual(student.practical_set.count(), 1)
+        self.assertEqual(student.tutorial_set.count(), 2)
+
+    def test_enrollment_parser_multi_with_tutorial(self):
+        content = "canvi241,L0001,T0001,PRA0001\r\n" +\
+                    "racrob58,L0002,T0002,PRA0002"
+        test_file = ContentFile(content.encode())
+        enrollment_list_obj = parsers.EnrollmentList(test_file)
+        enrollment_list_obj.parse()
+
+        for i, row in enumerate(content.split('\r\n')):
+            enrollment_string = row.split(',')
+
+            student = Student.objects.get(pk = enrollment_string[0])
+
+            lecture = "L000" + str(i+1)
+            tutorial = "T000" + str(i+1)
+            practical = "PRA000"+ str(i+1)
+
+            self.assertEqual(student.lecture_set.get().code, lecture)
+            self.assertEqual(student.tutorial_set.get().code, tutorial)
+            self.assertEqual(student.practical_set.get().code, practical)
+            self.assertEqual(student.lecture_set.count(), 1)
+            self.assertEqual(student.tutorial_set.count(), 1)
+            self.assertEqual(student.practical_set.count(), 1)
+
+    def test_enrollment_parser_multi_no_tutorial_and_with_tutorial(self):
+        content = "canvi241,L0001,,PRA0001\r\n" +\
+                    "racrob58,L0002,T0002,PRA0002"
+        test_file = ContentFile(content.encode())
+        enrollment_list_obj = parsers.EnrollmentList(test_file)
+        enrollment_list_obj.parse()
+
+        for i, row in enumerate(content.split('\r\n')):
+            enrollment_string = row.split(',')
+
+            student = Student.objects.get(pk = enrollment_string[0])
+
+            lecture = "L000" + str(i+1)
+            practical = "PRA000" + str(i+1)
+
+            if enrollment_string[2] != "":
+                tutorial = "T000"+ str(i+1)
+                self.assertEqual(student.tutorial_set.get().code, tutorial)
+                self.assertEqual(student.tutorial_set.count(), 1)
+            else:
+                self.assertEqual(student.tutorial_set.count(), 0)
+
+            self.assertEqual(student.lecture_set.get().code, lecture)
+            self.assertEqual(student.practical_set.get().code, practical)
+            self.assertEqual(student.lecture_set.count(), 1)
+            self.assertEqual(student.practical_set.count(), 1)
+
+class TAListParserTests(TestCase):
+
+    def test_ta_parser_empty(self):
+        content = ""
+        test_file = ContentFile(content.encode())
+        student_list_obj = parsers.TAList(test_file)
+        student_list_obj.parse()
+
+        self.assertEqual(TeachingAssistant.objects.count(), 0)
+
+    def test_ta_parser_one(self):
+        content = "canvi241,Cano,Vi,Vi.Cano@nowhere.com"
+        test_file = ContentFile(content.encode())
+        teaching_assistant_list_obj = parsers.TAList(test_file)
+        teaching_assistant_list_obj.parse()
+
+        entry = TeachingAssistant.objects.get(pk="canvi241")
+        self.assertEqual(entry.last_name, "Cano")
+        self.assertEqual(entry.first_name, "Vi")
+        self.assertEqual(entry.email, "Vi.Cano@nowhere.com")
+
+    def test_ta_parser_many(self):
+        content = "couade63,Couchman,Adella,Adella.Couchman@nowhere.com\r\n" + \
+            "staild32,Staplins,Ilda,Ilda.Staplins@nowhere.com\r\n" + \
+            "bisbea71,Bison,Beatris,Beatris.Bison@nowhere.com"
+        test_file = ContentFile(content.encode())
+        teaching_assistant_list_obj = parsers.TAList(test_file)
+        teaching_assistant_list_obj.parse()
+
+        for row in content.split('\r\n'):
+            teaching_assistant_data = row.split(',')
+            entry = TeachingAssistant.objects.get(pk=teaching_assistant_data[0])
+
+            self.assertEqual(entry.last_name, teaching_assistant_data[1])
+            self.assertEqual(entry.first_name, teaching_assistant_data[2])
+            self.assertEqual(entry.email, teaching_assistant_data[3])
+        self.assertEqual(TeachingAssistant.objects.count(), 3)
+
+    def test_ta_parser_conflict(self):
+        content = "canvi241,Cano,Vi,Vi.Cano@nowhere.com"
+        test_file = ContentFile(content.encode())
+        teaching_assistant_list_obj = parsers.TAList(test_file)
+        teaching_assistant_list_obj.parse()
+        teaching_assistant_list_obj.parse()
+
+        self.assertEqual(TeachingAssistant.objects.count(), 1)
+
+    def test_ta_parser_bad_format(self):
+        content = "canvi241"
+        test_file = ContentFile(content.encode())
+        teaching_assistant_list_obj = parsers.TAList(test_file)
+        teaching_assistant_list_obj.parse()
+
+        self.assertEqual(TeachingAssistant.objects.count(), 0)
