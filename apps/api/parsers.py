@@ -190,12 +190,18 @@ class MarkFile(object):
         self.results = {}
 
     def parse(self):
+        names = []
+        totals = []
+
         for i, row in enumerate(self.file):
             if i == 0:
                 names = (row.decode('ascii')).strip().split(",")
             elif i == 1:
                 totals = (row.decode('ascii')).strip().split(",")
                 break
+
+        if (len(names) == 0):
+            return self.results
 
         _assignment_model = apps.get_model("api", "Assignment")
         self.assignment, created = _assignment_model.objects.get_or_create(
@@ -236,8 +242,9 @@ class MarkFile(object):
         student = _student_model.objects.get(university_id=row[0])
         result = {"message": student.pk, "marks": {}}
         for rubric, value in zip(self.rubrics, row[1:]):
-            if value != "":
-                value = float(value)
+            if value == "":
+                value = 0
+            
             mark, created = _mark_model.objects.update_or_create(
                 value=value,
                 student=student,

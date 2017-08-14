@@ -29,7 +29,7 @@ in your machine:
 
 - ``sudo pip3 install -r requirements.txt`` - This will install all the dependencies found in the requirements.txt file
 
-- ``python3 manage.py makemigrations`` - Creates new migrations based on the changes you have made to your models (placed here just to be cautious)
+- ``python3 manage.py makemigrations`` - Creates new migrations based on the changes you have made to your models
 
 - ``python3 manage.py migrate`` - Applies the migrations and sets up the database
 

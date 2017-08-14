@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.apps import apps
 from django.core.files.base import ContentFile
 from apps.api import parsers
-from apps.api.models import Student, Lecture, Tutorial, Practical, TeachingAssistant
+from apps.api.models import Student, Lecture, Tutorial, Practical, TeachingAssistant, Assignment, Rubric, Mark
 
 
 class StudentListParserTests(TestCase):
@@ -110,6 +110,7 @@ class EnrollmentListParserTests(TestCase):
 
     def tearDown(self):
         self.student1.delete()
+        self.student2.delete()
         self.tutorial1.delete()
         self.tutorial2.delete()
         self.lecture1.delete()
@@ -505,8 +506,8 @@ class TAListParserTests(TestCase):
 
         for row in content.split('\r\n'):
             teaching_assistant_data = row.split(',')
-            entry = TeachingAssistant.objects.get(pk=teaching_assistant_data[0])
 
+            entry = TeachingAssistant.objects.get(pk=teaching_assistant_data[0])
             self.assertEqual(entry.last_name, teaching_assistant_data[1])
             self.assertEqual(entry.first_name, teaching_assistant_data[2])
             self.assertEqual(entry.email, teaching_assistant_data[3])
@@ -528,3 +529,112 @@ class TAListParserTests(TestCase):
         teaching_assistant_list_obj.parse()
 
         self.assertEqual(TeachingAssistant.objects.count(), 0)
+
+class MarkParserTest(TestCase):
+
+    def setUp(self):
+        self.student1 = Student.objects.create(
+            university_id = "canvi241",
+            first_name = "Cano",
+            last_name = "Vi",
+            email = "Vi.Cano@nowhere.com",
+            student_number = "209415323",
+        )
+        self.student2 = Student.objects.create(
+            university_id = "racrob58",
+            first_name = "Racey",
+            last_name = "Robbin",
+            email = "Robbin.Racey@nowhere.com",
+            student_number = "206271143",
+        )
+
+    def tearDown(self):
+        self.student1.delete()
+        self.student2.delete()
+
+    def test_mark_parser_empty(self):
+        content = ""
+        test_file = ContentFile(content.encode())
+        mark_file_obj = parsers.MarkFile(test_file)
+        mark_file_obj.parse()
+
+        self.assertEqual(Assignment.objects.count(), 0)
+        self.assertEqual(Rubric.objects.count(), 0)
+        self.assertEqual(Mark.objects.count(), 0)
+
+    def test_create_one_assignment(self):
+        content = "''"
+        test_file = ContentFile(content.encode())
+        mark_file_obj = parsers.MarkFile(test_file)
+        mark_file_obj.parse()
+
+        self.assertEqual(Assignment.objects.count(), 1)
+        self.assertEqual(Assignment.objects.all()[0].name, "''")
+        self.assertEqual(Rubric.objects.count(), 0)
+        self.assertEqual(Mark.objects.count(), 0)
+
+    def test_create_one_rubrics(self):
+        content = "'',Assignment_001\r\n" + \
+                    "'',65"
+        test_file = ContentFile(content.encode())
+        mark_file_obj = parsers.MarkFile(test_file)
+        mark_file_obj.parse()
+
+        self.assertEqual(Assignment.objects.count(), 1)
+        self.assertEqual(Rubric.objects.count(), 1)
+        self.assertEqual(Mark.objects.count(), 0)
+
+    def test_create_multiple_rubrics(self):
+        content = "'',Assignment_001,Assignment_002,Assignment_003,Assignment_004,Assignment_005\r\n" + \
+                    "'',65,94,95,37,108"
+        test_file = ContentFile(content.encode())
+        mark_file_obj = parsers.MarkFile(test_file)
+        mark_file_obj.parse()
+
+        self.assertEqual(Assignment.objects.count(), 1)
+        self.assertEqual(Rubric.objects.count(), 5)
+        self.assertEqual(Mark.objects.count(), 0)
+
+    def test_create_one_mark(self):
+        content = "'',Assignment_001\r\n" + \
+                    "'',65\r\ncanvi241,54"
+        test_file = ContentFile(content.encode())
+        mark_file_obj = parsers.MarkFile(test_file)
+        mark_file_obj.parse()
+
+        self.assertEqual(Assignment.objects.count(), 1)
+        self.assertEqual(Rubric.objects.count(), 1)
+        self.assertEqual(Mark.objects.count(), 1)
+
+    def test_create_multiple_marks(self):
+        content = "'',Assignment_001,Assignment_002,Assignment_003,Assignment_004,Assignment_005\r\n" + \
+                    "'',65,94,95,37,108\r\ncanvi241,54,58,,18,51"
+        test_file = ContentFile(content.encode())
+        mark_file_obj = parsers.MarkFile(test_file)
+        mark_file_obj.parse()
+
+        self.assertEqual(Assignment.objects.count(), 1)
+        self.assertEqual(Rubric.objects.count(), 5)
+        self.assertEqual(Mark.objects.count(), 5)
+
+    def test_multiple_student_create_one_mark(self):
+        content = "'',Assignment_001\r\n" + \
+                    "'',65\r\ncanvi241,54\r\nracrob58,56"
+        test_file = ContentFile(content.encode())
+        mark_file_obj = parsers.MarkFile(test_file)
+        mark_file_obj.parse()
+
+        self.assertEqual(Assignment.objects.count(), 1)
+        self.assertEqual(Rubric.objects.count(), 1)
+        self.assertEqual(Mark.objects.count(), 2)
+
+    def test_multiple_student_create_multiple_marks(self):
+        content = "'',Assignment_001,Assignment_002,Assignment_003,Assignment_004,Assignment_005\r\n" + \
+                    "'',65,94,95,37,108\r\ncanvi241,54,58,,18,51\r\nracrob58,56,61,95,18,72"
+        test_file = ContentFile(content.encode())
+        mark_file_obj = parsers.MarkFile(test_file)
+        mark_file_obj.parse()
+
+        self.assertEqual(Assignment.objects.count(), 1)
+        self.assertEqual(Rubric.objects.count(), 5)
+        self.assertEqual(Mark.objects.count(), 10)
