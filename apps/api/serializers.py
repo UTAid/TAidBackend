@@ -25,7 +25,7 @@ class IdentificationSerializer(serializers.ModelSerializer):
 
 class StudentSerializer(serializers.ModelSerializer):
     ids = IdentificationSerializer(
-        source="identification_set", many=True, required=False)
+        source="identification_set", many=True, required=False, read_only=True)
 
     class Meta:
         model = models.Student
@@ -83,7 +83,7 @@ class MarkSerializer(serializers.ModelSerializer):
 
 
 class RubricSerializer(serializers.ModelSerializer):
-    marks = MarkSerializer(source="mark_set", many=True, required=False)
+    marks = MarkSerializer(source="mark_set", many=True, required=False, read_only=True)
 
     class Meta:
         model = models.Rubric
@@ -91,7 +91,7 @@ class RubricSerializer(serializers.ModelSerializer):
 
 
 class AssignmentSerializer(serializers.ModelSerializer):
-    rubric_entries = RubricSerializer(many=True, required=False)
+    rubric_entries = RubricSerializer(many=True, required=False, read_only=True)
 
     class Meta:
         model = models.Assignment
