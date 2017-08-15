@@ -27,6 +27,7 @@ class CreateIdentificationTests(APITestCase):
                 "value": 999999999,
                 "description": "T-Card number",
                 "student": self.test_student.pk,
+                "number": 1,
                }
         self.client.force_authenticate(user=self.auth_user)
         response = self.client.post(url, data, format="json")

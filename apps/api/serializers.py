@@ -20,7 +20,7 @@ class TeachingAssistantSerializer(serializers.ModelSerializer):
 class IdentificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Identification
-        fields = ("url", "id", "student", "description", "value")
+        fields = ("url", "value", "student", "description", "number")
 
 
 class StudentSerializer(serializers.ModelSerializer):
@@ -79,15 +79,16 @@ class MarkSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Mark
-        fields = ("url", "id", "value", "student")
+        fields = ("url", "value", "student", "rubric")
 
 
 class RubricSerializer(serializers.ModelSerializer):
-    marks = MarkSerializer(source="mark_set", many=True, required=False, read_only=True)
-
+    # var assignment is a global variable which is declared right after AssignmentSerializer
+    # this was done because RubricSerializer and AssignmentSerializer are related
+    # order it is declared matters, so it could not be declared here
     class Meta:
         model = models.Rubric
-        fields = ("url", "name", "total", "marks")
+        fields = ("url", "name", "total", "assignment")
 
 
 class AssignmentSerializer(serializers.ModelSerializer):
@@ -97,6 +98,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
         model = models.Assignment
         fields = ("url", "name", "rubric_entries")
 
+assignment = AssignmentSerializer(source="mark_set", many=True, required=False, read_only=True)
 
 class StudentListSerializer(serializers.Serializer):
     file = serializers.FileField(validators=(validate_csv,))
