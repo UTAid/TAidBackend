@@ -19,6 +19,8 @@ class AssignmentTestCase(TestCase):
             assignment = assignment,
         )
         self.assertIsNotNone(assignment)
+        self.assertEqual(Assignment.objects.count(), 1)
+        self.assertEqual(Rubric.objects.count(), 1)
 
     def test_assignment_multiple_rubric(self):
         assignment = Assignment.objects.create(
@@ -35,3 +37,5 @@ class AssignmentTestCase(TestCase):
             assignment = assignment,
         )
         self.assertIsNotNone(assignment)
+        self.assertEqual(Assignment.objects.count(), 1)
+        self.assertEqual(Rubric.objects.count(), 2)

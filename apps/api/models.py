@@ -109,7 +109,7 @@ class Assignment(models.Model):
 class Rubric(models.Model):
     name = models.CharField(max_length=254)
     total = models.DecimalField(max_digits=6, decimal_places=2)
-    assignment = models.ForeignKey("Assignment")
+    assignment = models.ForeignKey("Assignment", blank=True)
 
     def __str__(self):
         return "{0} for {1}".format(self.name, self.assignment)
