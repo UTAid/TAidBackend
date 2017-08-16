@@ -1,4 +1,5 @@
 Steps to create visualization of database:
+==========================================
 
 1. `pip3 install django-extensions`
 
