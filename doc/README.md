@@ -3,8 +3,8 @@ Sphinx
 
 - Sphinx Documentation
     Sphinx documentation is found at:
-    ``sphinx/_build/html/index.html``
+    ``doc/_build/html/index.html``
 
--   Modify rst file
+-   Create Website from Documentation
     -   `make clean` - to remove the existing html files
-    -   `make html` - create html files with the new changes
+    -   `make html` - creates html files of documentation

@@ -12,6 +12,7 @@ Application for managing courses and grades.
    :caption: Contents:
 
    set_up
+
    admin
    constants
    parsers
@@ -19,9 +20,15 @@ Application for managing courses and grades.
    validators
    views
    viewsets
+
    graph
    update_sphinx
    run_test
+
+   apache2_vhost
+   quickstart
+   settings
+   structure
 
 
 

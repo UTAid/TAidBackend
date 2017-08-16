@@ -13,7 +13,6 @@ Can be found at ``requirements.txt``
 
 Installation
 ------------
-
 It is recommended to have ``pip`` and ``virtualenvwrapper`` setup on
 your base machine for development. Clone this repo to your destination.
 Just run ``pip3 install -r requirments.txt`` inside of a virtualenv to
@@ -21,7 +20,6 @@ download all your dependencies.
 
 Set-up
 ~~~~~~
-
 The code uses python3. Follow the instructions to setup a local server
 in your machine:
 
@@ -39,7 +37,6 @@ in your machine:
 
 Exploring the development server
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 The development server will most likely will be set as
 ``http://127.0.0.1:8000/`` but if otherwise it will say so on the screen
 when ``python2 manage.py runserver`` is run
@@ -52,8 +49,16 @@ when ``python2 manage.py runserver`` is run
 
   - Now going to ``http://127.0.0.1:8000/api/v0/docs/`` will show the operations available to the rest api
 
+Testing
+~~~~~~~~
+Run ``python3 manage.py test``
+
 Documentation
 ~~~~~~~~~~~~~
 Documentation of the overall project can be found at:
 
-``sphinx/_build/html/index.html``
+``doc/_build/html/index.html``
+
+or
+
+Look at the rst files in the doc folder

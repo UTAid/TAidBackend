@@ -32,6 +32,13 @@ The development server will most likely will be set as `http://127.0.0.1:8000/` 
   * Now going to `http://127.0.0.1:8000/api/v0/` will show more information on the screen of the links where different API requests can be made
   * Now going to `http://127.0.0.1:8000/api/v0/docs/` will show the operations available to the rest api
 
+## Testing
+Run `python3 manage.py test`
+
 ## Documentation
 Documentation of the overall project can be found at:
-`sphinx/_build/html/index.html`
+`doc/_build/html/index.html`
+
+or
+
+Look at the rst files in the doc folder
