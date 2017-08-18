@@ -71,10 +71,12 @@ class StudentList(object):
         _student_model = apps.get_model("api", "Student")
         student, created = _student_model.objects.update_or_create(
             university_id=uni_id,
-            first_name=first_name,
-            last_name=last_name,
-            student_number=number,
-            email=email,
+            defaults = {
+                'first_name':first_name,
+                'last_name':last_name,
+                'student_number':number,
+                'email':email,
+            }
         )
         if created:
             result = {"result":
@@ -85,8 +87,10 @@ class StudentList(object):
         result["ids"] = []
         for num, val in enumerate(ids, start=1):
             identity, created = student.identification_set.update_or_create(
-                value=val,
                 number=num,
+                defaults = {
+                    'value':val,
+                }
             )
             if created:
                 result["ids"].append(
@@ -377,9 +381,11 @@ class TAList(object):
         _ta_model = apps.get_model("api", "TeachingAssistant")
         teaching_assistant, created = _ta_model.objects.update_or_create(
             university_id=uni_id,
-            first_name=first_name,
-            last_name=last_name,
-            email=email,
+            defaults={
+                'first_name':first_name,
+                'last_name':last_name,
+                'email':email,
+            }
         )
         if created:
             result = {"result": "created", "message": teaching_assistant.pk}
