@@ -1,4 +1,4 @@
-'''Performs get and post requests'''
+'''Deals with all the rest operations. Ex - create, update, GET, POST'''
 
 from apps.api import models, serializers
 

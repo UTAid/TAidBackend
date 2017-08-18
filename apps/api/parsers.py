@@ -23,7 +23,7 @@ class StudentList(object):
 
         Returns:
             A dict of dict. Maps the i-th row to its corresponding data. Ex-
-            {int: {'result': '', 'message': ""}}
+            {row_num: {'result': '', 'message': ""}}
             Result can be 3 cases -
                 error: if models could not be updated. Message describes the
                     error
@@ -34,8 +34,8 @@ class StudentList(object):
                     Message is the uni_id which is the primary_key
 
         Excepts:
-            Excepts all errors but most likely it is for
-            django.core.exceptions.AppRegistryNotReady
+            All exception and displays the message in the dictionary being
+            returned
         '''
         for i, row in enumerate(self.file):
             row = (row.decode('ascii')).strip().split(",")
@@ -56,8 +56,8 @@ class StudentList(object):
                 [uni_id, last_name, first_name, number, email, id, id, id]
 
         Returns:
-            A dict of dict of the format {int: {'result': '', 'message': ""}}
             Result can be 2 cases -
+            A dict of dict of the format {int: {'result': '', 'message': ""}}
                 created: create a new student on the database with provided
                     info
                 changed: a student with that info already exists in database
@@ -104,7 +104,7 @@ class EnrollmentList(object):
     Attributes:
         file: Open csv file object. Contents of file. Has to be of format:
             uni_id, lec_id, tut_id, prac_id
-        results: A dictionary of the format {int: {'result':'', 'message':''}}
+        results: A dictionary of the format {row_num: {'result':'', 'message':''}}
     '''
 
     def __init__(self, file):
@@ -119,7 +119,7 @@ class EnrollmentList(object):
         Returns:
             A dict of dict. Maps the i-th row to its corresponding data. Ex-
             {int: {'result': '', 'message': ""}}
-            Result can be 3 cases -
+            Result can be 2 cases -
                 error: if models could not be updated. Message describes
                     the error
                 changed: changes the lecture, tutorial or practical associated
@@ -127,8 +127,8 @@ class EnrollmentList(object):
                     or prac_id
 
         Excepts:
-            Excepts all errors but most likely it is for
-            django.core.exceptions.AppRegistryNotReady
+            All exception and displays the message in the dictionary being
+            returned
         '''
         for i, row in enumerate(self.file):
             row = (row.decode('ascii')).strip().split(",")
@@ -150,7 +150,7 @@ class EnrollmentList(object):
                 lec_id, tut_id and prac_id can be empty strings
 
         Returns:
-            A dict of dict of the format {int: {'result': '', 'message': ""}}
+            A dict of dict of the format {row_num: {'result': '', 'message': ""}}
             Result can be empty or -
                 changed: this is when the lecture, tutorial or practical
                     associated with the student is changed
@@ -185,11 +185,43 @@ class EnrollmentList(object):
 
 
 class MarkFile(object):
+    '''Populates database with assignment, marks, rubrics and  connects them
+        accordingly to each other and students
+
+    Attributes:
+        file: Open csv file object. Contents of file. Has to be of format:
+            assignment_name, rubric_name_1, ... , rubric_name_n
+            "",rubric_total_1, ... , rubric_total_n
+            university_id, rubric_mark_1, ... , rubric_mark_n
+        results: A dictionary of the format {row_num: {'marks': {
+            assignment_name: {'value': int, 'result': str}
+                }, 'message': university_id}}
+    '''
+
     def __init__(self, file):
+        '''Inits MarkFile given an open file object
+        '''
         self.file = file
         self.results = {}
 
     def parse(self):
+        '''Updates the models and returns a dict of dict
+
+        Returns:
+            A dict of dict. Maps the i-th row to its corresponding data. Ex-
+            {row_num: {'marks': {
+                assignment_name: {'value': int, 'result': str}
+                    }, 'message': university_id}}
+            Result can be 3 cases -
+                error: if models could not be updated. Message describes
+                    the error
+                changed: the message is the assignment name
+                created: the message is the assignment name
+
+        Excepts:
+            All exception and displays the message in the dictionary being
+            returned
+        '''
         names = []
         totals = []
 
@@ -200,7 +232,7 @@ class MarkFile(object):
                 totals = (row.decode('ascii')).strip().split(",")
                 break
 
-        if (len(names) == 0):
+        if not len(names):
             return self.results
 
         _assignment_model = apps.get_model("api", "Assignment")
@@ -227,6 +259,14 @@ class MarkFile(object):
         return self.results
 
     def _setup_rubric(self, names, totals):
+        '''Creates the rubrics
+
+        Args:
+            names: list of str. Containing the names of all the rubrics
+            totals: list of int. Containg the total marks of all the rubrics.
+                The elements are in the same order in the list to their
+                corresponding rubric names
+        '''
         self.rubrics = []
         for name, total in zip(names[1:], totals[1:]):
             rubric, _ = self.assignment.rubric_entries.get_or_create(
@@ -237,6 +277,20 @@ class MarkFile(object):
             self.rubrics.append(rubric)
 
     def _setup_mark(self, row):
+        '''Creates the marks and connects it to their corresponding students
+
+        Args:
+            row: list of str. First element is university_id and all the
+                following elements are the marks received in the various
+                rubrics. The order marks received in reflects which rubric
+                it belongs to
+                [university_id, mark_1, ..., mark_n]
+
+        Returns:
+            A dict of dict of the format {'marks': {
+                assignment_name: {'value': int, 'result': str}
+                    }, 'message': university_id}
+        '''
         _student_model = apps.get_model("api", "Student")
         _mark_model = apps.get_model("api", "Mark")
         student = _student_model.objects.get(university_id=row[0])
@@ -244,7 +298,7 @@ class MarkFile(object):
         for rubric, value in zip(self.rubrics, row[1:]):
             if value == "":
                 value = 0
-            
+
             mark, created = _mark_model.objects.update_or_create(
                 value=value,
                 student=student,
@@ -265,7 +319,7 @@ class TAList(object):
     Attributes:
         file: Open csv file object. Contents of file. Has to be of format:
             uni_id, last_name, first_name, email
-        results: A dictionary of the format {int: {'result':'', 'message':''}}
+        results: A dictionary of the format {row_num: {'result':'', 'message':''}}
     '''
 
     def __init__(self, file):
@@ -279,7 +333,7 @@ class TAList(object):
 
         Returns:
             A dict of dict. Maps the i-th row to its corresponding data. Ex-
-            {int: {'result': '', 'message': ""}}
+            {row_num: {'result': '', 'message': ""}}
             Result can be 3 cases -
                 error: if models could not be updated. Message describes
                     the error
@@ -289,8 +343,8 @@ class TAList(object):
                     uni_id
 
         Excepts:
-            Excepts all errors but most likely it is for
-            django.core.exceptions.AppRegistryNotReady
+            All exception and displays the message in the dictionary being
+            returned
         '''
         for i, row in enumerate(self.file):
             row = (row.decode('ascii')).strip().split(",")
@@ -311,7 +365,7 @@ class TAList(object):
                 [uni_id, last_name, first_name, email]
 
         Returns:
-            A dict of dict of the format {int: {'result': '', 'message': ""}}
+            A dict of dict of the format {row_num: {'result': '', 'message': ""}}
             Result can be 2 cases -
                 created: create a new TA on the database with provided
                     info. Message is uni_id
