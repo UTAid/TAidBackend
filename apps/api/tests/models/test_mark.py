@@ -18,12 +18,12 @@ class MarkTestCase(TestCase):
             student_number=1,
         )
         self.assignment1 = Assignment.objects.create(
-            name = "Test Assignment1",
+            name="Test Assignment1",
         )
         self.rubric1 = Rubric.objects.create(
-            name = "Test Rubric 1",
-            total = 100,
-            assignment = self.assignment1,
+            name="Test Rubric 1",
+            total=100,
+            assignment=self.assignment1,
         )
 
     def tearDown(self):
@@ -33,8 +33,8 @@ class MarkTestCase(TestCase):
 
     def test_mark_created(self):
         mark = Mark.objects.create(
-            value = 20,
-            student = self.test_student1,
-            rubric = self.rubric1,
+            value=20,
+            student=self.test_student1,
+            rubric=self.rubric1,
         )
         self.assertIsNotNone(mark)

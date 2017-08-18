@@ -8,7 +8,8 @@ from apps.api.models import Mark, Rubric, Student, Assignment
 
 class CreateMarkTests(APITestCase):
     def setUp(self):
-        self.auth_user = User.objects.create_user(username="omg", email="omg@omg.com", password="omg")
+        self.auth_user = User.objects.create_user(
+            username="omg", email="omg@omg.com", password="omg")
 
         self.test_student1 = Student.objects.create(
             university_id=1,
@@ -18,13 +19,14 @@ class CreateMarkTests(APITestCase):
             student_number=1,
         )
         assignment1 = Assignment.objects.create(
-            name = "Test Assignment1",
+            name="Test Assignment1",
         )
         self.rubric1 = Rubric.objects.create(
-            name = "Test Rubric 1",
-            total = 100,
-            assignment = assignment1,
+            name="Test Rubric 1",
+            total=100,
+            assignment=assignment1,
         )
+
     def tearDown(self):
         self.auth_user.delete()
         self.rubric1.delete()
@@ -33,20 +35,20 @@ class CreateMarkTests(APITestCase):
         url = reverse("mark-list")
 
         data = {
-                "value": 20,
-                "student": self.test_student1.pk,
-                "rubric": self.rubric1.pk,
-               }
+            "value": 20,
+            "student": self.test_student1.pk,
+            "rubric": self.rubric1.pk,
+        }
         self.client.force_authenticate(user=self.auth_user)
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Mark.objects.count(), 1)
 
 
-
 class ReadAssignmentTests(APITestCase):
     def setUp(self):
-        self.auth_user = User.objects.create_user(username="omg", email="omg@omg.com", password="omg")
+        self.auth_user = User.objects.create_user(
+            username="omg", email="omg@omg.com", password="omg")
 
         test_student1 = Student.objects.create(
             university_id=1,
@@ -56,17 +58,17 @@ class ReadAssignmentTests(APITestCase):
             student_number=1,
         )
         assignment1 = Assignment.objects.create(
-            name = "Test Assignment1",
+            name="Test Assignment1",
         )
         rubric1 = Rubric.objects.create(
-            name = "Test Rubric 1",
-            total = 100,
-            assignment = assignment1,
+            name="Test Rubric 1",
+            total=100,
+            assignment=assignment1,
         )
         self.mark = Mark.objects.create(
-            value = 100,
-            student = test_student1,
-            rubric = rubric1,
+            value=100,
+            student=test_student1,
+            rubric=rubric1,
         )
 
     def tearDown(self):
@@ -88,7 +90,8 @@ class ReadAssignmentTests(APITestCase):
 
 class UpdateAssignmentTests(APITestCase):
     def setUp(self):
-        self.auth_user = User.objects.create_user(username="omg", email="omg@omg.com", password="omg")
+        self.auth_user = User.objects.create_user(
+            username="omg", email="omg@omg.com", password="omg")
 
         self.test_student1 = Student.objects.create(
             university_id=1,
@@ -98,17 +101,17 @@ class UpdateAssignmentTests(APITestCase):
             student_number=1,
         )
         self.assignment1 = Assignment.objects.create(
-            name = "Test Assignment1",
+            name="Test Assignment1",
         )
         self.rubric1 = Rubric.objects.create(
-            name = "Test Rubric 1",
-            total = 100,
-            assignment = self.assignment1,
+            name="Test Rubric 1",
+            total=100,
+            assignment=self.assignment1,
         )
         self.mark = Mark.objects.create(
-            value = 100,
-            student = self.test_student1,
-            rubric = self.rubric1,
+            value=100,
+            student=self.test_student1,
+            rubric=self.rubric1,
         )
 
     def tearDown(self):
@@ -120,10 +123,10 @@ class UpdateAssignmentTests(APITestCase):
     def test_update_mark(self):
         url = reverse("mark-detail", args=[self.mark.pk])
         data = {
-                "value": 9000,
-                "student": self.test_student1.pk,
-                "rubric": self.rubric1.pk,
-               }
+            "value": 9000,
+            "student": self.test_student1.pk,
+            "rubric": self.rubric1.pk,
+        }
         self.client.force_authenticate(user=self.auth_user)
         response = self.client.put(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -131,7 +134,8 @@ class UpdateAssignmentTests(APITestCase):
 
 class DeleteMarkTests(APITestCase):
     def setUp(self):
-        self.auth_user = User.objects.create_user(username="omg", email="omg@omg.com", password="omg")
+        self.auth_user = User.objects.create_user(
+            username="omg", email="omg@omg.com", password="omg")
 
         test_student1 = Student.objects.create(
             university_id=1,
@@ -141,17 +145,17 @@ class DeleteMarkTests(APITestCase):
             student_number=1,
         )
         assignment1 = Assignment.objects.create(
-            name = "Test Assignment1",
+            name="Test Assignment1",
         )
         rubric1 = Rubric.objects.create(
-            name = "Test Rubric 1",
-            total = 100,
-            assignment = assignment1,
+            name="Test Rubric 1",
+            total=100,
+            assignment=assignment1,
         )
         self.mark = Mark.objects.create(
-            value = 100,
-            student = test_student1,
-            rubric = rubric1,
+            value=100,
+            student=test_student1,
+            rubric=rubric1,
         )
 
     def tearDown(self):

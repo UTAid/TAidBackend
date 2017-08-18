@@ -8,6 +8,7 @@ from apps.api.models import Practical, Student, TeachingAssistant
 
 class PracticalTestCase(TestCase):
     '''Test Practical from models'''
+
     def setUp(self):
         self.test_student1 = Student.objects.create(
             university_id=1,
@@ -48,14 +49,14 @@ class PracticalTestCase(TestCase):
     def test_practical_created(self):
         '''No students or teaching assistants associated'''
         practical = Practical.objects.create(
-            code = "Test",
+            code="Test",
         )
         self.assertIsNotNone(practical)
 
     def test_practical_one_student(self):
         '''Practical with one student'''
         practical = Practical.objects.create(
-            code = "Test",
+            code="Test",
         )
         practical.students.add(self.test_student1)
         self.assertIsNotNone(practical)
@@ -63,7 +64,7 @@ class PracticalTestCase(TestCase):
     def test_practical_multiple_student(self):
         '''Practical with multiple students'''
         practical = Practical.objects.create(
-            code = "Test",
+            code="Test",
         )
         practical.students.add(self.test_student1)
         practical.students.add(self.test_student2)
@@ -72,7 +73,7 @@ class PracticalTestCase(TestCase):
     def test_practical_one_teaching_assistant(self):
         '''Practical with one teaching assistant'''
         practical = Practical.objects.create(
-            code = "Test",
+            code="Test",
         )
         practical.teaching_assistant.add(self.test_assistant1)
         self.assertIsNotNone(practical)
@@ -80,7 +81,7 @@ class PracticalTestCase(TestCase):
     def test_practical_multiple_teaching_assistant(self):
         '''Practical with multiple students'''
         practical = Practical.objects.create(
-            code = "Test",
+            code="Test",
         )
         practical.teaching_assistant.add(self.test_assistant1)
         practical.teaching_assistant.add(self.test_assistant2)
@@ -89,7 +90,7 @@ class PracticalTestCase(TestCase):
     def test_practical_student_and_teaching_assistant(self):
         '''Practical with students and teaching assistants'''
         practical = Practical.objects.create(
-            code = "Test",
+            code="Test",
         )
         practical.students.add(self.test_student1)
         practical.students.add(self.test_student2)

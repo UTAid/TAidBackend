@@ -18,7 +18,7 @@ class RubricTestCase(TestCase):
             student_number=1,
         )
         self.assignment1 = Assignment.objects.create(
-            name = "Test Assignment1",
+            name="Test Assignment1",
         )
 
     def tearDown(self):
@@ -27,38 +27,38 @@ class RubricTestCase(TestCase):
 
     def test_rubric_created(self):
         rubric = Rubric.objects.create(
-            name = "Test Rubric 1",
-            total = 100,
-            assignment = self.assignment1,
+            name="Test Rubric 1",
+            total=100,
+            assignment=self.assignment1,
         )
         self.assertIsNotNone(rubric)
 
     def test_rubric_one_mark(self):
         rubric = Rubric.objects.create(
-            name = "Test Rubric 1",
-            total = 100,
-            assignment = self.assignment1,
+            name="Test Rubric 1",
+            total=100,
+            assignment=self.assignment1,
         )
         rubric.mark_set.create(
-            value = 20,
-            student = self.test_student1,
+            value=20,
+            student=self.test_student1,
         )
         self.assertEquals(rubric.mark_set.count(), 1)
         self.assertIsNotNone(rubric)
 
     def test_rubric_multiple_mark(self):
         rubric = Rubric.objects.create(
-            name = "Test Rubric 1",
-            total = 100,
-            assignment = self.assignment1,
+            name="Test Rubric 1",
+            total=100,
+            assignment=self.assignment1,
         )
         rubric.mark_set.create(
-            value = 20,
-            student = self.test_student1,
+            value=20,
+            student=self.test_student1,
         )
         rubric.mark_set.create(
-            value = 55,
-            student = self.test_student1,
+            value=55,
+            student=self.test_student1,
         )
         self.assertEquals(rubric.mark_set.count(), 2)
         self.assertIsNotNone(rubric)

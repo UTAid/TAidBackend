@@ -32,6 +32,7 @@ class Instructor(Teacher):
 class TeachingAssistant(Teacher):
     pass
 
+
 class TaidEvent(Event):
     pass
 

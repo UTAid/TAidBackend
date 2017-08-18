@@ -8,7 +8,8 @@ from apps.api.models import Instructor
 
 class CreateInstructorTests(APITestCase):
     def setUp(self):
-        self.auth_user = User.objects.create_user(username="omg", email="omg@omg.com", password="omg")
+        self.auth_user = User.objects.create_user(
+            username="omg", email="omg@omg.com", password="omg")
 
     def tearDown(self):
         self.auth_user.delete()
@@ -16,11 +17,11 @@ class CreateInstructorTests(APITestCase):
     def test_create_instructor(self):
         url = reverse("instructor-list")
         data = {
-                "university_id": "pacotaco",
-                "first_name": "Paco",
-                "last_name": "Taco",
-                "email": "paco@taco.com",
-               }
+            "university_id": "pacotaco",
+            "first_name": "Paco",
+            "last_name": "Taco",
+            "email": "paco@taco.com",
+        }
         self.client.force_authenticate(user=self.auth_user)
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -30,13 +31,14 @@ class CreateInstructorTests(APITestCase):
 
 class ReadInstructorTests(APITestCase):
     def setUp(self):
-        self.auth_user = User.objects.create_user(username="omg", email="omg@omg.com", password="omg")
+        self.auth_user = User.objects.create_user(
+            username="omg", email="omg@omg.com", password="omg")
         self.test_instructor = Instructor.objects.create(
-                university_id="pacotaco",
-                first_name="Paco",
-                last_name="Taco",
-                email="paco@taco.com",
-                )
+            university_id="pacotaco",
+            first_name="Paco",
+            last_name="Taco",
+            email="paco@taco.com",
+        )
 
     def tearDown(self):
         self.auth_user.delete()
@@ -57,13 +59,14 @@ class ReadInstructorTests(APITestCase):
 
 class UpdateInstructorTests(APITestCase):
     def setUp(self):
-        self.auth_user = User.objects.create_user(username="omg", email="omg@omg.com", password="omg")
+        self.auth_user = User.objects.create_user(
+            username="omg", email="omg@omg.com", password="omg")
         self.test_instructor = Instructor.objects.create(
-                university_id="pacotaco",
-                first_name="Paco",
-                last_name="Taco",
-                email="paco@taco.com",
-                )
+            university_id="pacotaco",
+            first_name="Paco",
+            last_name="Taco",
+            email="paco@taco.com",
+        )
 
     def tearDown(self):
         self.auth_user.delete()
@@ -72,11 +75,11 @@ class UpdateInstructorTests(APITestCase):
     def test_update_instructor(self):
         url = reverse("instructor-detail", args=[self.test_instructor.pk])
         data = {
-                "university_id": "pacotaco",
-                "first_name": "Paco",
-                "last_name": "Taco",
-                "email": "paco@taco.com",
-               }
+            "university_id": "pacotaco",
+            "first_name": "Paco",
+            "last_name": "Taco",
+            "email": "paco@taco.com",
+        }
         self.client.force_authenticate(user=self.auth_user)
         response = self.client.put(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -84,13 +87,14 @@ class UpdateInstructorTests(APITestCase):
 
 class DeleteInstructorTests(APITestCase):
     def setUp(self):
-        self.auth_user = User.objects.create_user(username="omg", email="omg@omg.com", password="omg")
+        self.auth_user = User.objects.create_user(
+            username="omg", email="omg@omg.com", password="omg")
         self.test_instructor = Instructor.objects.create(
-                university_id="pacotaco",
-                first_name="Paco",
-                last_name="Taco",
-                email="paco@taco.com",
-                )
+            university_id="pacotaco",
+            first_name="Paco",
+            last_name="Taco",
+            email="paco@taco.com",
+        )
 
     def tearDown(self):
         self.auth_user.delete()

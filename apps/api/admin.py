@@ -35,10 +35,12 @@ class IdentificationInline(admin.StackedInline):
     '''
     model = models.Identification
 
+
 class IdentificationAdmin(admin.ModelAdmin):
     '''Adds identitfication model to the admin interface
     '''
     pass
+
 
 class TAidEventAdmin(admin.ModelAdmin):
     '''Adds event model to the admin interface
@@ -71,6 +73,7 @@ class TutorialInline(admin.StackedInline):
     edited by other interfaces
     '''
     model = models.Tutorial
+
 
 class TutorialAdmin(admin.ModelAdmin):
     '''Adds tutorial model to the admin interface

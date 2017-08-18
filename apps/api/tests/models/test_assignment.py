@@ -11,12 +11,12 @@ class AssignmentTestCase(TestCase):
 
     def test_assignment_created(self):
         assignment = Assignment.objects.create(
-            name = "Test Assignment",
+            name="Test Assignment",
         )
         assignment.rubric_entries.create(
-            name = "Rubric",
-            total = 100,
-            assignment = assignment,
+            name="Rubric",
+            total=100,
+            assignment=assignment,
         )
         self.assertIsNotNone(assignment)
         self.assertEqual(Assignment.objects.count(), 1)
@@ -24,17 +24,17 @@ class AssignmentTestCase(TestCase):
 
     def test_assignment_multiple_rubric(self):
         assignment = Assignment.objects.create(
-            name = "Test Assignment",
+            name="Test Assignment",
         )
         assignment.rubric_entries.create(
-            name = "Rubric1",
-            total = 100,
-            assignment = assignment,
+            name="Rubric1",
+            total=100,
+            assignment=assignment,
         )
         assignment.rubric_entries.create(
-            name = "Rubric2",
-            total = 150,
-            assignment = assignment,
+            name="Rubric2",
+            total=150,
+            assignment=assignment,
         )
         self.assertIsNotNone(assignment)
         self.assertEqual(Assignment.objects.count(), 1)

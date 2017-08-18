@@ -17,6 +17,7 @@ def schema_view(request):
     generator = schemas.SchemaGenerator(title='TAid API')
     return response.Response(generator.get_schema(request=request))
 
+
 class ListCalendarsView(ListView):
     ''' This provides response to /calender-list/'''
     model = Calendar

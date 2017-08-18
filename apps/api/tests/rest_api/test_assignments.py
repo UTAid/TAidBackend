@@ -8,7 +8,8 @@ from apps.api.models import Assignment, Rubric
 
 class CreateAssignmentTests(APITestCase):
     def setUp(self):
-        self.auth_user = User.objects.create_user(username="omg", email="omg@omg.com", password="omg")
+        self.auth_user = User.objects.create_user(
+            username="omg", email="omg@omg.com", password="omg")
 
     def tearDown(self):
         self.auth_user.delete()
@@ -17,20 +18,20 @@ class CreateAssignmentTests(APITestCase):
         url = reverse("assignment-list")
 
         data = {
-                "name": "Test",
-               }
+            "name": "Test",
+        }
         self.client.force_authenticate(user=self.auth_user)
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Assignment.objects.count(), 1)
 
 
-
 class ReadAssignmentTests(APITestCase):
     def setUp(self):
-        self.auth_user = User.objects.create_user(username="omg", email="omg@omg.com", password="omg")
+        self.auth_user = User.objects.create_user(
+            username="omg", email="omg@omg.com", password="omg")
         self.test_assignment = Assignment.objects.create(
-            name = "Test Assignment",
+            name="Test Assignment",
         )
 
     def tearDown(self):
@@ -52,14 +53,15 @@ class ReadAssignmentTests(APITestCase):
 
 class UpdateAssignmentTests(APITestCase):
     def setUp(self):
-        self.auth_user = User.objects.create_user(username="omg", email="omg@omg.com", password="omg")
+        self.auth_user = User.objects.create_user(
+            username="omg", email="omg@omg.com", password="omg")
         self.test_assignment = Assignment.objects.create(
-            name = "Test Assignment",
+            name="Test Assignment",
         )
         self.test_assignment.rubric_entries.create(
-            name = "Test",
-            total = 100,
-            assignment = self.test_assignment,
+            name="Test",
+            total=100,
+            assignment=self.test_assignment,
         )
 
     def tearDown(self):
@@ -69,8 +71,8 @@ class UpdateAssignmentTests(APITestCase):
     def test_update_assignment(self):
         url = reverse("assignment-detail", args=[self.test_assignment.pk])
         data = {
-                "name": "New Test Assignment",
-               }
+            "name": "New Test Assignment",
+        }
         self.client.force_authenticate(user=self.auth_user)
         response = self.client.put(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -78,14 +80,15 @@ class UpdateAssignmentTests(APITestCase):
 
 class DeleteIdentificationTests(APITestCase):
     def setUp(self):
-        self.auth_user = User.objects.create_user(username="omg", email="omg@omg.com", password="omg")
+        self.auth_user = User.objects.create_user(
+            username="omg", email="omg@omg.com", password="omg")
         self.test_assignment = Assignment.objects.create(
-            name = "Test Assignment",
+            name="Test Assignment",
         )
         self.test_assignment.rubric_entries.create(
-            name = "Test",
-            total = 100,
-            assignment = self.test_assignment,
+            name="Test",
+            total=100,
+            assignment=self.test_assignment,
         )
 
     def tearDown(self):

@@ -4,6 +4,7 @@ from django.test import TestCase
 
 from apps.api.models import Lecture, Instructor, Student
 
+
 class LectureTestCase(TestCase):
     '''Test Lecture from models'''
 
@@ -47,14 +48,14 @@ class LectureTestCase(TestCase):
     def test_lecture_created(self):
         '''No students or teaching assistants associated'''
         lecture = Lecture.objects.create(
-            code = "Test",
+            code="Test",
         )
         self.assertIsNotNone(lecture)
 
     def test_lecture_one_student(self):
         '''Lecture with one student'''
         lecture = Lecture.objects.create(
-            code = "Test",
+            code="Test",
         )
         lecture.students.add(self.test_student1)
         self.assertIsNotNone(lecture)
@@ -62,7 +63,7 @@ class LectureTestCase(TestCase):
     def test_lecture_multiple_student(self):
         '''Lecture with multiple students'''
         lecture = Lecture.objects.create(
-            code = "Test",
+            code="Test",
         )
         lecture.students.add(self.test_student1)
         lecture.students.add(self.test_student2)
@@ -71,7 +72,7 @@ class LectureTestCase(TestCase):
     def test_lecture_one_instructor(self):
         '''Lecture with one instructor'''
         lecture = Lecture.objects.create(
-            code = "Test",
+            code="Test",
         )
         lecture.instructors.add(self.test_instructor1)
         self.assertIsNotNone(lecture)
@@ -79,7 +80,7 @@ class LectureTestCase(TestCase):
     def test_lecture_multiple_instructor(self):
         '''Lecture with multiple instructors'''
         lecture = Lecture.objects.create(
-            code = "Test",
+            code="Test",
         )
         lecture.instructors.add(self.test_instructor1)
         lecture.instructors.add(self.test_instructor2)
@@ -88,7 +89,7 @@ class LectureTestCase(TestCase):
     def test_lecture_student_and_instructor(self):
         '''Lecture with students and instructors'''
         lecture = Lecture.objects.create(
-            code = "Test",
+            code="Test",
         )
         lecture.students.add(self.test_student1)
         lecture.students.add(self.test_student2)

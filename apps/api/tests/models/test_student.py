@@ -226,9 +226,9 @@ class StudentTestCase(TestCase):
             student_number=111111111,
         )
         student.identification_set.create(
-            value = 1,
-            description = "Test 1",
-            number = 1,
+            value=1,
+            description="Test 1",
+            number=1,
         )
         self.assertEquals(student.identification_set.count(), 1)
         self.assertIsNotNone(student)
@@ -242,14 +242,14 @@ class StudentTestCase(TestCase):
             student_number=111111111,
         )
         student.identification_set.create(
-            value = 1,
-            description = "Test 1",
-            number = 1,
+            value=1,
+            description="Test 1",
+            number=1,
         )
         student.identification_set.create(
-            value = 2,
-            description = "Test 2",
-            number = 2,
+            value=2,
+            description="Test 2",
+            number=2,
         )
         self.assertEquals(student.identification_set.count(), 2)
         self.assertIsNotNone(student)
@@ -263,16 +263,16 @@ class StudentTestCase(TestCase):
             student_number=111111111,
         )
         assignment1 = Assignment.objects.create(
-            name = "Test Assignment1",
+            name="Test Assignment1",
         )
         rubric1 = Rubric.objects.create(
-            name = "Test Rubric1",
-            total = 100,
-            assignment = assignment1,
+            name="Test Rubric1",
+            total=100,
+            assignment=assignment1,
         )
         student.mark_set.create(
-            value = 10,
-            rubric = rubric1,
+            value=10,
+            rubric=rubric1,
         )
         self.assertEquals(student.mark_set.count(), 1)
         self.assertIsNotNone(student)
@@ -286,20 +286,20 @@ class StudentTestCase(TestCase):
             student_number=111111111,
         )
         assignment1 = Assignment.objects.create(
-            name = "Test Assignment1",
+            name="Test Assignment1",
         )
         rubric1 = Rubric.objects.create(
-            name = "Test Rubric1",
-            total = 100,
-            assignment = assignment1,
+            name="Test Rubric1",
+            total=100,
+            assignment=assignment1,
         )
         student.mark_set.create(
-            value = 10,
-            rubric = rubric1,
+            value=10,
+            rubric=rubric1,
         )
         student.mark_set.create(
-            value = 12,
-            rubric = rubric1,
+            value=12,
+            rubric=rubric1,
         )
         self.assertEquals(student.mark_set.count(), 2)
         self.assertIsNotNone(student)

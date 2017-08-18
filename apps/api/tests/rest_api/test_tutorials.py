@@ -8,7 +8,8 @@ from apps.api.models import Tutorial, Student, Instructor
 
 class CreateTutorialTests(APITestCase):
     def setUp(self):
-        self.auth_user = User.objects.create_user(username="omg", email="omg@omg.com", password="omg")
+        self.auth_user = User.objects.create_user(
+            username="omg", email="omg@omg.com", password="omg")
 
     def tearDown(self):
         self.auth_user.delete()
@@ -16,8 +17,8 @@ class CreateTutorialTests(APITestCase):
     def test_create_tutorial(self):
         url = reverse("tutorial-list")
         data = {
-                "code": "CSCA08",
-               }
+            "code": "CSCA08",
+        }
         self.client.force_authenticate(user=self.auth_user)
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -27,7 +28,8 @@ class CreateTutorialTests(APITestCase):
 
 class ReadTutorialTests(APITestCase):
     def setUp(self):
-        self.auth_user = User.objects.create_user(username="omg", email="omg@omg.com", password="omg")
+        self.auth_user = User.objects.create_user(
+            username="omg", email="omg@omg.com", password="omg")
         self.test_tutorial = Tutorial.objects.create(code="CSCA08")
 
     def tearDown(self):
@@ -49,7 +51,8 @@ class ReadTutorialTests(APITestCase):
 
 class UpdateTutorialTests(APITestCase):
     def setUp(self):
-        self.auth_user = User.objects.create_user(username="omg", email="omg@omg.com", password="omg")
+        self.auth_user = User.objects.create_user(
+            username="omg", email="omg@omg.com", password="omg")
         self.test_tutorial = Tutorial.objects.create(code="CSCA08")
 
     def tearDown(self):
@@ -59,8 +62,8 @@ class UpdateTutorialTests(APITestCase):
     def test_update_tutorial(self):
         url = reverse("tutorial-detail", args=[self.test_tutorial.pk])
         data = {
-                "code": "CHANGED",
-               }
+            "code": "CHANGED",
+        }
         self.client.force_authenticate(user=self.auth_user)
         response = self.client.put(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -68,7 +71,8 @@ class UpdateTutorialTests(APITestCase):
 
 class DeleteTutorialTests(APITestCase):
     def setUp(self):
-        self.auth_user = User.objects.create_user(username="omg", email="omg@omg.com", password="omg")
+        self.auth_user = User.objects.create_user(
+            username="omg", email="omg@omg.com", password="omg")
         self.test_tutorial = Tutorial.objects.create(code="CSCA08")
 
     def tearDown(self):

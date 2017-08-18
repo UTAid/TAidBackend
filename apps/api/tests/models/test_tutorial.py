@@ -8,6 +8,7 @@ from apps.api.models import Tutorial, Student, TeachingAssistant
 
 class TutorialTestCase(TestCase):
     '''Test Tutorial from models'''
+
     def setUp(self):
         self.test_student1 = Student.objects.create(
             university_id=1,
@@ -48,14 +49,14 @@ class TutorialTestCase(TestCase):
     def test_tutorial_created(self):
         '''No students or teaching assistants associated'''
         tutorial = Tutorial.objects.create(
-            code = "Test",
+            code="Test",
         )
         self.assertIsNotNone(tutorial)
 
     def test_tutorial_one_student(self):
         '''Tutorial with one student'''
         tutorial = Tutorial.objects.create(
-            code = "Test",
+            code="Test",
         )
         tutorial.students.add(self.test_student1)
         self.assertIsNotNone(tutorial)
@@ -63,7 +64,7 @@ class TutorialTestCase(TestCase):
     def test_tutorial_multiple_student(self):
         '''Tutorial with multiple students'''
         tutorial = Tutorial.objects.create(
-            code = "Test",
+            code="Test",
         )
         tutorial.students.add(self.test_student1)
         tutorial.students.add(self.test_student2)
@@ -72,7 +73,7 @@ class TutorialTestCase(TestCase):
     def test_tutorial_one_teaching_assistant(self):
         '''Tutorial with one teaching assistant'''
         tutorial = Tutorial.objects.create(
-            code = "Test",
+            code="Test",
         )
         tutorial.teaching_assistant.add(self.test_assistant1)
         self.assertIsNotNone(tutorial)
@@ -80,7 +81,7 @@ class TutorialTestCase(TestCase):
     def test_tutorial_multiple_teaching_assistant(self):
         '''Tutorial with multiple students'''
         tutorial = Tutorial.objects.create(
-            code = "Test",
+            code="Test",
         )
         tutorial.teaching_assistant.add(self.test_assistant1)
         tutorial.teaching_assistant.add(self.test_assistant2)
@@ -89,7 +90,7 @@ class TutorialTestCase(TestCase):
     def test_tutorial_student_and_teaching_assistant(self):
         '''Tutorial with students and teaching assistants'''
         tutorial = Tutorial.objects.create(
-            code = "Test",
+            code="Test",
         )
         tutorial.students.add(self.test_student1)
         tutorial.students.add(self.test_student2)

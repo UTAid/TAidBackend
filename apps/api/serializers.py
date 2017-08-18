@@ -92,13 +92,17 @@ class RubricSerializer(serializers.ModelSerializer):
 
 
 class AssignmentSerializer(serializers.ModelSerializer):
-    rubric_entries = RubricSerializer(many=True, required=False, read_only=True)
+    rubric_entries = RubricSerializer(
+        many=True, required=False, read_only=True)
 
     class Meta:
         model = models.Assignment
         fields = ("url", "name", "rubric_entries")
 
-assignment = AssignmentSerializer(source="mark_set", many=True, required=False, read_only=True)
+
+assignment = AssignmentSerializer(
+    source="mark_set", many=True, required=False, read_only=True)
+
 
 class StudentListSerializer(serializers.Serializer):
     file = serializers.FileField(validators=(validate_csv,))

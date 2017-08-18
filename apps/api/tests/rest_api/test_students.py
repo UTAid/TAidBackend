@@ -9,7 +9,8 @@ from apps.api.viewsets import StudentViewSet
 
 class CreateStudentTests(APITestCase):
     def setUp(self):
-        self.auth_user = User.objects.create_user(username="omg", email="omg@omg.com", password="omg")
+        self.auth_user = User.objects.create_user(
+            username="omg", email="omg@omg.com", password="omg")
 
     def tearDown(self):
         self.auth_user.delete()
@@ -17,12 +18,12 @@ class CreateStudentTests(APITestCase):
     def test_create_student(self):
         url = reverse("student-list")
         data = {
-                "university_id": "pacotaco",
-                "first_name": "Paco",
-                "last_name": "Taco",
-                "email": "paco@taco.com",
-                "student_number": 999999999,
-               }
+            "university_id": "pacotaco",
+            "first_name": "Paco",
+            "last_name": "Taco",
+            "email": "paco@taco.com",
+            "student_number": 999999999,
+        }
         self.client.force_authenticate(user=self.auth_user)
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -32,14 +33,15 @@ class CreateStudentTests(APITestCase):
 
 class ReadStudentTests(APITestCase):
     def setUp(self):
-        self.auth_user = User.objects.create_user(username="omg", email="omg@omg.com", password="omg")
+        self.auth_user = User.objects.create_user(
+            username="omg", email="omg@omg.com", password="omg")
         self.test_student = Student.objects.create(
-                university_id="pacotaco",
-                first_name="Paco",
-                last_name="Taco",
-                email="paco@taco.com",
-                student_number=999999999,
-                )
+            university_id="pacotaco",
+            first_name="Paco",
+            last_name="Taco",
+            email="paco@taco.com",
+            student_number=999999999,
+        )
 
     def tearDown(self):
         self.auth_user.delete()
@@ -60,14 +62,15 @@ class ReadStudentTests(APITestCase):
 
 class UpdateStudentTests(APITestCase):
     def setUp(self):
-        self.auth_user = User.objects.create_user(username="omg", email="omg@omg.com", password="omg")
+        self.auth_user = User.objects.create_user(
+            username="omg", email="omg@omg.com", password="omg")
         self.test_student = Student.objects.create(
-                university_id="pacotaco",
-                first_name="Paco",
-                last_name="Taco",
-                email="paco@taco.com",
-                student_number=999999999,
-                )
+            university_id="pacotaco",
+            first_name="Paco",
+            last_name="Taco",
+            email="paco@taco.com",
+            student_number=999999999,
+        )
 
     def tearDown(self):
         self.auth_user.delete()
@@ -76,12 +79,12 @@ class UpdateStudentTests(APITestCase):
     def test_update_student(self):
         url = reverse("student-detail", args=[self.test_student.pk])
         data = {
-                "university_id": "pacotaco",
-                "first_name": "Paco",
-                "last_name": "Taco",
-                "email": "paco@taco.com",
-                "student_number": 123456789,
-               }
+            "university_id": "pacotaco",
+            "first_name": "Paco",
+            "last_name": "Taco",
+            "email": "paco@taco.com",
+            "student_number": 123456789,
+        }
         self.client.force_authenticate(user=self.auth_user)
         response = self.client.put(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -89,14 +92,15 @@ class UpdateStudentTests(APITestCase):
 
 class DeleteStudentTests(APITestCase):
     def setUp(self):
-        self.auth_user = User.objects.create_user(username="omg", email="omg@omg.com", password="omg")
+        self.auth_user = User.objects.create_user(
+            username="omg", email="omg@omg.com", password="omg")
         self.test_student = Student.objects.create(
-                university_id="pacotaco",
-                first_name="Paco",
-                last_name="Taco",
-                email="paco@taco.com",
-                student_number=999999999,
-                )
+            university_id="pacotaco",
+            first_name="Paco",
+            last_name="Taco",
+            email="paco@taco.com",
+            student_number=999999999,
+        )
 
     def tearDown(self):
         self.auth_user.delete()

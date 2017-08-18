@@ -71,11 +71,11 @@ class StudentList(object):
         _student_model = apps.get_model("api", "Student")
         student, created = _student_model.objects.update_or_create(
             university_id=uni_id,
-            defaults = {
-                'first_name':first_name,
-                'last_name':last_name,
-                'student_number':number,
-                'email':email,
+            defaults={
+                'first_name': first_name,
+                'last_name': last_name,
+                'student_number': number,
+                'email': email,
             }
         )
         if created:
@@ -88,8 +88,8 @@ class StudentList(object):
         for num, val in enumerate(ids, start=1):
             identity, created = student.identification_set.update_or_create(
                 number=num,
-                defaults = {
-                    'value':val,
+                defaults={
+                    'value': val,
                 }
             )
             if created:
@@ -382,9 +382,9 @@ class TAList(object):
         teaching_assistant, created = _ta_model.objects.update_or_create(
             university_id=uni_id,
             defaults={
-                'first_name':first_name,
-                'last_name':last_name,
-                'email':email,
+                'first_name': first_name,
+                'last_name': last_name,
+                'email': email,
             }
         )
         if created:
