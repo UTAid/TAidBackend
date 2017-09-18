@@ -49,6 +49,8 @@ when ``python2 manage.py runserver`` is run
 
   - Now going to ``http://127.0.0.1:8000/api/v0/docs/`` will show the operations available to the rest api
 
+- ``http://127.0.0.1:8000/calender-list/`` will take to the calender page. If there are no hyperlinks available, create an event (can be found in lecture, tutorial, practical).
+
 Testing
 ~~~~~~~~
 Run ``python3 manage.py test``
