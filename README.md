@@ -1,5 +1,5 @@
 [![BuildStatus](https://travis-ci.org/UTAid/TAidBackend.svg?branch=Django1.11)](https://travis-ci.org/UTAid/TAidBackend)
-[![CoverageStatus](https://coveralls.io/repos/github/UTAid/TAidBackend/badge.svg?branch=master)](https://coveralls.io/github/UTAid/TAidBackend?branch=master)
+[![CoverageStatus](https://coveralls.io/repos/github/UTAid/TAidBackend/badge.svg?branch=Django1.11)](https://coveralls.io/github/UTAid/TAidBackend?branch=Django1.11)
 
 # TAid
 
