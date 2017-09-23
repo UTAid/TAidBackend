@@ -18,8 +18,9 @@ before_install:
 script:
   - python3 manage.py makemigrations
   - python3 manage.py migrate
+
   - python3 manage.py test
-  - coverage run manage.py
+  - coverage run --source=apps/api manage.py test apps/api
 
 after_success:
     - coveralls
