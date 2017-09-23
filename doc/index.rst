@@ -24,6 +24,7 @@ Application for managing courses and grades.
    graph
    update_sphinx
    run_test
+   test_files
 
    apache2_vhost
    quickstart
