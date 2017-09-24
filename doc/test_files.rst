@@ -6,7 +6,7 @@ testing
 
 Create new test files
 ---------------------
-
+-  Go to _test_files directory
 -  ``sudo pip3 install -r requirements.txt``
 -  ``python3 create_test_files.py``
 -  Enter name of the course to create test files for

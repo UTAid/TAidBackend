@@ -31,6 +31,7 @@ Application for managing courses and grades.
    settings
    structure
 
+   faq
 
 
 Indices and tables

@@ -40,9 +40,4 @@ The development server will most likely will be set as `http://127.0.0.1:8000/` 
 Run `python3 manage.py test`
 
 ## Documentation
-Documentation of the overall project can be found at:
-`doc/_build/html/index.html`
-
-or
-
-Look at the rst files in the doc folder
+Documentation of the overall project can be found in the `docs` folder. A FAQ can also be found there.
