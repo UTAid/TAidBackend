@@ -1,4 +1,6 @@
-'''Converts models to JSON'''
+'''Convert complex data such as querysets and model instances to be converted
+to native Python datatypes that can then be easily rendered into JSON, XML
+or other content types.'''
 
 from apps.api import models, parsers
 from apps.api.validators import validate_csv
