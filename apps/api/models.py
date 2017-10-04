@@ -3,6 +3,7 @@
 from django.db import models
 from schedule.models.events import Event
 from apps.api import parsers
+from apps.api import validators
 
 
 class _UniversityMember(models.Model):
@@ -152,9 +153,18 @@ class StudentListFile(models.Model):
         return str(self.datafile)
 
     def save(self, *args, **kwargs):
-        student_list = parsers.StudentList(self.datafile)
-        student_list.parse()
-        super(StudentListFile, self).save(*args, **kwargs)
+        status = False
+
+        try:
+            validators.validate_csv(self.datafile)
+            status = True
+        except validators.ValidationError:
+            status = False
+
+        if status:
+            student_list = parsers.StudentList(self.datafile)
+            student_list.parse()
+            super(StudentListFile, self).save(*args, **kwargs)
 
 
 class EnrollmentListFile(models.Model):
@@ -168,9 +178,18 @@ class EnrollmentListFile(models.Model):
         return str(self.datafile)
 
     def save(self, *args, **kwargs):
-        enrollment_list = parsers.EnrollmentList(self.datafile)
-        enrollment_list.parse()
-        super(EnrollmentListFile, self).save(*args, **kwargs)
+        status = False
+
+        try:
+            validators.validate_csv(self.datafile)
+            status = True
+        except validators.ValidationError:
+            status = False
+
+        if status:
+            enrollment_list = parsers.EnrollmentList(self.datafile)
+            enrollment_list.parse()
+            super(EnrollmentListFile, self).save(*args, **kwargs)
 
 
 class MarkFile(models.Model):
@@ -185,9 +204,18 @@ class MarkFile(models.Model):
         return "Marks for {0}".format(self.assignment)
 
     def save(self, *args, **kwargs):
-        mark_file = parsers.MarkFile(self.datafile)
-        mark_file.parse()
-        super(MarkFile, self).save(*args, **kwargs)
+        status = False
+
+        try:
+            validators.validate_csv(self.datafile)
+            status = True
+        except validators.ValidationError:
+            status = False
+
+        if status:
+            mark_file = parsers.MarkFile(self.datafile)
+            mark_file.parse()
+            super(MarkFile, self).save(*args, **kwargs)
 
 
 class TAListFile(models.Model):
@@ -201,6 +229,15 @@ class TAListFile(models.Model):
         return str(self.datafile)
 
     def save(self, *args, **kwargs):
-        ta_list = parsers.TAList(self.datafile)
-        ta_list.parse()
-        super(TAListFile, self).save(*args, **kwargs)
+        status = False
+
+        try:
+            validators.validate_csv(self.datafile)
+            status = True
+        except validators.ValidationError:
+            status = False
+
+        if status:
+            ta_list = parsers.TAList(self.datafile)
+            ta_list.parse()
+            super(TAListFile, self).save(*args, **kwargs)
