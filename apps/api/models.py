@@ -3,7 +3,7 @@
 from django.db import models
 from schedule.models.events import Event
 from apps.api import parsers
-from apps.api import validators
+from apps.api.validators import validate_csv, ValidationError
 
 
 class _UniversityMember(models.Model):
@@ -156,9 +156,9 @@ class StudentListFile(models.Model):
         status = False
 
         try:
-            validators.validate_csv(self.datafile)
+            validate_csv(self.datafile)
             status = True
-        except validators.ValidationError:
+        except ValidationError:
             status = False
 
         if status:
@@ -181,9 +181,9 @@ class EnrollmentListFile(models.Model):
         status = False
 
         try:
-            validators.validate_csv(self.datafile)
+            validate_csv(self.datafile)
             status = True
-        except validators.ValidationError:
+        except ValidationError:
             status = False
 
         if status:
@@ -207,9 +207,9 @@ class MarkFile(models.Model):
         status = False
 
         try:
-            validators.validate_csv(self.datafile)
+            validate_csv(self.datafile)
             status = True
-        except validators.ValidationError:
+        except ValidationError:
             status = False
 
         if status:
@@ -232,9 +232,9 @@ class TAListFile(models.Model):
         status = False
 
         try:
-            validators.validate_csv(self.datafile)
+            validate_csv(self.datafile)
             status = True
-        except validators.ValidationError:
+        except ValidationError:
             status = False
 
         if status:

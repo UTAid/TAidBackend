@@ -82,7 +82,7 @@ def _is_alphanumeric_and_symbols(value):
         A boolean that determines if the parameter 'value' is composed of
         alphabet, numeric and certain symbol characters
     '''
-    return len(match('[A-Za-z0-9_.!@#$%^&*()]+', value).group(0)) == len(value)
+    return len(match('[A-Za-z0-9_.!@#$%^&*()\' ]+', value).group(0)) == len(value)
 
 
 def _is_numeric(value):
@@ -143,7 +143,8 @@ def enrollment_validation(value, col_number=4):
     '''Validation for enrollment list files
 
     Attributes:
-        value: is a file object
+        value: Open csv file object. Contents of file. Has to be of format:
+            uni_id, lec_id, tut_id, prac_id
         col_number: int. It is set to 4 as default. It says how many columns
                 the file should have
 
@@ -159,10 +160,10 @@ def enrollment_validation(value, col_number=4):
     error_utorid = set()
 
     for line_number, line in enumerate(value, start=1):
-        row = line.strip().split(',')
+        row = (line.decode('ascii')).strip().split(',')
         if len(row) != col_number:
-            raise ColumnError('Row: {}.\
-                Expected: {} columns. Found: {} columns'.format(
+            raise ColumnError(
+                'Row: {}. Expected: {} columns. Found: {} columns'.format(
                     line_number, col_number, len(row)))
 
         if _valid_utorid(row[0]) is False:
@@ -188,7 +189,10 @@ def mark_validation(value):
     '''Validation for mark files
 
     Attribute:
-        value: is a file object
+        value: Open csv file object. Contents of file. Has to be of format:
+            assignment_name, rubric_name_1, ... , rubric_name_n
+            "",rubric_total_1, ... , rubric_total_n
+            university_id, rubric_mark_1, ... , rubric_mark_n
 
     Raises:
         ColumnError: if there are more columns present than that specified in
@@ -202,7 +206,7 @@ def mark_validation(value):
     error_utorid = set()
 
     for line_number, line in enumerate(value, start=1):
-        row = line.strip().split(',')
+        row = (line.decode('ascii')).strip().split(',')
 
         if line_number == 1:
             col_number = len(row)
@@ -253,7 +257,8 @@ def student_validation(value, col_number=8):
     '''Validation for student list files
 
     Attributes:
-        value: is a file object
+        value: Open file object. Contents of file. Has to be of format:
+            uni_id, last_name, first_name, number, email, id, id, id
         col_number: int. It is set to 8 as default. It says how many columns
                 the file should have
 
@@ -269,7 +274,7 @@ def student_validation(value, col_number=8):
     error_utorid = set()
 
     for line_number, line in enumerate(value, start=1):
-        row = line.strip().split(',')
+        row = (line.decode('ascii')).strip().split(',')
 
         if len(row) != col_number:
             raise ColumnError(
@@ -314,7 +319,8 @@ def ta_validation(value, col_number=4):
     '''Validation for ta list files
 
     Attributes:
-        value: is a file object
+        value: Open csv file object. Contents of file. Has to be of format:
+            uni_id, last_name, first_name, email
         col_number: int. It is set to 4 as default. It says how many columns
                 the file should have
 
@@ -330,7 +336,7 @@ def ta_validation(value, col_number=4):
     error_utorid = set()
 
     for line_number, line in enumerate(value, start=1):
-        row = line.strip().split(',')
+        row = (line.decode('ascii')).strip().split(',')
 
         if len(row) != col_number:
             raise ColumnError(

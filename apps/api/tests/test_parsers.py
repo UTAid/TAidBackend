@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.core.files.base import ContentFile
 from apps.api import parsers
 from apps.api.models import Student, Lecture, Tutorial, Practical, TeachingAssistant, Assignment, Rubric, Mark
+from unittest.mock import patch
 
 
 class StudentListParserTests(TestCase):
@@ -68,25 +69,42 @@ class StudentListParserTests(TestCase):
 
         self.assertEqual(Student.objects.count(), 1)
 
-    def test_student_changed_info(self):
-        '''Student information is changed when requested'''
-        content = "canvi241,Cano,Vi,209415323,Vi.Cano@nowhere.com,ci1nva24\r\n" + \
-            "canvi241,Canol,Vi,209415323,Vi.Cano@nowhere.com,ci1nva23,ci1nva25"
+    def test_student_changed_info_1(self):
+        '''Student information is changed when requested.
+        MultipleUtoridOccurences and the user chooses to continue'''
+        content = "canvi241,Cano,Vi,209415323,Vi.Cano@nowhere.com,ci1nva24,vi2c1na4,24vic1an\r\n" + \
+            "canvi241,Canol,Vi,209415323,Vi.Cano@nowhere.com,ci1nva23,ci1nva25,24vic1an"
         test_file = ContentFile(content.encode())
         student_list_obj = parsers.StudentList(test_file)
-        student_list_obj.parse()
+
+        with patch('builtins.input', side_effect=['y']):
+            student_list_obj.parse()
 
         self.assertEqual(Student.objects.count(), 1)
         self.assertEqual(Student.objects.get(pk="canvi241").last_name, "Canol")
         self.assertEqual(Student.objects.get(
-            pk="canvi241").identification_set.count(), 2)
+            pk="canvi241").identification_set.count(), 3)
         self.assertEqual(Student.objects.get(
             pk="canvi241").identification_set.all()[0].value, 'ci1nva23')
         self.assertEqual(Student.objects.get(
             pk="canvi241").identification_set.all()[1].value, 'ci1nva25')
 
+
+    def test_student_changed_info_2(self):
+        '''Student information is changed when requested.
+        MultipleUtoridOccurences and the user chooses not to continue'''
+        content = "canvi241,Cano,Vi,209415323,Vi.Cano@nowhere.com,ci1nva24,vi2c1na4,24vic1an\r\n" + \
+            "canvi241,Canol,Vi,209415323,Vi.Cano@nowhere.com,ci1nva23,ci1nva25,24vic1an"
+        test_file = ContentFile(content.encode())
+        student_list_obj = parsers.StudentList(test_file)
+
+        with patch('builtins.input', side_effect=['n']):
+            student_list_obj.parse()
+
+        self.assertEqual(Student.objects.count(), 0)
+
     def test_student_parser_bad_format(self):
-        '''Does not enter student when bad formatting is entered'''
+        '''Deal with column error. Basically does not meet criteria of file'''
         content = "canvi241"
         test_file = ContentFile(content.encode())
         student_list_obj = parsers.StudentList(test_file)
@@ -142,7 +160,7 @@ class EnrollmentListParserTests(TestCase):
         self.practical2.delete()
 
     def test_enrollment_parser_empty(self):
-        '''Student is not linked with any classes if it does not say so'''
+        '''Deals with column error'''
         content = "canvi241"
         test_file = ContentFile(content.encode())
         enrollment_list_obj = parsers.EnrollmentList(test_file)
@@ -201,13 +219,15 @@ class EnrollmentListParserTests(TestCase):
             self.assertEqual(student.lecture_set.count(), 1)
             self.assertEqual(student.tutorial_set.count(), 1)
 
-    def test_add_student_multiple_practical(self):
+    def test_add_student_multiple_practical_1(self):
         '''Student is linked with the appropriate classes'''
         content = "canvi241,L0001,T0001,PRA0001\r\n" +\
             "canvi241,L0001,T0001,PRA0002"
         test_file = ContentFile(content.encode())
         enrollment_list_obj = parsers.EnrollmentList(test_file)
-        enrollment_list_obj.parse()
+
+        with patch('builtins.input', side_effect=['y']):
+            enrollment_list_obj.parse()
 
         student = Student.objects.get(pk="canvi241")
 
@@ -222,6 +242,25 @@ class EnrollmentListParserTests(TestCase):
         self.assertEqual(student.lecture_set.count(), 1)
         self.assertEqual(student.tutorial_set.count(), 1)
         self.assertEqual(student.practical_set.count(), 2)
+
+
+    def test_add_student_multiple_practical_2(self):
+        '''Student is linked with the appropriate classes. User chooses
+        not to continue'''
+        content = "canvi241,L0001,T0001,PRA0001\r\n" +\
+            "canvi241,L0001,T0001,PRA0002"
+        test_file = ContentFile(content.encode())
+        enrollment_list_obj = parsers.EnrollmentList(test_file)
+
+        with patch('builtins.input', side_effect=['n']):
+            enrollment_list_obj.parse()
+
+        student = Student.objects.get(pk="canvi241")
+
+        self.assertEqual(student.lecture_set.count(), 0)
+        self.assertEqual(student.tutorial_set.count(), 0)
+        self.assertEqual(student.practical_set.count(), 0)
+
 
     def test_enrollment_parser_multi_with_practical(self):
         '''Student is linked with the appropriate classes'''
@@ -328,7 +367,9 @@ class EnrollmentListParserTests(TestCase):
             "canvi241,L0002,T0001,PRA0001"
         test_file = ContentFile(content.encode())
         enrollment_list_obj = parsers.EnrollmentList(test_file)
-        enrollment_list_obj.parse()
+
+        with patch('builtins.input', side_effect=['y']):
+            enrollment_list_obj.parse()
 
         student = Student.objects.get(pk="canvi241")
 
@@ -449,7 +490,9 @@ class EnrollmentListParserTests(TestCase):
             "canvi241,L0001,T0002,PRA0001"
         test_file = ContentFile(content.encode())
         enrollment_list_obj = parsers.EnrollmentList(test_file)
-        enrollment_list_obj.parse()
+
+        with patch('builtins.input', side_effect=['y']):
+            enrollment_list_obj.parse()
 
         student = Student.objects.get(pk="canvi241")
 
@@ -521,7 +564,7 @@ class EnrollmentListParserTests(TestCase):
 class TAListParserTests(TestCase):
 
     def test_ta_parser_empty(self):
-        '''No information provided'''
+        '''No information provided. Deals with column error'''
         content = ""
         test_file = ContentFile(content.encode())
         student_list_obj = parsers.TAList(test_file)
@@ -570,20 +613,35 @@ class TAListParserTests(TestCase):
 
         self.assertEqual(TeachingAssistant.objects.count(), 1)
 
-    def test_ta_changed_info(self):
-        ''' If ta information updated make sure it is refelected'''
-        content = "canvi241,Cano,Vi,209415323,Vi.Cano@nowhere.com\r\n" + \
-            "canvi241,Canol,Vi,209415323,Vi.Cano@nowhere.com"
+    def test_ta_changed_info_1(self):
+        '''Multiple occurences of utor id. User chooses to continue'''
+        content = "canvi241,Cano,Vi,Vi.Cano@nowhere.com\r\n" + \
+            "canvi241,Canol,Vi,Vi.Cano@nowhere.com"
         test_file = ContentFile(content.encode())
-        teachong_assistant_obj = parsers.TAList(test_file)
-        teachong_assistant_obj.parse()
+        teaching_assistant_obj = parsers.TAList(test_file)
+
+        with patch('builtins.input', side_effect=['y']):
+            teaching_assistant_obj.parse()
 
         self.assertEqual(TeachingAssistant.objects.count(), 1)
         self.assertEqual(TeachingAssistant.objects.get(
             pk="canvi241").last_name, "Canol")
 
+    def test_ta_changed_info_2(self):
+        '''Multiple occurences of utor id. User chooses not to continue'''
+        content = "canvi241,Cano,Vi,Vi.Cano@nowhere.com\r\n" + \
+            "canvi241,Canol,Vi,Vi.Cano@nowhere.com"
+        test_file = ContentFile(content.encode())
+        teaching_assistant_obj = parsers.TAList(test_file)
+
+        with patch('builtins.input', side_effect=['n']):
+            teaching_assistant_obj.parse()
+
+        self.assertEqual(TeachingAssistant.objects.count(), 0)
+
     def test_ta_parser_bad_format(self):
-        '''No ta created if not enough information is provided'''
+        '''No ta created if not enough information is provided. Deals with
+        column error'''
         content = "canvi241"
         test_file = ContentFile(content.encode())
         teaching_assistant_list_obj = parsers.TAList(test_file)
@@ -615,7 +673,8 @@ class MarkParserTest(TestCase):
         self.student2.delete()
 
     def test_mark_parser_empty(self):
-        '''No assignment, rubric or mark created if no info provided'''
+        '''No assignment, rubric or mark created if no info provided.
+        Column error'''
         content = ""
         test_file = ContentFile(content.encode())
         mark_file_obj = parsers.MarkFile(test_file)
@@ -684,17 +743,32 @@ class MarkParserTest(TestCase):
         self.assertEqual(Rubric.objects.count(), 5)
         self.assertEqual(Mark.objects.count(), 5)
 
-    def test_change_mark(self):
-        '''Mark changed if info for student added more than once'''
-        content = "'', Assignment_001\r\n'',65\r\n,canvi241,25\r\ncanvi241, 37"
+    def test_change_mark_1(self):
+        '''Student info entered more than once. User decides to continue'''
+        content = "'',Assignment_001\r\n'',65\r\ncanvi241,54\r\ncanvi241,37"
         test_file = ContentFile(content.encode())
         mark_file_obj = parsers.MarkFile(test_file)
-        mark_file_obj.parse()
+
+        with patch('builtins.input', side_effect=['y']):
+            mark_file_obj.parse()
 
         self.assertEqual(Assignment.objects.count(), 1)
         self.assertEqual(Rubric.objects.count(), 1)
         self.assertEqual(Mark.objects.count(), 1)
         self.assertEqual(Mark.objects.all()[0].value, 37)
+
+    def test_change_mark_2(self):
+        '''Student info entered more than once. User decides not to continue'''
+        content = "'',Assignment_001\r\n'',65\r\ncanvi241,54\r\ncanvi241,37"
+        test_file = ContentFile(content.encode())
+        mark_file_obj = parsers.MarkFile(test_file)
+
+        with patch('builtins.input', side_effect=['n']):
+            mark_file_obj.parse()
+
+        self.assertEqual(Assignment.objects.count(), 1)
+        self.assertEqual(Rubric.objects.count(), 1)
+        self.assertEqual(Mark.objects.count(), 0)
 
     def test_multiple_student_create_one_mark(self):
         '''One rubric and multiple marks for multiple students'''

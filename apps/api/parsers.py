@@ -1,6 +1,7 @@
 '''Populates the database based on the csv files provided'''
 
 from django.apps import apps
+from apps.api import validators
 
 
 class StudentList(object):
@@ -37,16 +38,59 @@ class StudentList(object):
             All exception and displays the message in the dictionary being
             returned
         '''
-        for i, row in enumerate(self.file):
-            row = (row.decode('ascii')).strip().split(",")
+        status, message = self._validation_check()
 
-            self.results[i] = {"result": None, "message": None}
-            try:
-                self.results[i] = self._setup_student(row)
-            except Exception as exception:
-                self.results[i]["result"] = "error"
-                self.results[i]["message"] = str(exception)
+        if status:
+            for i, row in enumerate(self.file):
+                row = (row.decode('ascii')).strip().split(",")
+
+                self.results[i] = {"result": None, "message": None}
+                try:
+                    self.results[i] = self._setup_student(row)
+                except Exception as exception:
+                    self.results[i]["result"] = "error"
+                    self.results[i]["message"] = str(exception)
         return self.results
+
+
+    def _validation_check(self):
+        '''Check if the info in the file is valid. Displays error message
+        and takes user input if they wish to continue
+
+        Returns:
+            status: boolean on whether to update database with info
+            message: contains error message
+        '''
+        status = False
+        message = ""
+
+        try:
+            validators.student_validation(self.file)
+            status = True
+        except validators.ColumnError as error_message:
+            message = error_message
+            print (error_message)
+        except validators.InvalidUtorid as error_message:
+            message = error_message
+            print (error_message)
+        except validators.InvalidData as error_message:
+            message = error_message
+            print (error_message)
+        except validators.MultipleUtoridOccurences as error_message:
+            message = error_message
+
+            print ("There are multiple occurences of the following utor id:", error_message)
+            holder = ''
+
+            while (holder != 'y' and holder != 'n'):
+                holder = input("Do you wish to continue(y/n): ")
+
+            if holder == 'y':
+                status = True
+
+        return status, message
+
+
 
     def _setup_student(self, row):
         '''Updates the database
@@ -134,16 +178,56 @@ class EnrollmentList(object):
             All exception and displays the message in the dictionary being
             returned
         '''
-        for i, row in enumerate(self.file):
-            row = (row.decode('ascii')).strip().split(",")
+        status, message = self._validation_check()
 
-            self.results[i] = {"result": None, "message": None}
-            try:
-                self.results[i] = self._setup_enrollment(row)
-            except Exception as exception:
-                self.results[i]["result"] = "error"
-                self.results[i]["message"] = str(exception)
+        if status:
+            for i, row in enumerate(self.file):
+                row = (row.decode('ascii')).strip().split(",")
+
+                self.results[i] = {"result": None, "message": None}
+                try:
+                    self.results[i] = self._setup_enrollment(row)
+                except Exception as exception:
+                    self.results[i]["result"] = "error"
+                    self.results[i]["message"] = str(exception)
         return self.results
+
+    def _validation_check(self):
+        '''Check if the info in the file is valid. Displays error message
+        and takes user input if they wish to continue
+
+        Returns:
+            status: boolean on whether to update database with info
+            message: contains error message
+        '''
+        status = False
+        message = ""
+
+        try:
+            validators.enrollment_validation(self.file)
+            status = True
+        except validators.ColumnError as error_message:
+            message = error_message
+            print (error_message)
+        except validators.InvalidUtorid as error_message:
+            message = error_message
+            print (error_message)
+        except validators.InvalidData as error_message:
+            message = error_message
+            print (error_message)
+        except validators.MultipleUtoridOccurences as error_message:
+            message = error_message
+
+            print ("There are multiple occurences of the following utor id:", error_message)
+            holder = ''
+
+            while (holder != 'y' and holder != 'n'):
+                holder = input("Do you wish to continue(y/n): ")
+
+            if holder == 'y':
+                status = True
+
+        return status, message
 
     def _setup_enrollment(self, row):
         '''Updates the database
@@ -229,6 +313,8 @@ class MarkFile(object):
         names = []
         totals = []
 
+        status, message = self._validation_check()
+
         for i, row in enumerate(self.file):
             if i == 0:
                 names = (row.decode('ascii')).strip().split(",")
@@ -250,17 +336,55 @@ class MarkFile(object):
 
         self._setup_rubric(names, totals)
 
-        for i, row in enumerate(self.file):
-            if i >= 2:
-                row = (row.decode('ascii')).strip().split(",")
+        if status:
+            for i, row in enumerate(self.file):
+                if i >= 2:
+                    row = (row.decode('ascii')).strip().split(",")
 
-                self.results[i] = {"result": None, "message": None}
-                try:
-                    self.results[i] = self._setup_mark(row)
-                except Exception as exception:
-                    self.results[i]["result"] = "error"
-                    self.results[i]["message"] = str(exception)
+                    self.results[i] = {"result": None, "message": None}
+                    try:
+                        self.results[i] = self._setup_mark(row)
+                    except Exception as exception:
+                        self.results[i]["result"] = "error"
+                        self.results[i]["message"] = str(exception)
         return self.results
+
+    def _validation_check(self):
+        '''Check if the info in the file is valid. Displays error message
+        and takes user input if they wish to continue
+
+        Returns:
+            status: boolean on whether to update database with info
+            message: contains error message
+        '''
+        status = False
+        message = ""
+
+        try:
+            validators.mark_validation(self.file)
+            status = True
+        except validators.ColumnError as error_message:
+            message = error_message
+            print (error_message)
+        except validators.InvalidUtorid as error_message:
+            message = error_message
+            print (error_message)
+        except validators.InvalidData as error_message:
+            message = error_message
+            print (error_message)
+        except validators.MultipleUtoridOccurences as error_message:
+            message = error_message
+
+            print ("There are multiple occurences of the following utor id:", error_message)
+            holder = ''
+
+            while (holder != 'y' and holder != 'n'):
+                holder = input("Do you wish to continue(y/n): ")
+
+            if holder == 'y':
+                status = True
+
+        return status, message
 
     def _setup_rubric(self, names, totals):
         '''Creates the rubrics
@@ -303,11 +427,17 @@ class MarkFile(object):
             if value == "":
                 value = 0
 
-            mark, created = _mark_model.objects.update_or_create(
-                value=value,
-                student=student,
-                rubric=rubric,
-            )
+            if _mark_model.objects.filter(rubric=rubric, student=student).count() == 0:
+                mark, created = _mark_model.objects.update_or_create(
+                    value=value,
+                    student=student,
+                    rubric=rubric,
+                )
+            else:
+                entry = _mark_model.objects.get(rubric=rubric)
+                entry.value = value
+                entry.save()
+
             if created:
                 result["marks"][rubric.name] = {
                     "result": "created", "value": mark.value}
@@ -350,16 +480,56 @@ class TAList(object):
             All exception and displays the message in the dictionary being
             returned
         '''
-        for i, row in enumerate(self.file):
-            row = (row.decode('ascii')).strip().split(",")
+        status, message = self._validation_check()
 
-            self.results[i] = {"result": None, "message": None}
-            try:
-                self.results[i] = self._setup_ta(row)
-            except Exception as exception:
-                self.results[i]["result"] = "error"
-                self.results[i]["message"] = str(exception)
+        if status:
+            for i, row in enumerate(self.file):
+                row = (row.decode('ascii')).strip().split(",")
+
+                self.results[i] = {"result": None, "message": None}
+                try:
+                    self.results[i] = self._setup_ta(row)
+                except Exception as exception:
+                    self.results[i]["result"] = "error"
+                    self.results[i]["message"] = str(exception)
         return self.results
+
+    def _validation_check(self):
+        '''Check if the info in the file is valid. Displays error message
+        and takes user input if they wish to continue
+
+        Returns:
+            status: boolean on whether to update database with info
+            message: contains error message
+        '''
+        status = False
+        message = ""
+
+        try:
+            validators.ta_validation(self.file)
+            status = True
+        except validators.ColumnError as error_message:
+            message = error_message
+            print (error_message)
+        except validators.InvalidUtorid as error_message:
+            message = error_message
+            print (error_message)
+        except validators.InvalidData as error_message:
+            message = error_message
+            print (error_message)
+        except validators.MultipleUtoridOccurences as error_message:
+            message = error_message
+
+            print ("There are multiple occurences of the following utor id:", error_message)
+            holder = ''
+
+            while (holder != 'y' and holder != 'n'):
+                holder = input("Do you wish to continue(y/n): ")
+
+            if holder == 'y':
+                status = True
+
+        return status, message
 
     def _setup_ta(self, row):
         '''Updates the database
