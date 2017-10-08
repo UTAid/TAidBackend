@@ -1,5 +1,6 @@
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.views.generic import TemplateView
 from django.views.static import serve
 import rest_framework_jwt.views as jwt
 
@@ -25,6 +26,7 @@ api_patterns = [
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include(api_patterns)),
+    url(r'^fullcalendar/', TemplateView.as_view(template_name="fullcalendar.html"), name='fullcalendar'),
     url(r'^calender-list/', include('schedule.urls')),
     url(r'^media/(?P<path>.*)$', serve, {
         'document_root': common.MEDIA_ROOT,
