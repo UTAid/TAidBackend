@@ -26,3 +26,10 @@ What are the main folders I need to be concerned about?
 * ``run`` - contains database and the files the database holds
 * ``static`` - static files like css, js etc
 * ``TAid`` - Django related stuff
+
+In rest api I only want to disply the x number elements?
+-------------------------------------------------------
+This can be done placing the limit and offset tags. Limit gives you the
+x number elements and offset causes to skip the first x elements.
+Some examples of the url are - http://127.0.0.1:8000/api/v0/students/?limit=20 ,
+http://127.0.0.1:8000/api/v0/students/?limit=20&offset=20
