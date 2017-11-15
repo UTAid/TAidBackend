@@ -8,7 +8,7 @@ from faker import Faker
 def _generate_random_char(num_of_char, letters=False):
     '''Generates specified amount of random characters. Either letters or numbers
 
-    Attributes:
+    Args:
         num_of_char: int specifying the number of characters to return
         letters: bool set as false by default. If false no letters and only
             numbers. If true only letters and no numbers
@@ -43,7 +43,7 @@ def _generate_name():
 def _generate_utorid(first_name, last_name, utor_id_length=8):
     '''Generates utor id from the person's first and last name
 
-    Attributes:
+    Args:
         first_name: str of the person's first name
         last_name: str of the person's last name
         utor_id_length: int set as 8 by deafult. This is the length of the
@@ -64,7 +64,7 @@ def _generate_utorid(first_name, last_name, utor_id_length=8):
 def _generate_email(first_name, last_name):
     '''Generates email address from a person's first and last name
 
-    Attributes:
+    Args:
         first_name: str of the person's first name
         last_name: str of the person's last name
 
@@ -78,7 +78,7 @@ def _generate_email(first_name, last_name):
 def _generate_student_number(length=9):
     '''Generates student number which is generated randomly
 
-    Attributes:
+    Args:
         length: int is set as 9 by default. This determines the length of the
             student number
 
@@ -92,7 +92,7 @@ def _generate_student_number(length=9):
 def _generate_id(length=8):
     '''Generates an id which is randomly generated
 
-    Attributes:
+    Args:
         length: int is set as 8 by default. This determines the length of
         the id
 
@@ -109,7 +109,7 @@ def _generate_id(length=8):
 def generate_studentlist_file(file_name):
     '''Generates student list test file
 
-    Attributes:
+    Args:
         file_name: str which contains the name of the file to write to
 
     Return:
@@ -142,7 +142,7 @@ def generate_studentlist_file(file_name):
 def generate_mark_file(utorid, file_name, num_of_assignment=-1):
     '''Generates mark test file
 
-    Attributes:
+    Args:
         utorid: list of str which contains utor id of students. Assigns marks
             to assignments for these students
         file_name: str which contains the name of the file to write to
@@ -188,7 +188,7 @@ def generate_mark_file(utorid, file_name, num_of_assignment=-1):
 def generate_enrollmentlist_file(utorid, file_name):
     '''Generates enrollment test file
 
-    Attributes:
+    Args:
         utorid: list of str which contains utor id of students. Assigns
             students to different practicals and tutorials
         file_name: str which contains the name of the file to write to
@@ -212,7 +212,7 @@ def generate_enrollmentlist_file(utorid, file_name):
 def generate_talist_file(file_name):
     '''Generates TA test file
 
-    Attributes:
+    Args:
         file_name: str which contains the name of the file to write to
 
     Return:
