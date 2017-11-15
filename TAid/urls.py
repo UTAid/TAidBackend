@@ -1,5 +1,7 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.contrib import admin
+from django.views.generic import TemplateView
+from django.views.static import serve
 import rest_framework_jwt.views as jwt
 
 from TAid.settings import common
@@ -20,12 +22,13 @@ api_patterns = [
     url(r'^token-verify/', jwt.verify_jwt_token),
 ]
 
-urlpatterns = patterns('',
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^api/', include(api_patterns)),
 
-    # Static files (images, css, javascript, etc.)
-    (r'^media/(?P<path>.*)$', 'django.views.static.serve',
-        {'document_root': common.MEDIA_ROOT},
-    ),
-)
+urlpatterns = [
+    url(r'^admin/', admin.site.urls),
+    url(r'^api/', include(api_patterns)),
+    url(r'^fullcalendar/', TemplateView.as_view(template_name="fullcalendar.html"), name='fullcalendar'),
+    url(r'^calender-list/', include('schedule.urls')),
+    url(r'^media/(?P<path>.*)$', serve, {
+        'document_root': common.MEDIA_ROOT,
+    }),
+]

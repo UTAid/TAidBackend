@@ -1,3 +1,5 @@
+'''Deals with all the rest operations. Ex - create, update, GET, POST'''
+
 from apps.api import models, serializers
 
 from rest_framework import viewsets, routers, parsers
@@ -38,16 +40,17 @@ class TeachingAssistantViewSet(viewsets.ModelViewSet):
     def export(self, request):
         content = []
         for university_id in request.GET.getlist("id"):
-            ta = models.TeachingAssistant.objects.get(university_id=university_id)
+            ta = models.TeachingAssistant.objects.get(
+                university_id=university_id)
             row = [
-                    ta.university_id,
-                    ta.first_name,
-                    ta.last_name,
-                    ta.email,
-                    ]
+                ta.university_id,
+                ta.first_name,
+                ta.last_name,
+                ta.email,
+            ]
             content.append(row)
         return Response(content)
-        
+
 
 class StudentViewSet(viewsets.ModelViewSet):
     queryset = models.Student.objects.all().order_by('university_id')
@@ -67,12 +70,12 @@ class StudentViewSet(viewsets.ModelViewSet):
         for university_id in request.GET.getlist("id"):
             student = models.Student.objects.get(university_id=university_id)
             row = [
-                    student.university_id,
-                    student.first_name,
-                    student.last_name,
-                    student.email,
-                    student.student_number,
-                    ]
+                student.university_id,
+                student.first_name,
+                student.last_name,
+                student.email,
+                student.student_number,
+            ]
             for identification in student.identification_set.all():
                 row.append(identification.value)
             content.append(row)
@@ -95,11 +98,11 @@ class StudentViewSet(viewsets.ModelViewSet):
             tut = student.tutorial_set.first()
             pra = student.practical_set.first()
             row = [
-                    student.university_id,
-                    "" if lec is None else lec.code,
-                    "" if tut is None else tut.code,
-                    "" if pra is None else pra.code,
-                    ]
+                student.university_id,
+                "" if lec is None else lec.code,
+                "" if tut is None else tut.code,
+                "" if pra is None else pra.code,
+            ]
             content.append(row)
         print(content)
         return Response(content)
@@ -149,7 +152,8 @@ class AssignmentViewSet(viewsets.ModelViewSet):
 
     @detail_route(methods=["get"], renderer_classes=(NoHeaderCSVRenderer,))
     def export(self, request, pk):
-        assignment = models.Assignment.objects.prefetch_related("rubric_entries").get(id=pk)
+        assignment = models.Assignment.objects.prefetch_related(
+            "rubric_entries").get(id=pk)
         rubrics = assignment.rubric_entries.all()
         num_entries = rubrics.count() + 1
         content = [[""] * num_entries, [""] * num_entries]

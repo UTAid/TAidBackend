@@ -1,3 +1,7 @@
+'''Convert complex data such as querysets and model instances to be converted
+to native Python datatypes that can then be easily rendered into JSON, XML
+or other content types.'''
+
 from apps.api import models, parsers
 from apps.api.validators import validate_csv
 from rest_framework import serializers
@@ -18,23 +22,24 @@ class TeachingAssistantSerializer(serializers.ModelSerializer):
 class IdentificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Identification
-        fields = ("url", "id", "student", "description", "value")
+        fields = ("url", "value", "student", "description", "number")
 
 
 class StudentSerializer(serializers.ModelSerializer):
-    ids = IdentificationSerializer(source="identification_set", many=True, required=False)
+    ids = IdentificationSerializer(
+        source="identification_set", many=True, required=False, read_only=True)
 
     class Meta:
         model = models.Student
         fields = (
-                "url",
-                "university_id",
-                "student_number",
-                "first_name",
-                "last_name",
-                "email",
-                "ids",
-                )
+            "url",
+            "university_id",
+            "student_number",
+            "first_name",
+            "last_name",
+            "email",
+            "ids",
+        )
 
 
 class LectureSerializer(serializers.ModelSerializer):
@@ -44,30 +49,30 @@ class LectureSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Lecture
         fields = (
-                "url",
-                "id",
-                "code",
-                "instructors",
-                "students",
-                )
+            "url",
+            "id",
+            "code",
+            "instructors",
+            "students",
+        )
 
 
 class TutorialSerializer(serializers.ModelSerializer):
-    ta = TeachingAssistantSerializer
+    teaching_assistant = TeachingAssistantSerializer
     students = StudentSerializer
 
     class Meta:
         model = models.Tutorial
-        fields = ("url", "id", "code", "ta", "students")
+        fields = ("url", "id", "code", "teaching_assistant", "students")
 
 
 class PracticalSerializer(serializers.ModelSerializer):
-    ta = TeachingAssistantSerializer
+    teaching_assistant = TeachingAssistantSerializer
     students = StudentSerializer
 
     class Meta:
         model = models.Practical
-        fields = ("url", "id", "code", "ta", "students")
+        fields = ("url", "id", "code", "teaching_assistant", "students")
 
 
 class MarkSerializer(serializers.ModelSerializer):
@@ -76,23 +81,29 @@ class MarkSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Mark
-        fields = ("url", "id", "value", "student")
+        fields = ("url", "value", "student", "rubric")
 
 
 class RubricSerializer(serializers.ModelSerializer):
-    marks = MarkSerializer(source="mark_set", many=True, required=False)
-
+    # var assignment is a global variable which is declared right after AssignmentSerializer
+    # this was done because RubricSerializer and AssignmentSerializer are related
+    # order it is declared matters, so it could not be declared here
     class Meta:
         model = models.Rubric
-        fields = ("url", "name", "total", "marks")
+        fields = ("url", "name", "total", "assignment")
 
 
 class AssignmentSerializer(serializers.ModelSerializer):
-    rubric_entries = RubricSerializer(many=True, required=False)
+    rubric_entries = RubricSerializer(
+        many=True, required=False, read_only=True)
 
     class Meta:
         model = models.Assignment
         fields = ("url", "name", "rubric_entries")
+
+
+assignment = AssignmentSerializer(
+    source="mark_set", many=True, required=False, read_only=True)
 
 
 class StudentListSerializer(serializers.Serializer):
